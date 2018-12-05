@@ -18,7 +18,7 @@ public class RegulationController {
 
 
     public RegulationController() {
-        Regulations = new ArrayList<Regulation>();
+        Regulations = new ArrayList<>();
         Date d =new Date();
         System.out.println(d.toString());
         Calendar od = Calendar.getInstance();
@@ -32,18 +32,29 @@ public class RegulationController {
 
     }
 
-    @RequestMapping(value = "/api/regulations", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/regulation/list", method = RequestMethod.GET)
     @ResponseBody
-    public ArrayList<Regulation> GetRegulations(){
-        System.out.println(".....aaaaaaaaaaaaaabbbbbbb...");
-        return Regulations;
+    public ArrayList<Regulation> GetRegulations(@RequestParam(value = "name", required = false) String name,
+                                                @RequestParam(value = "deparment", required = false) String deparment){
+        System.out.println(".....get list with name=..." + name);
+        ArrayList<Regulation> reg = new ArrayList<>();
+        for(int i = 0; i < Regulations.size(); i++){
+            if ((name != null) && !name.isEmpty() && !name.equals(Regulations.get(i).getName()) ){
+                continue;
+            }
+            if ((deparment != null) && !deparment.isEmpty() && !deparment.equals(Regulations.get(i).getDepartment())){
+                continue;
+            }
+            reg.add(Regulations.get(i));
+        }
+
+        return reg;
     }
 
-    @RequestMapping(value="/api/regulation/{name}", method = RequestMethod.GET)
-
+    @RequestMapping(value="/api/regulation/content/{name}", method = RequestMethod.GET)
     public void GetRegulationContent(@PathVariable String name, HttpServletResponse response) throws IOException {
         System.out.println("........get content............");
-        File regFile = new File("/Users/lhj/work/ksoa/oasvr/" + name + ".pdf");
+        File regFile = new File("e:/projects/" + name + ".pdf");
         FileInputStream fis = new FileInputStream(regFile);
 
         Long flen = regFile.length();
@@ -59,4 +70,5 @@ public class RegulationController {
         fis.close();
         sos.close();
     }
-}
+
+ }
