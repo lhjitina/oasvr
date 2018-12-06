@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 @Controller
 public class BasicDataController {
 
-    private ArrayList<Department> Departments = new ArrayList<Department>();
+    private ArrayList<Department> Departments = new ArrayList<>();
 
     public BasicDataController() {
     }
@@ -31,30 +32,36 @@ public class BasicDataController {
         return Departments;
     }
 */
-    @RequestMapping(value = "/api/departments", method= RequestMethod.GET)
-    public void  getDepartments(HttpServletResponse response) throws IOException {
+    @RequestMapping(value = "/api/department/list", method= RequestMethod.GET)
+    @ResponseBody
+    public ArrayList<String>  getDepartments(HttpServletResponse response) throws IOException {
 
-        JSONArray deps=new JSONArray();
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("Id", 30);
-        jsonObject.put("Name", "市场营销部");
-        deps.put(jsonObject);
-
-        jsonObject = new JSONObject();
-        jsonObject.put("Id", 30);
-        jsonObject.put("Name", "运营管理部");
-        deps.put(jsonObject);
-
-        jsonObject = new JSONObject();
-        jsonObject.put("Id", 30);
-        jsonObject.put("Name", "方案策划部");
-        deps.put(jsonObject);
-
-        response.setContentType("application/json;charset=utf-8");
-        PrintWriter pw = response.getWriter();
-
-        pw.write(deps.toString());
+        ArrayList<String> deps = new ArrayList<>();
+        deps.add("市场营销部");
+        deps.add("运营管理部");
+        deps.add("方案策划部");
+        return deps;
+//        JSONArray deps=new JSONArray();
+//
+//        JSONObject jsonObject = new JSONObject();
+//        jsonObject.put("Id", 30);
+//        jsonObject.put("Name", "市场营销部");
+//        deps.put(jsonObject);
+//
+//        jsonObject = new JSONObject();
+//        jsonObject.put("Id", 30);
+//        jsonObject.put("Name", "运营管理部");
+//        deps.put(jsonObject);
+//
+//        jsonObject = new JSONObject();
+//        jsonObject.put("Id", 30);
+//        jsonObject.put("Name", "方案策划部");
+//        deps.put(jsonObject);
+//
+//        response.setContentType("application/json;charset=utf-8");
+//        PrintWriter pw = response.getWriter();
+//
+//        pw.write(deps.toString());
 
     }
 }

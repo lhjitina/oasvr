@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,11 +25,11 @@ public class RegulationController {
         System.out.println(d.toString());
         Calendar od = Calendar.getInstance();
 
-        Regulation r = new Regulation(1, "20180521凯晟周例会会议纪要", "策划部", d, 1, od);
+        Regulation r = new Regulation(1, "20180521凯晟周例会会议纪要", "方案策划部", d, 1, od);
         Regulations.add(r);
-        r = new Regulation(1, "开行方案2", "策划部", d, 1, od);
+        r = new Regulation(1, "开行方案2", "市场营销部", d, 1, od);
         Regulations.add(r);
-        r = new Regulation(1, "开行方案3", "策划部", d, 1, od);
+        r = new Regulation(1, "开行方案3", "运营管理部", d, 1, od);
         Regulations.add(r);
 
     }
@@ -35,16 +37,46 @@ public class RegulationController {
     @RequestMapping(value = "/api/regulation/list", method = RequestMethod.GET)
     @ResponseBody
     public ArrayList<Regulation> GetRegulations(@RequestParam(value = "name", required = false) String name,
-                                                @RequestParam(value = "deparment", required = false) String deparment){
-        System.out.println(".....get list with name=..." + name);
+                                                @RequestParam(value = "department", required = false) String department,
+                                                @RequestParam(value = "startDate", required = false) String startDate,
+                                                @RequestParam(value = "endDate", required = false) String endDate){
+        if (department != null)
+            System.out.println("...department=" + department);
+        else
+            System.out.println("....department is null....");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date sd = null;
+        Date ed = null;
+        if (startDate != null){
+            try {
+                sd = sdf.parse(startDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        if (endDate!= null){
+            try {
+                ed = sdf.parse(endDate);
+            }catch (ParseException e){
+                e.printStackTrace();
+            }
+        }
+
         ArrayList<Regulation> reg = new ArrayList<>();
         for(int i = 0; i < Regulations.size(); i++){
-            if ((name != null) && !name.isEmpty() && !name.equals(Regulations.get(i).getName()) ){
+            if ((name != null) && !name.isEmpty() && !name.contains(Regulations.get(i).getName()) ){
                 continue;
             }
-            if ((deparment != null) && !deparment.isEmpty() && !deparment.equals(Regulations.get(i).getDepartment())){
+            if ((department != null) && !department.isEmpty() && !department.equals(Regulations.get(i).getDepartment())){
                 continue;
             }
+            if ((sd != null) && sd.after(Regulations.get(i).getPubDate())){
+                continue;
+            }
+            if ((ed != null) && ed.before(Regulations.get(i).getPubDate())){
+                continue;
+            }
+            System.out.println("add a reg");
             reg.add(Regulations.get(i));
         }
 
