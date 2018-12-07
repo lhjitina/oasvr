@@ -23,7 +23,7 @@ public class RegulationController {
         Regulations = new ArrayList<>();
         Date d =new Date();
         System.out.println(d.toString());
-        Calendar od = Calendar.getInstance();
+        Date od = new Date();
 
         Regulation r = new Regulation(1, "20180521凯晟周例会会议纪要", "方案策划部", d, 1, od);
         Regulations.add(r);
@@ -64,7 +64,7 @@ public class RegulationController {
 
         ArrayList<Regulation> reg = new ArrayList<>();
         for(int i = 0; i < Regulations.size(); i++){
-            if ((name != null) && !name.isEmpty() && !name.contains(Regulations.get(i).getName()) ){
+            if ((name != null) && !name.isEmpty() && !Regulations.get(i).getName().contains(name) ){
                 continue;
             }
             if ((department != null) && !department.isEmpty() && !department.equals(Regulations.get(i).getDepartment())){
@@ -102,5 +102,14 @@ public class RegulationController {
         fis.close();
         sos.close();
     }
+    @RequestMapping(value = "/api/regmgt/list", method = RequestMethod.GET)
+    @ResponseBody
+    public ArrayList<Regulation> GetRegulationMgts(@RequestParam(value = "name", required = false) String name,
+                                                @RequestParam(value = "department", required = false) String department,
+                                                @RequestParam(value = "startDate", required = false) String startDate,
+                                                @RequestParam(value = "endDate", required = false) String endDate){
+        return GetRegulations(name, department, startDate, endDate);
+    }
 
- }
+
+}

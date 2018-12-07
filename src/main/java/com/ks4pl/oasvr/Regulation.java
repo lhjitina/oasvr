@@ -11,9 +11,9 @@ public class Regulation {
     private String Department;
     private Date PubDate;
     private Integer OperatorId;
-    private Calendar OperateTime;
+    private Date OperateTime;
 
-     public Regulation(Integer id, String name, String department, Date pubDate, Integer operatorId, Calendar operateTime) {
+     public Regulation(Integer id, String name, String department, Date pubDate, Integer operatorId, Date operateTime) {
         Id = id;
         Name = name;
         Department = department;
@@ -66,11 +66,11 @@ public class Regulation {
         OperatorId = operatorId;
     }
     @JsonProperty("OperateTime")
-    public Calendar getOperateTime() {
+    public Date getOperateTime() {
         return OperateTime;
     }
 
-    public void setOperateTime(Calendar operateTime) {
+    public void setOperateTime(Date operateTime) {
         OperateTime = operateTime;
     }
 
