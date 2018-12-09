@@ -2,7 +2,6 @@ package com.ks4pl.oasvr;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class Regulation {
@@ -10,16 +9,18 @@ public class Regulation {
     private String Name;
     private String Department;
     private Date PubDate;
+    private String State;
     private Integer OperatorId;
     private Date OperateTime;
 
-     public Regulation(Integer id, String name, String department, Date pubDate, Integer operatorId, Date operateTime) {
-        Id = id;
-        Name = name;
-        Department = department;
-        PubDate = pubDate;
-        OperatorId = operatorId;
-        OperateTime = operateTime;
+     public Regulation(Integer id, String name, String department, Date pubDate, String state, Integer operatorId, Date operateTime) {
+        setId(id);
+        setName(name);
+        setDepartment(department);
+        setPubDate(pubDate);
+        setState(state);
+        setOperatorId(operatorId);
+        setOperateTime(operateTime);
     }
 
     @JsonProperty("Id")
@@ -57,7 +58,7 @@ public class Regulation {
     public void setPubDate(Date pubeDate) {
         PubDate = pubeDate;
     }
-    @JsonProperty("OperatorId")
+
     public Integer getOperatorId() {
         return OperatorId;
     }
@@ -65,7 +66,7 @@ public class Regulation {
     public void setOperatorId(Integer operatorId) {
         OperatorId = operatorId;
     }
-    @JsonProperty("OperateTime")
+
     public Date getOperateTime() {
         return OperateTime;
     }
@@ -77,12 +78,20 @@ public class Regulation {
     @Override
     public String toString() {
         return "Regulation{" +
-                "Id=" + Id +
-                ", Name='" + Name + '\'' +
-                ", Department='" + Department + '\'' +
-                ", PubDate=" + PubDate +
-                ", OperatorId=" + OperatorId +
-                ", OperateTime=" + OperateTime +
+                "Id=" + getId() +
+                ", Name='" + getName() + '\'' +
+                ", Department='" + getDepartment() + '\'' +
+                ", PubDate=" + getPubDate() +
+                ", OperatorId=" + getOperatorId() +
+                ", OperateTime=" + getOperateTime() +
                 '}';
+    }
+
+    public String getState() {
+        return State;
+    }
+
+    public void setState(String state) {
+        State = state;
     }
 }

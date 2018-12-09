@@ -1,18 +1,20 @@
 package com.ks4pl.oasvr;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class RegulationController {
@@ -25,11 +27,11 @@ public class RegulationController {
         System.out.println(d.toString());
         Date od = new Date();
 
-        Regulation r = new Regulation(1, "20180521凯晟周例会会议纪要", "方案策划部", d, 1, od);
+        Regulation r = new Regulation(1, "20180521凯晟周例会会议纪要", "方案策划部", d, "有效", 1, od);
         Regulations.add(r);
-        r = new Regulation(1, "开行方案2", "市场营销部", d, 1, od);
+        r = new Regulation(1, "开行方案2", "市场营销部", d, "有效", 1, od);
         Regulations.add(r);
-        r = new Regulation(1, "开行方案3", "运营管理部", d, 1, od);
+        r = new Regulation(1, "开行方案3", "运营管理部", d, "有效", 1, od);
         Regulations.add(r);
 
     }
@@ -111,5 +113,30 @@ public class RegulationController {
         return GetRegulations(name, department, startDate, endDate);
     }
 
+    @RequestMapping(value = "/api/regulation/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public String FileUpload(@RequestParam(value = "department") String department,
+                             @RequestParam(value = "operateUser") String operateUser,
+                             MultipartFile file){
+            String originalFileName = file.getOriginalFilename();
+            try {
+                byte[] bytes = file.getBytes();
+                FileOutputStream fileOutputStream = new FileOutputStream(new File("/Users/lhj/work/" + originalFileName));
+                fileOutputStream.write(bytes);
+                fileOutputStream.flush();
+                fileOutputStream.close();
 
+                Date d = new Date();
+
+                Regulation r = new Regulation(0, originalFileName, department, d, "有效", 1, d);
+                Regulations.add(0, r);
+
+                return "ok";
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "fail";
+        }
 }
