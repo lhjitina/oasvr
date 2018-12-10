@@ -20,6 +20,16 @@ import java.util.List;
 public class RegulationController {
     private ArrayList<Regulation> Regulations;
 
+    public static String getPath(){
+        String os_name = System.getProperties().get("os.name").toString().toLowerCase();
+        System.out.println("os name is ...."+os_name);
+        if(os_name.contains("windows")) {
+            return "e:/projects/data/";
+        }
+        else{
+            return "/Users/lhj/work/";
+        }
+    }
 
     public RegulationController() {
         Regulations = new ArrayList<>();
@@ -27,7 +37,7 @@ public class RegulationController {
         System.out.println(d.toString());
         Date od = new Date();
 
-        Regulation r = new Regulation(1, "20180521凯晟周例会会议纪要", "方案策划部", d, "有效", 1, od);
+        Regulation r = new Regulation(1, "20180521凯晟周例会会议纪要.pdf", "方案策划部", d, "有效", 1, od);
         Regulations.add(r);
         r = new Regulation(1, "开行方案2", "市场营销部", d, "有效", 1, od);
         Regulations.add(r);
@@ -88,7 +98,8 @@ public class RegulationController {
     @RequestMapping(value="/api/regulation/content/{name}", method = RequestMethod.GET)
     public void GetRegulationContent(@PathVariable String name, HttpServletResponse response) throws IOException {
         System.out.println("........get content............");
-        File regFile = new File("e:/projects/" + name + ".pdf");
+        File regFile = new File(getPath() + name);
+        System.out.println("........file............" + getPath() + name);
         FileInputStream fis = new FileInputStream(regFile);
 
         Long flen = regFile.length();
@@ -121,7 +132,7 @@ public class RegulationController {
             String originalFileName = file.getOriginalFilename();
             try {
                 byte[] bytes = file.getBytes();
-                FileOutputStream fileOutputStream = new FileOutputStream(new File("/Users/lhj/work/" + originalFileName));
+                FileOutputStream fileOutputStream = new FileOutputStream(new File(getPath() + originalFileName));
                 fileOutputStream.write(bytes);
                 fileOutputStream.flush();
                 fileOutputStream.close();
