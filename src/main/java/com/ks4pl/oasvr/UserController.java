@@ -66,10 +66,10 @@ public class UserController {
 
     @RequestMapping(value = "/api/user/edit", method= RequestMethod.POST)
     public Integer getUserEdit(@RequestBody User user){
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserName().equals(user.getUserName())) {
-                users[i] =user;
-                return users.get(i);
+        for (User u: users) {
+            if (u.getUserName().equals(user.getUserName())) {
+                u.setUser(user);
+                return 200;
             }
         }
         return null;

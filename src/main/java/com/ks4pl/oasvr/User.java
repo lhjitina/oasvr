@@ -11,7 +11,6 @@ public class User {
     private String tel;
     private String email;
     private String state;
-    private Integer sex;
 
     private Integer[] priviledge;
 
@@ -98,14 +97,6 @@ public class User {
         this.state = state;
     }
 
-    public Integer getSex() {
-        return sex;
-    }
-
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -117,8 +108,19 @@ public class User {
                 ", tel='" + tel + '\'' +
                 ", email='" + email + '\'' +
                 ", state='" + state + '\'' +
-                ", sex=" + sex +
                 ", priviledge=" + Arrays.toString(priviledge) +
                 '}';
+    }
+
+    public void setUser(User user){
+        this.setUserId(user.getUserId());
+        this.setUserName(user.getUserName());
+        this.setTel(user.getTel());
+        this.setEmail(user.getEmail());
+        this.setDepartment(user.getDepartment());
+        this.setRealName(user.getRealName());
+        this.setState(user.getState());
+        this.setRole(user.getRole());
+        this.setPriviledge(user.getPriviledge());
     }
 }
