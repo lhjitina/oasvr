@@ -75,5 +75,10 @@ public class UserController {
         return null;
     }
 
+    @RequestMapping(value = "/api/user/test", method= RequestMethod.GET)
+    public String getUserTest(){
+
+        return "test";
+    }
 
 }
