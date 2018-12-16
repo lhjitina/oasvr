@@ -19,7 +19,7 @@ public class SessionTest {
     SessionTest(){
 
     }
-    @RequestMapping(value = "/api/session", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
+    @RequestMapping(value = "/api/login", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
     public Map<String, String> createSession(HttpServletRequest request) throws JsonProcessingException {
         Map<String, String> map = new HashMap<>();
         String username;
@@ -27,11 +27,15 @@ public class SessionTest {
 
         if (session.isNew()){
             System.out.println(".....create a new sssion.....");
-            session.setAttribute("username", "lhj");
+            session.setAttribute("userName", "lhj");
             username = "new a name";
         }
         else{
-            username = session.getAttribute("username").toString();
+            username = (String) session.getAttribute("userName");
+            if (username == null){
+                session.setAttribute("userName", "lhj");
+                username = "new a name";
+            }
             System.out.println("....seesion exist, username is :"+username);
         }
         map.put("username", username);
