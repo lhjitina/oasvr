@@ -5,7 +5,6 @@ import java.util.Arrays;
 public class User {
     private Integer userId;
     private String userName;
-    private String realName;
     private String department;
     private String role;
     private String tel;
@@ -81,14 +80,6 @@ public class User {
         this.email = email;
     }
 
-    public String getRealName() {
-        return realName;
-    }
-
-    public void setRealName(String realName) {
-        this.realName = realName;
-    }
-
     public String getState() {
         return state;
     }
@@ -102,7 +93,6 @@ public class User {
         return "User{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
-                ", realName='" + realName + '\'' +
                 ", department='" + department + '\'' +
                 ", role='" + role + '\'' +
                 ", tel='" + tel + '\'' +
@@ -118,8 +108,7 @@ public class User {
         this.setTel(user.getTel());
         this.setEmail(user.getEmail());
         this.setDepartment(user.getDepartment());
-        this.setRealName(user.getRealName());
-        this.setState(user.getState());
+         this.setState(user.getState());
         this.setRole(user.getRole());
         this.setPriviledge(user.getPriviledge());
     }

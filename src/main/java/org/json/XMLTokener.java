@@ -35,7 +35,7 @@ import java.io.Reader;
 public class XMLTokener extends JSONTokener {
 
 
-   /** The table of entity values. It initially contains Character values for
+   /** The table of model values. It initially contains Character values for
     * amp, apos, gt, lt, quot.
     */
    public static final java.util.HashMap<String, Character> entity;
@@ -129,11 +129,11 @@ public class XMLTokener extends JSONTokener {
 
 
     /**
-     * Return the next entity. These entities are translated to Characters:
+     * Return the next model. These entities are translated to Characters:
      *     <code>&amp;  &apos;  &gt;  &lt;  &quot;</code>.
      * @param ampersand An ampersand character.
-     * @return  A Character or an entity String if the entity is not recognized.
-     * @throws JSONException If missing ';' in XML entity.
+     * @return  A Character or an model String if the model is not recognized.
+     * @throws JSONException If missing ';' in XML model.
      */
     public Object nextEntity(@SuppressWarnings("unused") char ampersand) throws JSONException {
         StringBuilder sb = new StringBuilder();
@@ -144,7 +144,7 @@ public class XMLTokener extends JSONTokener {
             } else if (c == ';') {
                 break;
             } else {
-                throw syntaxError("Missing ';' in XML entity: &" + sb);
+                throw syntaxError("Missing ';' in XML model: &" + sb);
             }
         }
         String string = sb.toString();
@@ -152,8 +152,8 @@ public class XMLTokener extends JSONTokener {
     }
     
     /**
-     * Unescapes an XML entity encoding;
-     * @param e entity (only the actual entity value, not the preceding & or ending ;
+     * Unescapes an XML model encoding;
+     * @param e model (only the actual model value, not the preceding & or ending ;
      * @return
      */
     static String unescapeEntity(String e) {
@@ -161,7 +161,7 @@ public class XMLTokener extends JSONTokener {
         if (e == null || e.isEmpty()) {
             return "";
         }
-        // if our entity is an encoded unicode point, parse it.
+        // if our model is an encoded unicode point, parse it.
         if (e.charAt(0) == '#') {
             int cp;
             if (e.charAt(1) == 'x') {
@@ -175,7 +175,7 @@ public class XMLTokener extends JSONTokener {
         } 
         Character knownEntity = entity.get(e);
         if(knownEntity==null) {
-            // we don't know the entity so keep it encoded
+            // we don't know the model so keep it encoded
             return '&' + e + ';';
         }
         return knownEntity.toString();

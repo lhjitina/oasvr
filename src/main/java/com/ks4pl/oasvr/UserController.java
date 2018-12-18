@@ -49,9 +49,6 @@ public class UserController {
                 continue;
             }
             System.out.println("...find user with name:"+userName);
-            if ((realName != null) && !realName.isEmpty() && !users.get(i).getRealName().equals(realName) ){
-                continue;
-            }
             if ((tel != null) && !tel.isEmpty() && !users.get(i).getTel().equals(tel)){
                 continue;
             }
@@ -75,5 +72,10 @@ public class UserController {
         return null;
     }
 
+    @RequestMapping(value = "/api/login", method = RequestMethod.POST)
+    public Integer userLogin(@RequestBody User user){
+        System.out.println("login user: ${user}");
+        return 200;
+    }
 
 }

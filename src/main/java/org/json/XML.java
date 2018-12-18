@@ -193,7 +193,7 @@ public class XML {
                 if (semic > i) {
                     final String entity = string.substring(i + 1, semic);
                     sb.append(XMLTokener.unescapeEntity(entity));
-                    // skip past the entity we just parsed.
+                    // skip past the model we just parsed.
                     i += entity.length() + 1;
                 } else {
                     // this shouldn't happen in most cases since the parser
@@ -201,7 +201,7 @@ public class XML {
                     sb.append(c);
                 }
             } else {
-                // not part of an entity
+                // not part of an model
                 sb.append(c);
             }
         }
