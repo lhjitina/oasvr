@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Component
@@ -20,7 +23,27 @@ public class KsoaFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         System.out.println("test filter.....");
-        filterChain.doFilter(servletRequest, servletResponse);
+
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        String url = request.getRequestURI();
+        System.out.println("....request uri....="+url);
+
+        HttpSession session = request.getSession();
+        String userName = (String) session.getAttribute("userName");
+
+        if (url.equals("/api/login")){
+            System.out.println("...login in.....");
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
+        else if (session.isNew() || userName==null ){
+            HttpServletResponse response= (HttpServletResponse)servletResponse;
+            response.sendError(550);
+            response.setStatus(560);
+            return;
+        }
+        else{
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
     }
 
     @Override
