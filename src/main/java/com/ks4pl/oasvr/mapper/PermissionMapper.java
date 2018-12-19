@@ -7,9 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.ArrayList;
 
 @Mapper
-public interface DepartmentMapper {
+public interface PermissionMapper {
 
-    public ArrayList<Department> selectAll();
-    public Department selectByName(@Param("name") String name);
-    public Department selectById(@Param("id") Integer id);
+    public ArrayList<Department> selectPermissionDepartmentByUser(@Param("userId") Integer userId);
 }

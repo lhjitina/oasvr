@@ -13,7 +13,19 @@ public class DepartmentService {
     @Autowired
     private DepartmentMapper departmentMapper;
 
-    public ArrayList<Department> getAll(){
+    public ArrayList<Department> selectAll(){
         return departmentMapper.selectAll();
     }
+
+    public Department selectByName(String name){
+        if (name == null)
+            return null;
+        return departmentMapper.selectByName(name);
+    }
+
+    public Boolean isIdValid(Integer id){
+        return (departmentMapper.selectById(id) != null);
+    }
+
+
 }

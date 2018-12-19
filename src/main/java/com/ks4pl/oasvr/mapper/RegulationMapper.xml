@@ -12,12 +12,18 @@
         <result column="operateTime" property="operateTime"/>
     </resultMap>
 
-    <sql id="regHeader">
+    <sql id="regCol">
         id, name, departmentId, issueDate, state, operatorId, operateTime
     </sql>
     <select id="selectAll" resultMap="regResultMap" resultType="com.ks4pl.oasvr.entity.Regulation">
-        select <include refid="regHeader"/>  from regulation
+        select <include refid="regCol"/>  from regulation ORDER BY issueDate
     </select>
+
+    <insert id="insert" parameterType="com.ks4pl.oasvr.entity.Regulation">
+        INSERT INTO regulation(<include refid="regCol"/>)
+        VALUES (#{regulation.id}, #{regulation.name}, #{regulation.department}, #{regulation.issueDate},
+                #{regulation.state}, #{regulation.operatorId}, #{regulation.operateTime})
+    </insert>
 </mapper>
 
 

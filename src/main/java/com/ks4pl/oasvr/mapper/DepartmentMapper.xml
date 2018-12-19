@@ -8,6 +8,14 @@
     </resultMap>
 
     <select id="selectAll" resultMap="BaseResultMap">
-        select id, name from department
+        SELECT id, name FROM department
+    </select>
+
+    <select id="selectByName" parameterType="String" resultMap="BaseResultMap">
+        SELECT id, name from department WHERE name=#{name}
+    </select>
+
+    <select id="selectById" parameterType="Integer" resultMap="BaseResultMap">
+        SELECT id, name from department WHERE id=#{id}
     </select>
 </mapper>

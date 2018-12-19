@@ -1,7 +1,9 @@
 package com.ks4pl.oasvr.controller;
 
+import com.ks4pl.oasvr.entity.Department;
 import com.ks4pl.oasvr.entity.Regulation;
 import com.ks4pl.oasvr.model.RegulationListItem;
+import com.ks4pl.oasvr.service.DepartmentService;
 import com.ks4pl.oasvr.service.RegulationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,16 +26,8 @@ public class RegulationController {
     @Autowired
     private RegulationService regulationService;
 
-    public static String getPath(){
-        String os_name = System.getProperties().get("os.name").toString().toLowerCase();
-        System.out.println("os name is ...."+os_name);
-        if(os_name.contains("windows")) {
-            return "e:/projects/data/";
-        }
-        else{
-            return "/Users/lhj/work/";
-        }
-    }
+    @Autowired
+    private DepartmentService departmentService;
 
     public RegulationController() {
 
@@ -97,26 +91,29 @@ public class RegulationController {
 
     @RequestMapping(value = "/api/regulation/upload", method = RequestMethod.POST)
     @ResponseBody
-    public String FileUpload(@RequestParam(value = "department") String department,
-                             MultipartFile file){
-        if (file == null)
-            return "fail";
+    public String FileUpload(@RequestParam(value = "department") Integer departmentId, MultipartFile file){
 
-        String originalFileName = file.getOriginalFilename();
-        try {
-            byte[] bytes = file.getBytes();
-            FileOutputStream fileOutputStream = new FileOutputStream(new File(getPath() + originalFileName));
-            fileOutputStream.write(bytes);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return "fail";
-        } catch (IOException e) {
-            e.printStackTrace();
+        System.out.println("upload file with department id=" + departmentId);
+        if (!regulationService.FileUpload(file)){
+             return "fail";
+        }
+        else if (!departmentService.isIdValid(departmentId)){
             return "fail";
         }
+        else{
+            Regulation regulation = new Regulation();
+            regulation.setId(0);
+            regulation.setName(file.getOriginalFilename());
+            regulation.setDepartment(departmentId);
+            regulation.setIssueDate(new Date());
+            regulation.setState("有效");
+            regulation.setOperatorId(1);
+            regulation.setOperateTime(new Timestamp(System.currentTimeMillis()));
 
+            if (regulationService.insert(regulation) == 0){
+                return "fail";
+            }
+        }
         return "ok";
     }
 }

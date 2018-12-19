@@ -16,12 +16,5 @@
          FROM regulation r, department d, user u
          WHERE r.departmentId=d.id AND r.operatorId=u.id
     </select>
-    
-    <resultMap id="contentResult" type="map">
-        <result property="content" column="content" jdbcType="BLOB" typeHandler="org.apache.ibatis.type.BlobTypeHandler"/>
-    </resultMap>
-    <select id="selectContent" parameterType="java.lang.String" resultMap="contentResult">
-        SELECT content FROM regulation WHERE name=#{name}
-    </select>
-    
+
 </mapper>
