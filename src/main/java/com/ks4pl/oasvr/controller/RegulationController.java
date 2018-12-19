@@ -1,6 +1,5 @@
 package com.ks4pl.oasvr.controller;
 
-import com.ks4pl.oasvr.entity.Department;
 import com.ks4pl.oasvr.entity.Regulation;
 import com.ks4pl.oasvr.model.RegulationListItem;
 import com.ks4pl.oasvr.service.DepartmentService;
@@ -13,15 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 @Controller
 public class RegulationController {
-    private ArrayList<Regulation> Regulations;
 
     @Autowired
     private RegulationService regulationService;
@@ -47,19 +45,8 @@ public class RegulationController {
     public void GetRegulationContent(@PathVariable String name, HttpServletResponse response) throws IOException {
 
         System.out.println(".....get reuglation content........name:"+name);
-        byte[] content = regulationService.getRegulationContent(name);
+        Boolean bGet = regulationService.getRegulationContent(name, response);
 
-        File f = new File("testblob.pdf");
-
-        FileOutputStream fos = new FileOutputStream(f);
-
-        fos.write(content);
-        fos.close();
-
-            ServletOutputStream sos = response.getOutputStream();
-            response.setContentType("application/octet-stream");
-        sos.write(content);
-            sos.close();
 
         /*       System.out.println("........get content............");
         File regFile = new File(getPath() + name);
@@ -80,20 +67,24 @@ public class RegulationController {
         sos.close();
         */
     }
-    @RequestMapping(value = "/api/regmgt/list", method = RequestMethod.GET)
-    @ResponseBody
-    public ArrayList<Regulation> GetRegulationMgts(@RequestParam(value = "name", required = false) String name,
-                                                @RequestParam(value = "department", required = false) String department,
-                                                @RequestParam(value = "startDate", required = false) String startDate,
-                                                @RequestParam(value = "endDate", required = false) String endDate){
-        return null;
-    }
+
 
     @RequestMapping(value = "/api/regulation/upload", method = RequestMethod.POST)
     @ResponseBody
-    public String FileUpload(@RequestParam(value = "department") Integer departmentId, MultipartFile file){
+    public String FileUpload(@RequestParam(value = "department") Integer departmentId,
+                             @RequestParam(value = "issueDate") String issueDateStr,
+                             MultipartFile file){
 
-        System.out.println("upload file with department id=" + departmentId);
+        System.out.println("upload file with department id=" + departmentId + "  issueDate=" + issueDateStr);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date issueDate = null;
+        try {
+            issueDate = sdf.parse(issueDateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "fail";
+        }
+
         if (!regulationService.FileUpload(file)){
              return "fail";
         }
@@ -105,7 +96,7 @@ public class RegulationController {
             regulation.setId(0);
             regulation.setName(file.getOriginalFilename());
             regulation.setDepartment(departmentId);
-            regulation.setIssueDate(new Date());
+            regulation.setIssueDate(issueDate);
             regulation.setState("有效");
             regulation.setOperatorId(1);
             regulation.setOperateTime(new Timestamp(System.currentTimeMillis()));
