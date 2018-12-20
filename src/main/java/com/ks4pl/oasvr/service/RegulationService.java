@@ -33,6 +33,7 @@ public class RegulationService {
         return regulationListItemMapper.selectAll();
     }
 
+<<<<<<< HEAD
     public Boolean getRegulationContent(String name, HttpServletResponse response){
         File regFile = new File(getPath() + name);
         System.out.println("....get regulation file: " + getPath() + name);
@@ -60,6 +61,9 @@ public class RegulationService {
         }
         return true;
     }
+=======
+
+>>>>>>> refs/remotes/origin/master
 
     public static String getPath(){
         String os_name = System.getProperties().get("os.name").toString().toLowerCase();
@@ -70,6 +74,37 @@ public class RegulationService {
         else{
             return "/Users/lhj/work/";
         }
+    }
+
+    public Boolean getRegulationContent(String name, HttpServletResponse response){
+        File regFile = new File(getPath() + name);
+
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(regFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        Long flen = regFile.length();
+        byte data[] = new byte[flen.intValue()];
+
+        try {
+            fis.read(data, 0, flen.intValue());
+            ServletOutputStream sos = response.getOutputStream();
+            sos.write(data, 0, flen.intValue());
+
+            response.setContentType("application/octet-stream");
+
+            fis.close();
+            sos.close();
+            sos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public Boolean FileUpload(MultipartFile file) {
