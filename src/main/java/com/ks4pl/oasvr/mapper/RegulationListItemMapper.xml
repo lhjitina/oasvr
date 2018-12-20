@@ -17,4 +17,31 @@
          WHERE r.departmentId=d.id AND r.operatorId=u.id
     </select>
 
+    <select id="selectByCondition" parameterType="Map" resultMap="BaseResultMap">
+        SELECT r.name, r.issueDate, r.state, r.operateTime, d.name department, u.name operator
+        FROM regulation r, department d, user u
+        <where>
+            r.departmentId=d.id AND r.operatorId=u.id
+            <if test="name!=null">
+                AND r.name LIKE  concat('%', #{name}, '%')
+            </if>
+            <if test="departmentId != null">
+                AND r.departmentId=#{departmentId}
+            </if>
+            <if test="startDate != null">
+                AND r.issueDate &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND r.issueDate &lt;= #{endDate}
+            </if>
+            <if test="state != null">
+                And r.state=#{state}
+            </if>
+
+
+
+         </where>
+    </select>
+
+
 </mapper>

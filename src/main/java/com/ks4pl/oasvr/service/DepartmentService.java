@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @Service
 public class DepartmentService {
@@ -26,6 +27,7 @@ public class DepartmentService {
     public Boolean isIdValid(Integer id){
         return (departmentMapper.selectById(id) != null);
     }
+
 
 
 }

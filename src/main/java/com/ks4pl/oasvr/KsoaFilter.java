@@ -22,11 +22,11 @@ public class KsoaFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("test filter.....");
+        filterChain.doFilter(servletRequest, servletResponse);
+        return;
 
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
+/*        HttpServletRequest request = (HttpServletRequest) servletRequest;
         String url = request.getRequestURI();
-        System.out.println("....request uri....="+url);
 
         HttpSession session = request.getSession();
         String userName = (String) session.getAttribute("userName");
@@ -44,6 +44,7 @@ public class KsoaFilter implements Filter {
         else{
             filterChain.doFilter(servletRequest, servletResponse);
         }
+        */
     }
 
     @Override

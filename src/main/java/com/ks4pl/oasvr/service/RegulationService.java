@@ -1,5 +1,6 @@
 package com.ks4pl.oasvr.service;
 
+import com.ks4pl.oasvr.entity.Department;
 import com.ks4pl.oasvr.mapper.RegulationListItemMapper;
 import com.ks4pl.oasvr.mapper.RegulationMapper;
 import com.ks4pl.oasvr.entity.Regulation;
@@ -8,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Map;
 
 
 @Service
@@ -32,9 +33,32 @@ public class RegulationService {
         return regulationListItemMapper.selectAll();
     }
 
-    public byte[] getRegulationContent(String name){
-        return null;
+    public Boolean getRegulationContent(String name, HttpServletResponse response){
+        File regFile = new File(getPath() + name);
+        System.out.println("....get regulation file: " + getPath() + name);
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(regFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
 
+        Long flen = regFile.length();
+        byte data[] = new byte[flen.intValue()];
+
+        try {
+            fis.read(data, 0, flen.intValue());
+            ServletOutputStream sos = response.getOutputStream();
+            sos.write(data, 0, flen.intValue());
+            response.setContentType("application/octet-stream");
+            fis.close();
+            sos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public static String getPath(){
@@ -74,5 +98,9 @@ public class RegulationService {
 
     public Integer insert(Regulation regulation){
         return regulationMapper.insert(regulation);
+    }
+
+    public ArrayList<RegulationListItem> selectListItemByCondition(Map<String, Object> condition){
+        return regulationListItemMapper.selectByCondition(condition);
     }
 }
