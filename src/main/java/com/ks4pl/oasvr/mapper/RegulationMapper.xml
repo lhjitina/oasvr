@@ -24,6 +24,15 @@
         VALUES (#{regulation.name}, #{regulation.department}, #{regulation.issueDate},
                 #{regulation.state}, #{regulation.operatorId}, #{regulation.operateTime})
     </insert>
+
+    <update id="updateStateByName" >
+        UPDATE regulation SET state=#{state} WHERE name=#{name}
+    </update>
+
+    <delete id="deleteByName">
+        DELETE FROM regulation WHERE name=#{name}
+    </delete>
+
 </mapper>
 
 

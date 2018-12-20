@@ -12,4 +12,8 @@ public interface RegulationMapper {
     public ArrayList<Regulation> selectAll();
 
     public int insert(@Param("regulation") Regulation regulation);
+
+    public int updateStateByName(@Param("name")String name, @Param("state")String state);
+
+    public int deleteByName(@Param("name")String name);
 }

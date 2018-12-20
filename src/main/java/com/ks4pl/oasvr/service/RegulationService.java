@@ -33,7 +33,6 @@ public class RegulationService {
         return regulationListItemMapper.selectAll();
     }
 
-
     public Boolean getRegulationContent(String name, HttpServletResponse response){
         File regFile = new File(getPath() + name);
         System.out.println("....get regulation file: " + getPath() + name);
@@ -62,7 +61,7 @@ public class RegulationService {
         return true;
     }
 
-
+    @org.jetbrains.annotations.NotNull
     public static String getPath(){
         String os_name = System.getProperties().get("os.name").toString().toLowerCase();
         System.out.println("os name is ...."+os_name);
@@ -70,7 +69,7 @@ public class RegulationService {
             return "e:/projects/data/";
         }
         else{
-            return "/Users/lhj/work/";
+            return "/Users/lhj/work/data/";
         }
     }
 
@@ -104,5 +103,17 @@ public class RegulationService {
 
     public ArrayList<RegulationListItem> selectListItemByCondition(Map<String, Object> condition){
         return regulationListItemMapper.selectByCondition(condition);
+    }
+
+    public Integer updateState(String name, String state){
+        return regulationMapper.updateStateByName(name, state);
+    }
+
+    public Boolean stateValid(String state){
+        return (state.equals("有效") || (state.equals("作废")));
+    }
+
+    public Integer delete(String name){
+        return regulationMapper.deleteByName(name);
     }
 }

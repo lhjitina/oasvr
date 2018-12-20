@@ -11,11 +11,13 @@ import com.ks4pl.oasvr.service.PermissionService;
 import com.ks4pl.oasvr.service.RegulationService;
 import com.ks4pl.oasvr.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.sql.Timestamp;
@@ -43,12 +45,12 @@ public class RegulationController {
     }
 
     @RequestMapping(value = "/api/regulation/list", method = RequestMethod.GET)
-    @ResponseBody
-    public ArrayList<RegulationListItem> GetRegulations(@RequestParam(value = "name", required = false) String name,
-                                                        @RequestParam(value = "department", required = false) String department,
-                                                        @RequestParam(value = "startDate", required = false) String startDate,
-                                                        @RequestParam(value = "endDate", required = false) String endDate,
-                                                        @RequestParam(value = "state", required = false) String state){
+    public ArrayList<RegulationListItem> GetRegulations(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "department", required = false) String department,
+            @RequestParam(value = "startDate", required = false) String startDate,
+            @RequestParam(value = "endDate", required = false) String endDate,
+            @RequestParam(value = "state", required = false) String state){
 
         System.out.println("enter:   /api/regulation/list");
         Map<String, Object> condition = new HashMap<>();
@@ -74,18 +76,15 @@ public class RegulationController {
     }
 
     @RequestMapping(value="/api/regulation/content/{name}", method = RequestMethod.GET)
-    public Integer GetRegulationContent(@PathVariable String name, HttpServletResponse response){
+    public void GetRegulationContent(@PathVariable String name, HttpServletResponse response){
+       if (regulationService.getRegulationContent(name, response) == false){
+           System.out.println("GetRegulationContent error");
+       }
 
-        Integer ret = 200;
-        if (!regulationService.getRegulationContent(name, response)){
-            ret = 201;
-        }
-        return ret;
     }
 
 
     @RequestMapping(value = "/api/regulation/upload", method = RequestMethod.POST)
-    @ResponseBody
     public String FileUpload(@RequestParam(value = "department") Integer departmentId,
                              @RequestParam(value = "issueDate") String issueDateStr,
                              MultipartFile file){
@@ -131,5 +130,55 @@ public class RegulationController {
             return "fail";
         }
         return "ok";
+    }
+
+ //   @RequestMapping(value = "/api/regulation/state", method = RequestMethod.POST)
+    @PostMapping(value = "/api/regulation/state", produces = MediaType.APPLICATION_JSON_VALUE)
+    public void setRegulationState(@RequestBody String name){
+        System.out.println("name is :" + name);
+
+/*    public void setRegulationState(HttpServletRequest request){
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder("");
+        try
+        {
+            br = request.getReader();
+            String str;
+            while ((str = br.readLine()) != null)
+            {
+                System.out.println(str);
+                sb.append(str);
+            }
+            br.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            if (null != br)
+            {
+                try
+                {
+                    br.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        System.out.println(sb.toString());
+*/
+
+ //       System.out.println("change reg state: " + name + "state: " + state );
+ //       if (regulationService.stateValid(state)){
+  //          regulationService.updateState(name, state);
+  //      }
+    }
+
+    public void deleteRegulation(@RequestParam String name){
+        regulationService.delete(name);
     }
 }
