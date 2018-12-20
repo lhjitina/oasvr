@@ -11,4 +11,13 @@
         SELECT d.id, d.name FROM permission p, department d WHERE p.userId = #{userId} AND d.id=p.departmentId
     </select>
 
+    <resultMap id="PermissionMap" type="com.ks4pl.oasvr.entity.Permission">
+        <result property="userId" column="userId"/>
+        <result property="departmentId" column="departmentId"/>
+    </resultMap>
+    <select id="selectPermissionByUserAndDepartment" resultMap="PermissionMap">
+        SELECT userId, departmentId FROM permission WHERE userId = #{uid} AND departmentId=#{did}
+    </select>
+
+
 </mapper>

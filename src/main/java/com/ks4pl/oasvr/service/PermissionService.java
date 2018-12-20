@@ -16,4 +16,9 @@ public class PermissionService {
     public ArrayList<Department> getPermissionDeprtmentByUser(Integer userId){
         return permissionMapper.selectPermissionDepartmentByUser(userId);
     }
+
+    public Boolean permissionExist(Integer uid, Integer did){
+        Boolean bExist = (permissionMapper.selectPermissionByUserAndDepartment(uid, did) != null);
+        return bExist;
+    }
 }

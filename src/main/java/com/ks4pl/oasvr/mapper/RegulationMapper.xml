@@ -20,8 +20,8 @@
     </select>
 
     <insert id="insert" parameterType="com.ks4pl.oasvr.entity.Regulation">
-        INSERT INTO regulation(<include refid="regCol"/>)
-        VALUES (#{regulation.id}, #{regulation.name}, #{regulation.department}, #{regulation.issueDate},
+        INSERT INTO regulation(name, departmentId, issueDate, state, operatorId, operateTime)
+        VALUES (#{regulation.name}, #{regulation.department}, #{regulation.issueDate},
                 #{regulation.state}, #{regulation.operatorId}, #{regulation.operateTime})
     </insert>
 </mapper>

@@ -37,10 +37,8 @@
             <if test="state != null">
                 And r.state=#{state}
             </if>
-
-
-
-         </where>
+        </where>
+        ORDER by r.issueDate DESC
     </select>
 
 
