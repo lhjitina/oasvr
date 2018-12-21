@@ -17,11 +17,54 @@
     <sql id="allCol">
         id, name, tel, email, departmentId, state, registTime, lastLoginTime, passwd
     </sql>
+
     <select id="selectUserByTelOrEmail" resultMap="userResultMap" resultType="com.ks4pl.oasvr.entity.User">
         SELECT <include refid="allCol"/>  FROM user
-        WHERE tel=#{TelOrEmail} OR email=#{TelOrEmail}
+        WHERE tel=#{TelOrEmail} OR email=#{TelOrEmail} AND delete=0
     </select>
 
+    <sql id="insCol">
+        name, tel, email, departmentId, state, registTime, passwd, delete
+    </sql>
+    <insert id="insert"  parameterType="com.ks4pl.oasvr.entity.User">
+        INSERT INTO user (<include refid="insCol"/>)
+        VALUES (#{user.name}, #{user.tel}, #{user.email}, #{user.departmentId}, #{user.state},
+                #{user.registTime}, #{user.passwd}, 0)
+    </insert>
+
+    <update id="deleteByTelOrEmail" parameterType="String">
+        UPDATE user SET delete=1 WHERE tel=#{TelOrEmail} OR email=#{TelOrEmail}
+    </update>
+
+    <update id="updateById" parameterType="com.ks4pl.oasvr.entity.User">
+        UPDATE user <trim prefix="SET" suffixOverrides=",">
+        <if test="u.name!=null">
+            name=#{u.name},
+        </if>
+        <if test="u.tel != null">
+            tel=#{u.tel},
+        </if>
+        <if test="u.email != null">
+            tel=#{u.email},
+        </if>
+        <if test="u.departmentId != null">
+            tel=#{u.departmentId},
+        </if>
+        <if test="u.state != null">
+            tel=#{u.state},
+        </if>
+        <if test="u.passwd != null">
+            tel=#{u.passwd},
+        </if>
+        <if test="u.delete != null">
+            tel=#{u.delete},
+        </if>
+        <if test="u.lastLoginTime != null">
+            tel=#{u.lastLoginTime},
+        </if>
+    </trim>
+        WHERE id=#{u.id}
+    </update>
 </mapper>
 
 

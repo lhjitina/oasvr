@@ -1,12 +1,16 @@
 package com.ks4pl.oasvr.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.ks4pl.oasvr.MyUtils;
 import com.ks4pl.oasvr.entity.User;
+import com.ks4pl.oasvr.model.UserListItem;
 import com.ks4pl.oasvr.service.SessionService;
 import com.ks4pl.oasvr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @RestController
@@ -49,8 +53,26 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/user/list", method= RequestMethod.GET)
-    public ArrayList<User> getUsers(String userName, String realName, String tel, String department){
-         return null;
+    public ArrayList<UserListItem> getUserList(String userName, String departmentId, String tel, String email, String state){
+        Map<String, Object> condition = new HashMap<>();
+        if ((userName != null) && !userName.trim().isEmpty()){
+            condition.put("name", userName);
+        }
+        if ((departmentId !=null) && !departmentId.trim().isEmpty()){
+            condition.put("departmentId", departmentId);
+        }
+        if ((tel != null) && !tel.trim().isEmpty()){
+            condition.put("tel", tel);
+        }
+        if ((email != null) && !email.trim().isEmpty()){
+            condition.put("email", email);
+        }
+        if ((state != null) && !state.trim().isEmpty()){
+            condition.put("state", state);
+        }
+
+        System.out.println("get user list with condition: " + condition);
+        return userService.selectUserListItemByCondition(condition);
     }
 
     @RequestMapping(value = "/api/user/edit", method= RequestMethod.POST)

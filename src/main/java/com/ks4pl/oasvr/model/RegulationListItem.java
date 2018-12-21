@@ -10,10 +10,12 @@ import java.util.Date;
 @Setter
 public class RegulationListItem {
     private String name;
-    private String department;
+    private String departmentName;
+    private Integer departmentId;
     private Date issueDate;
     private String state;
-    private String operator;
+    private String operatorName;
+    private Integer operatorId;
     private Timestamp operateTime;
 
 }

@@ -4,21 +4,24 @@
 
     <resultMap id="BaseResultMap" type="com.ks4pl.oasvr.model.RegulationListItem">
         <result property="name" column="name" />
-        <result property="department" column="department"/>
+        <result property="departmentName" column="depName"/>
+        <result property="departmentId" column="depId"/>
         <result property="issueDate" column="issueDate"/>
         <result property="state" column="state"/>
-        <result property="operator" column="operator"/>
+        <result property="operatorName" column="operator"/>
+        <result property="operatorId" column="uid"/>
         <result property="operateTime" column="operateTime"/>
     </resultMap>
 
     <select id="selectAll" resultMap="BaseResultMap">
-        SELECT r.name, r.issueDate, r.state, r.operateTime, d.name department, u.name operator
+        SELECT r.name, r.issueDate, r.state, r.operateTime,
+                d.name depName, d.id depId, u.name operator, u.id uid
          FROM regulation r, department d, user u
          WHERE r.departmentId=d.id AND r.operatorId=u.id
     </select>
 
     <select id="selectByCondition" parameterType="Map" resultMap="BaseResultMap">
-        SELECT r.name, r.issueDate, r.state, r.operateTime, d.name department, u.name operator
+        SELECT r.name, r.issueDate, r.state, r.operateTime, d.name depName, d.id depId, u.name operator, u.id uid
         FROM regulation r, department d, user u
         <where>
             r.departmentId=d.id AND r.operatorId=u.id

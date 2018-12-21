@@ -61,7 +61,6 @@ public class RegulationService {
         return true;
     }
 
-    @org.jetbrains.annotations.NotNull
     public static String getPath(){
         String os_name = System.getProperties().get("os.name").toString().toLowerCase();
         System.out.println("os name is ...."+os_name);
@@ -105,8 +104,8 @@ public class RegulationService {
         return regulationListItemMapper.selectByCondition(condition);
     }
 
-    public Integer updateState(String name, String state){
-        return regulationMapper.updateStateByName(name, state);
+    public Integer updateState(Regulation regulation){
+        return regulationMapper.updateStateByName(regulation);
     }
 
     public Boolean stateValid(String state){

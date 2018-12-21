@@ -14,8 +14,7 @@ public class Regulation {
     private Integer operatorId;
     private Timestamp operateTime;
 
-     public Regulation(Integer id, String name, Integer department, Date issueDate, String state, Integer operatorId, Timestamp operateTime) {
-        setId(id);
+     public Regulation(String name, Integer department, Date issueDate, String state, Integer operatorId, Timestamp operateTime) {
         setName(name);
         setDepartment(department);
         setIssueDate(issueDate);

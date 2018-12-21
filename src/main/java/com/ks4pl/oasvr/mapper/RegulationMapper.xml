@@ -26,7 +26,8 @@
     </insert>
 
     <update id="updateStateByName" >
-        UPDATE regulation SET state=#{state} WHERE name=#{name}
+        UPDATE regulation SET state=#{reg.state}, operatorId=#{reg.operatorId}, operateTime=#{reg.operateTime}
+        WHERE name=#{reg.name}
     </update>
 
     <delete id="deleteByName">

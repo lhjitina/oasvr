@@ -44,15 +44,7 @@ public class RegulationController {
 
     }
 
-    @RequestMapping(value = "/api/regulation/list", method = RequestMethod.GET)
-    public ArrayList<RegulationListItem> GetRegulations(
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "department", required = false) String department,
-            @RequestParam(value = "startDate", required = false) String startDate,
-            @RequestParam(value = "endDate", required = false) String endDate,
-            @RequestParam(value = "state", required = false) String state){
-
-        System.out.println("enter:   /api/regulation/list");
+    private ArrayList<RegulationListItem> getRegList(String name, String department, String startDate, String endDate, String state){
         Map<String, Object> condition = new HashMap<>();
         if (name !=null && !name.trim().isEmpty()){
             condition.put("name", name);
@@ -72,15 +64,40 @@ public class RegulationController {
         }
 
         System.out.println("conditons:"+condition);
-        return regulationService.selectListItemByCondition(condition);
+        ArrayList<RegulationListItem> ret = regulationService.selectListItemByCondition(condition);
+        if (ret == null){
+            System.out.println("select regulations return value is null");
+        }
+        return ret;
     }
+    @RequestMapping(value = "/api/front/regulation/list", method = RequestMethod.GET)
+    public ArrayList<RegulationListItem> frontGetRegulationList(String name,
+                                                                String department,//department id
+                                                                String startDate,
+                                                                String endDate,
+                                                                String state) {
+        System.out.println("enter:   /api/front/regulation/list");
+        return getRegList(name, department, startDate, endDate, state);
+    }
+
+    @RequestMapping(value = "/api/console/regulation/list", method = RequestMethod.GET)
+    public ArrayList<RegulationListItem> consoleGetRegulationList(String name,
+                                                    @RequestParam String department,
+                                                                  String startDate,
+                                                                  String endDate,
+                                                                  String state){
+        System.out.println("enter:/api/console/regulation/list  department=" + department);
+        if (department.trim().isEmpty()){
+            return null;
+         }
+        return getRegList(name, department, startDate, endDate, state);
+   }
 
     @RequestMapping(value="/api/regulation/content/{name}", method = RequestMethod.GET)
     public void GetRegulationContent(@PathVariable String name, HttpServletResponse response){
        if (regulationService.getRegulationContent(name, response) == false){
            System.out.println("GetRegulationContent error");
        }
-
     }
 
 
@@ -134,8 +151,19 @@ public class RegulationController {
 
  //   @RequestMapping(value = "/api/regulation/state", method = RequestMethod.POST)
     @PostMapping(value = "/api/regulation/state", produces = MediaType.APPLICATION_JSON_VALUE)
-    public void setRegulationState(@RequestBody String name){
-        System.out.println("name is :" + name);
+    public void setRegulationState(@RequestBody RegulationListItem regulationListItem){
+        System.out.println("setRegulationState:" + regulationListItem.getName());
+        Regulation regulation = new Regulation(regulationListItem.getName(),
+                regulationListItem.getDepartmentId(),
+                regulationListItem.getIssueDate(),
+                regulationListItem.getState(),
+                regulationListItem.getOperatorId(),
+                //sessionService.getCurrentUserId(),
+                new Timestamp(System.currentTimeMillis()));
+        regulationService.updateState(regulation);
+
+
+
 
 /*    public void setRegulationState(HttpServletRequest request){
         BufferedReader br = null;

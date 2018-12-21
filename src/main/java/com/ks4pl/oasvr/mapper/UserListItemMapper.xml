@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ks4pl.oasvr.mapper.UserListItemMapper">
+
+    <resultMap id="userResultMap" type="com.ks4pl.oasvr.model.UserListItem">
+        <id column="id"  property="id"/>
+        <result column="name" property="name"/>
+        <result column="departmentId" property="departmentId"/>
+        <result column="departmentName" property="departmentName"/>
+        <result column="tel" property="tel"/>
+        <result column="state" property="state"/>
+        <result column="email" property="email"/>
+        <result column="registTime" property="registTime"/>
+        <result column="lastLoginTime" property="lastLoginTime"/>
+    </resultMap>
+
+    <sql id="allCol">
+        u.id, u.name, u.tel, u.email, u.departmentId, u.state, u.registTime, u.lastLoginTime, d.name departmentName
+    </sql>
+
+    <select id="selectByCondition" resultMap="userResultMap" resultType="com.ks4pl.oasvr.model.UserListItem">
+        SELECT <include refid="allCol"/>  FROM user u, department d
+        <where>
+            d.id=u.departmentId AND u.delete=0
+            <if test="id!=null">
+                AND u.id=#{id}
+            </if>
+            <if test="name!=null">
+                AND u.name LIKE  concat('%',#{name},'%')
+            </if>
+            <if test="tel!=null">
+                AND u.tel LIKE  concat('%',#{tel},'%')
+            </if>
+            <if test="emal!=null">
+                AND u.email LIKE  concat('%',#{email},'%')
+            </if>
+            <if test="departId!=null">
+                AND u.departmentId=#{departmentId}
+            </if>
+            <if test="state!=null">
+                AND u.state=#{state}
+            </if>
+
+        </where>
+    </select>
+ </mapper>
+
+
+
