@@ -12,7 +12,7 @@ import java.util.Map;
 @Mapper
 public interface RegulationListItemMapper {
 
-    public ArrayList<RegulationListItem> selectAll();
-    public ArrayList<RegulationListItem> selectByCondition(Map<String, Object> conditionMap);
+    ArrayList<RegulationListItem> selectAll();
+    ArrayList<RegulationListItem> selectByCondition(Map<String, Object> conditionMap);
 
 }

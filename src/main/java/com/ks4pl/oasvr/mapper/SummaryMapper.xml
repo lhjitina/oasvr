@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ks4pl.oasvr.mapper.SummaryMapper">
+
+    <resultMap id="baseResultMap" type="com.ks4pl.oasvr.entity.Summary">
+        <id column="id"  property="id"/>
+        <result column="name"  property="name"/>
+        <result column="meetingDate" property="meetingDate"/>
+        <result column="operatorId" property="operatorId"/>
+        <result column="operateTime" property="operateTime"/>
+    </resultMap>
+
+    <sql id="insCol">
+        name, meetingDate, operatorId, operateTime
+    </sql>
+
+    <insert id="insert" parameterType="com.ks4pl.oasvr.entity.Summary">
+        INSERT INTO summary (<include refid="insCol"/> )
+        VALUES (#{sum.name}, #{sum.meetingDate},
+                #{sum.operatorId}, #{sum.operateTime})
+    </insert>
+
+    <delete id="deleteByName" >
+        DELETE FROM summary WHERE name=#{name}
+    </delete>
+
+</mapper>
+
+
+

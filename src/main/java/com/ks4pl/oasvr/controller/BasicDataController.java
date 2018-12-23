@@ -35,12 +35,4 @@ public class BasicDataController {
         return departmentService.selectAll();
     }
 
-    @RequestMapping(value = "/api/permission/department", method = RequestMethod.GET)
-    public ArrayList<Department> getPermissionDeprtmentByUser(){
-
-        Integer userId = sessionService.getCurrentUserId();
-        System.out.println("query permission department with userid="+userId);
-
-        return permissionService.getPermissionDeprtmentByUser(userId);
-    }
 }

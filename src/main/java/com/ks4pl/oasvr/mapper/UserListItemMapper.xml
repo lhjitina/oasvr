@@ -21,7 +21,7 @@
     <select id="selectByCondition" resultMap="userResultMap" resultType="com.ks4pl.oasvr.model.UserListItem">
         SELECT <include refid="allCol"/>  FROM user u, department d
         <where>
-            d.id=u.departmentId AND u.delete=0
+            d.id=u.departmentId AND u.deleted=0
             <if test="id!=null">
                 AND u.id=#{id}
             </if>

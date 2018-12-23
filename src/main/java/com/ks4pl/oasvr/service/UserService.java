@@ -21,7 +21,27 @@ public class UserService {
         return userMapper.selectUserByTelOrEmail(userTelOrEmail);
     }
 
+    public User selectUserById(Integer uid){
+        return userMapper.slectUserById(uid);
+    }
+
     public ArrayList<UserListItem> selectUserListItemByCondition(Map<String, Object> condition){
         return userListItemMapper.selectByCondition(condition);
+    }
+
+    public Integer insert(User u){
+        return userMapper.insert(u);
+    }
+
+    public Integer updateById(User u){
+        return userMapper.updateById(u);
+    }
+
+    public Integer deleteUserById(Integer uid){
+        return userMapper.deleteById(uid);
+    }
+
+    public Integer resetPasswd(Integer uid, String passwd){
+        return userMapper.updatePasswdById(uid, passwd);
     }
 }

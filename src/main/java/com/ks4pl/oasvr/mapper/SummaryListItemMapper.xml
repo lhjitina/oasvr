@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ks4pl.oasvr.mapper.SummaryListItemMapper">
+
+    <resultMap id="baseResultMap" type="com.ks4pl.oasvr.model.SummaryListItem">
+        <id column="id"  property="id"/>
+        <result column="name"  property="name"/>
+        <result column="meetingDate" property="meetingDate"/>
+        <result column="operatorId" property="operatorId"/>
+        <result column="operateTime" property="operateTime"/>
+        <result column="operator" property="operatorName"/>
+    </resultMap>
+
+    <select id="selectByCondition" parameterType="Map" resultMap="baseResultMap">
+        SELECT s.name, s.meetingDate, s.operateTime, u.name operator
+        FROM summary s, user u
+       <where>
+            s.operatorId=u.id
+            <if test="name!=null">
+                AND s.name LIKE  concat('%', #{name}, '%')
+            </if>
+            <if test="startDate != null">
+                AND s.meetingDate &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND s.meetingDate &lt;= #{endDate}
+            </if>
+        </where>
+        ORDER by s.meetingDate DESC
+    </select>
+</mapper>
+
+
+

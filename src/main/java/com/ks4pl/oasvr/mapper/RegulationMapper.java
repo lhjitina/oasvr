@@ -15,5 +15,4 @@ public interface RegulationMapper {
 
     public int updateStateByName(@Param("reg")Regulation reg);
 
-    public int deleteByName(@Param("name")String name);
 }

@@ -2,8 +2,6 @@ package com.ks4pl.oasvr.controller;
 
 
 import com.ks4pl.oasvr.MyUtils;
-import com.ks4pl.oasvr.entity.Department;
-
 import com.ks4pl.oasvr.entity.Regulation;
 import com.ks4pl.oasvr.model.RegulationListItem;
 import com.ks4pl.oasvr.service.DepartmentService;
@@ -12,14 +10,9 @@ import com.ks4pl.oasvr.service.RegulationService;
 import com.ks4pl.oasvr.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,8 +26,6 @@ public class RegulationController {
 
     @Autowired
     private RegulationService regulationService;
-    @Autowired
-    private DepartmentService departmentService;
     @Autowired
     private SessionService sessionService;
     @Autowired
@@ -82,14 +73,11 @@ public class RegulationController {
 
     @RequestMapping(value = "/api/console/regulation/list", method = RequestMethod.GET)
     public ArrayList<RegulationListItem> consoleGetRegulationList(String name,
-                                                    @RequestParam String department,
+                                                                  String department,
                                                                   String startDate,
                                                                   String endDate,
                                                                   String state){
         System.out.println("enter:/api/console/regulation/list  department=" + department);
-        if (department.trim().isEmpty()){
-            return null;
-         }
         return getRegList(name, department, startDate, endDate, state);
    }
 
@@ -114,7 +102,7 @@ public class RegulationController {
         }
 
         //检查用户权限
-        if (!permissionService.permissionExist(sessionService.getCurrentUserId(), departmentId)){
+        if (!permissionService.regPermissionExist(sessionService.getCurrentUserId())){
             return "no permission";
         }
 
@@ -149,7 +137,6 @@ public class RegulationController {
         return "ok";
     }
 
- //   @RequestMapping(value = "/api/regulation/state", method = RequestMethod.POST)
     @PostMapping(value = "/api/regulation/state", produces = MediaType.APPLICATION_JSON_VALUE)
     public void setRegulationState(@RequestBody RegulationListItem regulationListItem){
         System.out.println("setRegulationState:" + regulationListItem.getName());
@@ -158,7 +145,6 @@ public class RegulationController {
                 regulationListItem.getIssueDate(),
                 regulationListItem.getState(),
                 regulationListItem.getOperatorId(),
-                //sessionService.getCurrentUserId(),
                 new Timestamp(System.currentTimeMillis()));
         regulationService.updateState(regulation);
 
@@ -206,7 +192,5 @@ public class RegulationController {
   //      }
     }
 
-    public void deleteRegulation(@RequestParam String name){
-        regulationService.delete(name);
-    }
+
 }

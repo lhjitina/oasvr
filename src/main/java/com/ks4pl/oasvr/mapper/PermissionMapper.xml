@@ -2,22 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ks4pl.oasvr.mapper.PermissionMapper">
 
-    <resultMap id="BaseResultMap" type="com.ks4pl.oasvr.entity.Department">
-        <id column="id"  property="id"/>
-        <result column="name"  property="name"/>
+    <resultMap id="perResultMap" type="com.ks4pl.oasvr.entity.Permission">
+        <result property="uid" column="uid"/>
+        <result property="pol" column="pol"/>
+        <result property="reg" column="reg"/>
+        <result property="sum" column="sum"/>
     </resultMap>
 
-    <select id="selectPermissionDepartmentByUser" resultMap="BaseResultMap">
-        SELECT d.id, d.name FROM permission p, department d WHERE p.userId = #{userId} AND d.id=p.departmentId
+    <select id="selectPermissionByUser" resultMap="perResultMap">
+        SELECT uid, pol, reg, sum FROM permission
+        WHERE uid = #{uid}
     </select>
-
-    <resultMap id="PermissionMap" type="com.ks4pl.oasvr.entity.Permission">
-        <result property="userId" column="userId"/>
-        <result property="departmentId" column="departmentId"/>
-    </resultMap>
-    <select id="selectPermissionByUserAndDepartment" resultMap="PermissionMap">
-        SELECT userId, departmentId FROM permission WHERE userId = #{uid} AND departmentId=#{did}
-    </select>
-
 
 </mapper>

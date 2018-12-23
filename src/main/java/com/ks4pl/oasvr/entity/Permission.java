@@ -6,6 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Permission {
-    private Integer userId;
-    private Integer departmentId;
+    private Integer uid;
+    private Integer pol;
+    private Integer reg;
+    private Integer sum;
 }

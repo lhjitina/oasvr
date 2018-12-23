@@ -30,10 +30,6 @@
         WHERE name=#{reg.name}
     </update>
 
-    <delete id="deleteByName">
-        DELETE FROM regulation WHERE name=#{name}
-    </delete>
-
 </mapper>
 
 

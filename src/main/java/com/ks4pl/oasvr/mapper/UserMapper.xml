@@ -20,11 +20,15 @@
 
     <select id="selectUserByTelOrEmail" resultMap="userResultMap" resultType="com.ks4pl.oasvr.entity.User">
         SELECT <include refid="allCol"/>  FROM user
-        WHERE tel=#{TelOrEmail} OR email=#{TelOrEmail} AND delete=0
+        WHERE tel=#{0} OR email=#{0} AND deleted=0
+    </select>
+
+    <select id="slectUserById" resultMap="userResultMap" resultType="com.ks4pl.oasvr.entity.User">
+        SELECT <include refid="allCol"/> FROM user WHERE id=#{uid}
     </select>
 
     <sql id="insCol">
-        name, tel, email, departmentId, state, registTime, passwd, delete
+        name, tel, email, departmentId, state, registTime, passwd, deleted
     </sql>
     <insert id="insert"  parameterType="com.ks4pl.oasvr.entity.User">
         INSERT INTO user (<include refid="insCol"/>)
@@ -32,8 +36,12 @@
                 #{user.registTime}, #{user.passwd}, 0)
     </insert>
 
-    <update id="deleteByTelOrEmail" parameterType="String">
-        UPDATE user SET delete=1 WHERE tel=#{TelOrEmail} OR email=#{TelOrEmail}
+    <update id="deleteById" parameterType="Integer">
+        UPDATE user SET deleted=1 WHERE id=#{uid}
+    </update>
+
+    <update id="updatePasswdById">
+        UPDATE user SET passwd=#{passwd} WHERE id=#{uid}
     </update>
 
     <update id="updateById" parameterType="com.ks4pl.oasvr.entity.User">
@@ -45,23 +53,15 @@
             tel=#{u.tel},
         </if>
         <if test="u.email != null">
-            tel=#{u.email},
+            email=#{u.email},
         </if>
         <if test="u.departmentId != null">
-            tel=#{u.departmentId},
+            departmentId=#{u.departmentId},
         </if>
         <if test="u.state != null">
-            tel=#{u.state},
+            state=#{u.state},
         </if>
-        <if test="u.passwd != null">
-            tel=#{u.passwd},
-        </if>
-        <if test="u.delete != null">
-            tel=#{u.delete},
-        </if>
-        <if test="u.lastLoginTime != null">
-            tel=#{u.lastLoginTime},
-        </if>
+
     </trim>
         WHERE id=#{u.id}
     </update>

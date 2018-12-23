@@ -8,6 +8,8 @@ import com.ks4pl.oasvr.service.SessionService;
 import com.ks4pl.oasvr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,29 +29,20 @@ public class UserController {
         users = new ArrayList<>();
     }
 
-    private void logUsers(){
-        users.forEach(user -> System.out.println(user.toString()));
-    }
-
     @RequestMapping(value = "/api/user/add", method = RequestMethod.POST)
-    public Integer userAdd(@RequestBody User user) {
+    public void userAdd(@RequestBody User user) {
 
-        Random rd = new Random();
-
-        user.setId(rd.nextInt());
-        users.add(user);
-        logUsers();
-        return 200;
+        System.out.println("add user: " + user.toString());
+        user.setPasswd("123456");
+        user.setRegistTime(new Timestamp(System.currentTimeMillis()));
+        user.setState("启用");
+        userService.insert(user);
     }
 
     @RequestMapping(value = "/api/user/detail", method= RequestMethod.GET)
-    public User getUserDetail(@RequestParam(value = "userName", required = true) String userName){
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getTel().equals(userName)) {
-                return users.get(i);
-            }
-        }
-        return null;
+    public User getUserDetail(@RequestParam(value = "id") Integer uid){
+        System.out.println("/api/user/detail with id="+uid);
+        return userService.selectUserById(uid);
     }
 
     @RequestMapping(value = "/api/user/list", method= RequestMethod.GET)
@@ -75,9 +68,16 @@ public class UserController {
         return userService.selectUserListItemByCondition(condition);
     }
 
-    @RequestMapping(value = "/api/user/edit", method= RequestMethod.POST)
+    @RequestMapping(value = "/api/user/update", method= RequestMethod.POST)
     public Integer getUserEdit(@RequestBody User user){
-         return null;
+        System.out.println("/api/user/update" + user);
+        return userService.updateById(user);
+    }
+
+    @RequestMapping(value = "/api/user/delete", method = RequestMethod.GET)
+    public Integer deleteUser(@RequestParam("id") Integer uid){
+        System.out.println("/api/user/delete uid="+uid);
+        return userService.deleteUserById(uid);
     }
 
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
@@ -87,8 +87,9 @@ public class UserController {
         String loginName = jsonObject.getString("loginName");
         String passwd = jsonObject.getString("passwd");
 
+        System.out.println("loginame:"+loginName + "  passwd:"+passwd);
         User u = userService.selectUserByTelOrEmail(loginName);
-            if (u == null){
+        if (u == null){
             System.out.println("user name error:" + loginName);
             ret = 201;
         }
@@ -106,6 +107,11 @@ public class UserController {
            sessionService.saveUserInfo(1, u.getName());
         }
         return ret;
+    }
+
+    @RequestMapping(value = "/api/user/passwd/reset", method = RequestMethod.GET)
+    public Integer ResetPasswd(@RequestParam("id") Integer uid){
+        return userService.resetPasswd(uid, "123456");
     }
 
 }

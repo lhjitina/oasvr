@@ -10,6 +10,5 @@ import java.util.ArrayList;
 @Mapper
 public interface PermissionMapper {
 
-    public ArrayList<Department> selectPermissionDepartmentByUser(@Param("userId") Integer userId);
-    public Permission selectPermissionByUserAndDepartment(@Param("uid")Integer uid, @Param("did") Integer did);
+    Permission selectPermissionByUser(@Param("uid")Integer uid);
 }

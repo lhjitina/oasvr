@@ -7,11 +7,15 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserMapper {
 
-    public User selectUserByTelOrEmail(@Param("TelOrEmail") String te);
+    User selectUserByTelOrEmail(String te);
 
-    public Integer insert(User user);
+    User slectUserById(Integer uid);
 
-    public Integer deleteByTelOrEmail(@Param("TelOrEmail") String te);
+    Integer insert(@Param("user") User user);
 
-    public Integer updateById(User u);
+    Integer deleteById(@Param("uid") Integer uid);
+
+    Integer updateById(@Param("u") User u);
+
+    Integer updatePasswdById(@Param("uid")Integer uid, @Param("passwd")String passwd);
 }

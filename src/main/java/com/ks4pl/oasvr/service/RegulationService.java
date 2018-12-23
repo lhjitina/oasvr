@@ -25,75 +25,13 @@ public class RegulationService {
     @Autowired
     private RegulationListItemMapper regulationListItemMapper;
 
-    public ArrayList<Regulation> getAllReg(){
-        return regulationMapper.selectAll();
-    }
-
-    public ArrayList<RegulationListItem> getAllRegulationListItem(){
-        return regulationListItemMapper.selectAll();
-    }
 
     public Boolean getRegulationContent(String name, HttpServletResponse response){
-        File regFile = new File(getPath() + name);
-        System.out.println("....get regulation file: " + getPath() + name);
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(regFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        Long flen = regFile.length();
-        byte data[] = new byte[flen.intValue()];
-
-        try {
-            fis.read(data, 0, flen.intValue());
-            ServletOutputStream sos = response.getOutputStream();
-            sos.write(data, 0, flen.intValue());
-            response.setContentType("application/octet-stream");
-            fis.close();
-            sos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    public static String getPath(){
-        String os_name = System.getProperties().get("os.name").toString().toLowerCase();
-        System.out.println("os name is ...."+os_name);
-        if(os_name.contains("windows")) {
-            return "e:/projects/data/";
-        }
-        else{
-            return "/Users/lhj/work/data/";
-        }
+        return FileUtil.getBinaryFileContent("regulation", name, response);
     }
 
     public Boolean FileUpload(MultipartFile file) {
-        System.out.println("uploadint  file......");
-        if (file == null){
-            System.out.println("file upload: error, file is null");
-        }
-        String originalFileName = file.getOriginalFilename();
-        System.out.println("uploadint  file......name:"+originalFileName);
-        try {
-            byte[] bytes = file.getBytes();
-            FileOutputStream fileOutputStream = new FileOutputStream(new File(getPath() + originalFileName));
-            fileOutputStream.write(bytes);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-            System.out.println("upload ok");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return FileUtil.FileUpload("regulation", file);
     }
 
     public Integer insert(Regulation regulation){
@@ -108,11 +46,4 @@ public class RegulationService {
         return regulationMapper.updateStateByName(regulation);
     }
 
-    public Boolean stateValid(String state){
-        return (state.equals("有效") || (state.equals("作废")));
-    }
-
-    public Integer delete(String name){
-        return regulationMapper.deleteByName(name);
-    }
 }
