@@ -12,7 +12,7 @@
     </resultMap>
 
     <select id="selectByCondition" parameterType="Map" resultMap="baseResultMap">
-        SELECT s.name, s.meetingDate, s.operateTime, u.name operator
+        SELECT s.name, s.meetingDate, s.operatorId, s.operateTime, u.name operator
         FROM summary s, user u
        <where>
             s.operatorId=u.id

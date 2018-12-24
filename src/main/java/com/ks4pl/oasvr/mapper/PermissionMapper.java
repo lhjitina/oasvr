@@ -11,4 +11,6 @@ import java.util.ArrayList;
 public interface PermissionMapper {
 
     Permission selectPermissionByUser(@Param("uid")Integer uid);
+    Integer insert(@Param("per")Permission permission);
+    Integer update(@Param("per")Permission permission);
 }

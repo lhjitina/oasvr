@@ -2,6 +2,7 @@ package com.ks4pl.oasvr.mapper;
 
 import com.ks4pl.oasvr.model.UserListItem;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -9,5 +10,7 @@ import java.util.Map;
 @Mapper
 public interface UserListItemMapper {
 
-    public ArrayList<UserListItem> selectByCondition(Map<String, Object> conditon);
+    ArrayList<UserListItem> selectByCondition(Map<String, Object> conditon);
+
+    UserListItem selectById(@Param("uid")Integer uid);
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -21,9 +22,9 @@ public class UserService {
         return userMapper.selectUserByTelOrEmail(userTelOrEmail);
     }
 
-    public User selectUserById(Integer uid){
-        return userMapper.slectUserById(uid);
-    }
+    public UserListItem selectUserListItemById(Integer uid){
+        return userListItemMapper.selectById(uid);
+}
 
     public ArrayList<UserListItem> selectUserListItemByCondition(Map<String, Object> condition){
         return userListItemMapper.selectByCondition(condition);
@@ -43,5 +44,9 @@ public class UserService {
 
     public Integer resetPasswd(Integer uid, String passwd){
         return userMapper.updatePasswdById(uid, passwd);
+    }
+
+    public Integer getLastInsertId(){
+        return userMapper.getLastInsertId();
     }
 }

@@ -12,16 +12,26 @@
         <result column="email" property="email"/>
         <result column="registTime" property="registTime"/>
         <result column="lastLoginTime" property="lastLoginTime"/>
+        <result column="pol" property="perPol"/>
+        <result column="reg" property="perReg"/>
+        <result column="sum" property="perSum"/>
+        <result column="usr" property="perUsr"/>
     </resultMap>
 
     <sql id="allCol">
-        u.id, u.name, u.tel, u.email, u.departmentId, u.state, u.registTime, u.lastLoginTime, d.name departmentName
+        u.id, u.name, u.tel, u.email, u.departmentId, u.state, u.registTime, u.lastLoginTime,
+        d.name departmentName, p.pol, p.reg, p.sum, p.usr
     </sql>
 
+    <select id="selectById" parameterType="Integer" resultMap="userResultMap">
+        SELECT <include refid="allCol"/> FROM user u, department d, permission p
+        WHERE u.id=#{uid} AND d.id=u.departmentId AND p.uid=u.id AND u.deleted=0
+    </select>
+
     <select id="selectByCondition" resultMap="userResultMap" resultType="com.ks4pl.oasvr.model.UserListItem">
-        SELECT <include refid="allCol"/>  FROM user u, department d
+        SELECT <include refid="allCol"/>  FROM user u, department d, permission p
         <where>
-            d.id=u.departmentId AND u.deleted=0
+            d.id=u.departmentId AND u.deleted=0 AND p.uid=u.id
             <if test="id!=null">
                 AND u.id=#{id}
             </if>
@@ -31,10 +41,10 @@
             <if test="tel!=null">
                 AND u.tel LIKE  concat('%',#{tel},'%')
             </if>
-            <if test="emal!=null">
+            <if test="email!=null">
                 AND u.email LIKE  concat('%',#{email},'%')
             </if>
-            <if test="departId!=null">
+            <if test="departmentId!=null">
                 AND u.departmentId=#{departmentId}
             </if>
             <if test="state!=null">

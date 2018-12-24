@@ -18,4 +18,6 @@ public interface UserMapper {
     Integer updateById(@Param("u") User u);
 
     Integer updatePasswdById(@Param("uid")Integer uid, @Param("passwd")String passwd);
+
+    Integer getLastInsertId();
 }

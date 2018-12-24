@@ -65,6 +65,10 @@
     </trim>
         WHERE id=#{u.id}
     </update>
+
+    <select id="getLastInsertId" resultType="Integer">
+        SELECT LAST_INSERT_ID()
+    </select>
 </mapper>
 
 

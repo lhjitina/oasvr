@@ -34,4 +34,19 @@ public class PermissionService {
         bExist = (permission.getSum() == 1);
         return bExist;
     }
+
+    public Boolean usrPermissionExist(Integer uid){
+        Boolean bExist = false;
+        Permission permission = permissionMapper.selectPermissionByUser(uid);
+        bExist = (permission.getUsr() == 1);
+        return bExist;
+    }
+
+    public Integer insert(Permission p){
+        return permissionMapper.insert(p);
+    }
+
+    public Integer update(Permission p){
+        return permissionMapper.update(p);
+    }
 }

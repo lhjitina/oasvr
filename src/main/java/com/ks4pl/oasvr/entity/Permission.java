@@ -1,5 +1,6 @@
 package com.ks4pl.oasvr.entity;
 
+import com.ks4pl.oasvr.model.UserListItem;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,4 +11,18 @@ public class Permission {
     private Integer pol;
     private Integer reg;
     private Integer sum;
+    private Integer usr;
+
+    public Permission() {
+    }
+
+    public static Permission fromUserListItem(UserListItem userListItem){
+        Permission p = new Permission();
+        p.setUid(userListItem.getId());
+        p.setPol(userListItem.getPerPol()? 1 : 0);
+        p.setReg(userListItem.getPerReg()? 1 : 0);
+        p.setSum(userListItem.getPerSum()? 1 : 0);
+        p.setUsr(userListItem.getPerUsr()? 1 : 0);
+        return p;
+    }
 }

@@ -12,6 +12,9 @@ public class FileUtil {
 
     public static Boolean getBinaryFileContent(String type, String name, HttpServletResponse response){
         System.out.println("....get file: " + getPath(type) + name);
+        if (getPath(type) == null)
+            return false;
+
         File file = new File(getPath(type) + name);
         FileInputStream fis = null;
         try {
@@ -50,21 +53,38 @@ public class FileUtil {
         }
         switch(type) {
             case "policy": {
-                path += "policy/";
+                path += "policy";
                 break;
             }
             case "regulation": {
-                path += "regulation/";
+                path += "regulation";
                 break;
             }
             case "summary": {
-                path += "summary/";
+                path += "summary";
                 break;
             }
             default:{
-                path += "other/";
+                path += "other";
                 break;
             }
+        }
+        File file = new File(path);
+        if(file.exists()){
+            if (file.isDirectory()){
+                path += '/';
+            }
+            else{
+                System.out.println("the same name file exist, can not create directory:" + path);
+                path = null;
+            }
+        }
+        else if (file.mkdirs()){
+            path += '/';
+        }
+        else{
+            System.out.println("the directory no exist and create fail:" + path);
+            path = null;
         }
         return path;
     }

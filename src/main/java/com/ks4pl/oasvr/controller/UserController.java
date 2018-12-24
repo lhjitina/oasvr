@@ -2,8 +2,10 @@ package com.ks4pl.oasvr.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ks4pl.oasvr.MyUtils;
+import com.ks4pl.oasvr.entity.Permission;
 import com.ks4pl.oasvr.entity.User;
 import com.ks4pl.oasvr.model.UserListItem;
+import com.ks4pl.oasvr.service.PermissionService;
 import com.ks4pl.oasvr.service.SessionService;
 import com.ks4pl.oasvr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,8 @@ public class UserController {
     private SessionService sessionService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private PermissionService permissionService;
 
     private ArrayList<User> users;
 
@@ -30,19 +34,29 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/user/add", method = RequestMethod.POST)
-    public void userAdd(@RequestBody User user) {
+    public void userAdd(@RequestBody UserListItem userListItem) {
 
-        System.out.println("add user: " + user.toString());
+        System.out.println("add user: " + userListItem.toString());
+        User user = User.fromUserListItem(userListItem);
         user.setPasswd("123456");
         user.setRegistTime(new Timestamp(System.currentTimeMillis()));
         user.setState("启用");
-        userService.insert(user);
+        if (userService.insert(user) != 0){
+            Permission p = Permission.fromUserListItem(userListItem);
+            p.setUid(userService.getLastInsertId());
+            if (permissionService.insert(p) == 0){
+                System.out.println("insert permission fail:" + p);
+            }
+        }
+        else{
+            System.out.println("insert user fail: "+user);
+        }
     }
 
     @RequestMapping(value = "/api/user/detail", method= RequestMethod.GET)
-    public User getUserDetail(@RequestParam(value = "id") Integer uid){
+    public UserListItem getUserDetail(@RequestParam(value = "id") Integer uid){
         System.out.println("/api/user/detail with id="+uid);
-        return userService.selectUserById(uid);
+        return userService.selectUserListItemById(uid);
     }
 
     @RequestMapping(value = "/api/user/list", method= RequestMethod.GET)
@@ -51,7 +65,7 @@ public class UserController {
         if ((userName != null) && !userName.trim().isEmpty()){
             condition.put("name", userName);
         }
-        if ((departmentId !=null) && !departmentId.trim().isEmpty()){
+        if ((departmentId !=null) && !departmentId.trim().isEmpty() && MyUtils.isNumeric(departmentId)){
             condition.put("departmentId", departmentId);
         }
         if ((tel != null) && !tel.trim().isEmpty()){
@@ -69,9 +83,22 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/user/update", method= RequestMethod.POST)
-    public Integer getUserEdit(@RequestBody User user){
-        System.out.println("/api/user/update" + user);
-        return userService.updateById(user);
+    public Integer getUserEdit(@RequestBody UserListItem userListItem){
+        System.out.println("/api/user/update" + userListItem.toString());
+        User user = User.fromUserListItem(userListItem);
+        Integer ret = 1;
+        if (userService.updateById(user) == 0){
+            System.out.println("update user fail");
+            ret = 0;
+        }
+        else{
+            Permission p = Permission.fromUserListItem(userListItem);
+            if (permissionService.update(p) == 0){
+                System.out.println("update permission fail: " + userListItem.toString());
+                ret = 0;
+            }
+        }
+        return  ret;
     }
 
     @RequestMapping(value = "/api/user/delete", method = RequestMethod.GET)
@@ -111,6 +138,7 @@ public class UserController {
 
     @RequestMapping(value = "/api/user/passwd/reset", method = RequestMethod.GET)
     public Integer ResetPasswd(@RequestParam("id") Integer uid){
+        System.out.println("/api/user/passwd/reset uid=" + uid);
         return userService.resetPasswd(uid, "123456");
     }
 

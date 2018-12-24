@@ -9,6 +9,6 @@ import java.util.Map;
 @Mapper
 public interface SummaryListItemMapper {
 
-    public ArrayList<SummaryListItem> selectByCondition(Map<String, Object> condition);
+    ArrayList<SummaryListItem> selectByCondition(Map<String, Object> condition);
 
 }
