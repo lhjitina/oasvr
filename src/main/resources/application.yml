@@ -1,5 +1,5 @@
 server:
-  port: 8001
+  port: 9196
 
 spring:
   jackson:
@@ -7,7 +7,7 @@ spring:
     time_zone: GMT+8
 
   datasource:
-    driver: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/kaisheng
+    url: jdbc:mysql://localhost:3306/kaisheng?serverTimezone=Asia/Shanghai
     username: root
-    password: root
+    password: root123456
+    driver-class-name: com.mysql.cj.jdbc.Driver

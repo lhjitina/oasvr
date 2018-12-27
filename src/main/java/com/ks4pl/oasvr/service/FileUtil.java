@@ -64,6 +64,10 @@ public class FileUtil {
                 path += "summary";
                 break;
             }
+            case "pdoc":{
+                path += "pdoc";
+                break;
+            }
             default:{
                 path += "other";
                 break;

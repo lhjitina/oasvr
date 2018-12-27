@@ -7,19 +7,20 @@
         <result property="pol" column="pol"/>
         <result property="reg" column="reg"/>
         <result property="sum" column="sum"/>
+        <result property="doc" column="doc"/>
     </resultMap>
 
     <select id="selectPermissionByUser" resultMap="perResultMap">
-        SELECT uid, pol, reg, sum FROM permission
+        SELECT uid, pol, reg, sum, doc FROM permission
         WHERE uid = #{uid}
     </select>
     <insert id="insert" parameterType="com.ks4pl.oasvr.entity.Permission">
-        INSERT INTO permission (uid, pol, reg, sum, usr)
-        VALUES (#{per.uid}, #{per.pol}, #{per.reg}, #{per.sum}, #{per.usr})
+        INSERT INTO permission (uid, pol, reg, sum, doc, usr)
+        VALUES (#{per.uid}, #{per.pol}, #{per.reg}, #{per.sum}, #{per.doc}, #{per.usr})
     </insert>
 
     <update id="update" parameterType="com.ks4pl.oasvr.entity.Permission">
-        UPDATE permission SET pol=#{per.pol}, reg=#{per.reg}, sum=#{per.sum}, usr=#{per.usr}
+        UPDATE permission SET pol=#{per.pol}, reg=#{per.reg}, sum=#{per.sum}, doc=#{per.doc}, usr=#{per.usr}
         WHERE uid=#{per.uid}
     </update>
 

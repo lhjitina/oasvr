@@ -35,6 +35,13 @@ public class PermissionService {
         return bExist;
     }
 
+    public Boolean docPermissionExist(Integer uid){
+        Boolean bExist = false;
+        Permission permission = permissionMapper.selectPermissionByUser(uid);
+        bExist = (permission.getDoc() == 1);
+        return bExist;
+    }
+
     public Boolean usrPermissionExist(Integer uid){
         Boolean bExist = false;
         Permission permission = permissionMapper.selectPermissionByUser(uid);

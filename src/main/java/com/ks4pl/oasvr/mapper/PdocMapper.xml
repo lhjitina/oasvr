@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ks4pl.oasvr.mapper.PdocMapper">
+
+    <resultMap id="baseResultMap" type="com.ks4pl.oasvr.entity.PartnerDoc">
+        <id column="id"  property="id"/>
+        <result column="name"  property="name"/>
+        <result column="partner" property="partner"/>
+        <result column="operatorId" property="operatorId"/>
+        <result column="operateTime" property="operateTime"/>
+    </resultMap>
+
+    <sql id="insCol">
+        name, partner, operatorId, operateTime
+    </sql>
+
+    <insert id="insert" parameterType="com.ks4pl.oasvr.entity.PartnerDoc">
+        INSERT INTO partnerdoc (<include refid="insCol"/> )
+        VALUES (#{pdoc.name}, #{pdoc.partner}, #{pdoc.operatorId}, #{pdoc.operateTime})
+    </insert>
+
+    <delete id="deleteByPartnerAndName" >
+        DELETE FROM partnerdoc  WHERE partner=#{p} AND name=#{n}
+    </delete>
+
+</mapper>
+

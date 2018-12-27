@@ -2,6 +2,7 @@ package com.ks4pl.oasvr.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ks4pl.oasvr.MyUtils;
+import com.ks4pl.oasvr.OasvrApplication;
 import com.ks4pl.oasvr.entity.Permission;
 import com.ks4pl.oasvr.entity.User;
 import com.ks4pl.oasvr.model.UserListItem;
@@ -106,6 +107,11 @@ public class UserController {
         System.out.println("/api/user/delete uid="+uid);
         return userService.deleteUserById(uid);
     }
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Integer userLogina(@RequestBody String params){
+        return userLogin(params);
+    }
+
 
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
     public Integer userLogin(@RequestBody String params){
@@ -113,7 +119,7 @@ public class UserController {
         JSONObject jsonObject = JSONObject.parseObject(params);
         String loginName = jsonObject.getString("loginName");
         String passwd = jsonObject.getString("passwd");
-
+        OasvrApplication.logger.info("user login....");
         System.out.println("loginame:"+loginName + "  passwd:"+passwd);
         User u = userService.selectUserByTelOrEmail(loginName);
         if (u == null){
@@ -128,10 +134,11 @@ public class UserController {
         }
         else if (sessionService.getCurrentUserId() != 0){
             System.out.println("the user has login, repeat login error");
-            ret = 203;
+            sessionService.saveUserInfo(u.getId(), u.getName());
         }
         else{
-           sessionService.saveUserInfo(1, u.getName());
+            System.out.println("the user login success");
+            sessionService.saveUserInfo(u.getId(), u.getName());
         }
         return ret;
     }
