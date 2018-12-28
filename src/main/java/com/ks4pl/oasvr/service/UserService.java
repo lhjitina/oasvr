@@ -21,7 +21,9 @@ public class UserService {
     public User selectUserByTelOrEmail(String userTelOrEmail){
         return userMapper.selectUserByTelOrEmail(userTelOrEmail);
     }
-
+    public User selectUserById(Integer uid){
+        return userMapper.slectUserById(uid);
+    }
     public UserListItem selectUserListItemById(Integer uid){
         return userListItemMapper.selectById(uid);
 }
@@ -48,5 +50,9 @@ public class UserService {
 
     public Integer getLastInsertId(){
         return userMapper.getLastInsertId();
+    }
+
+    public Integer modifyPasswd(Integer uid, String passwd){
+        return userMapper.updatePasswdById(uid, passwd);
     }
 }

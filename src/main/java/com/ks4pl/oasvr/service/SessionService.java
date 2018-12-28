@@ -37,4 +37,9 @@ public class SessionService {
         session.setAttribute("userName", name);
     }
 
+    public void deleteCurrentUserInfo(){
+        HttpSession session = request.getSession();
+        session.removeAttribute("userId");
+        session.removeAttribute("userName");
+    }
 }

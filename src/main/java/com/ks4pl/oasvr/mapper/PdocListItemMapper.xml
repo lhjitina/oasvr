@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ks4pl.oasvr.mapper.PdocListItemMapper">
+
+    <resultMap id="BaseResultMap" type="com.ks4pl.oasvr.model.PdocListItem">
+        <result property="name" column="name" />
+        <result property="partner" column="partner"/>
+        <result property="operatorName" column="operator"/>
+        <result property="operatorId" column="uid"/>
+        <result property="operateTime" column="operateTime"/>
+    </resultMap>
+
+    <select id="selectByCondition" parameterType="Map" resultMap="BaseResultMap">
+        SELECT pd.name, pd.partner, pd.operateTime, u.name operator, u.id uid
+        FROM partnerdoc pd, user u
+        <where>
+            u.id = pd.operatorId
+            <if test="name!=null">
+                AND pd.name LIKE  concat('%', #{name}, '%')
+            </if>
+            <if test="partner != null">
+                AND pd.partner LIKE concat('%', #{partner}, '%')
+            </if>
+        </where>
+        ORDER by pd.partner, pd.operateTime DESC
+    </select>
+</mapper>

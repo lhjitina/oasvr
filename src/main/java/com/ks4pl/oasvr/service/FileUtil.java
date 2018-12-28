@@ -46,7 +46,7 @@ public class FileUtil {
         String os_name = System.getProperties().get("os.name").toString().toLowerCase();
         System.out.println("os name is ...."+os_name);
         if(os_name.contains("windows")) {
-            path = "e:/projects/data/";
+            path = "d:/ksoa/data/";
         }
         else{
             path = "/Users/lhj/work/data/";

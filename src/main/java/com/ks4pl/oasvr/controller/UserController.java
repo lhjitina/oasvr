@@ -5,6 +5,7 @@ import com.ks4pl.oasvr.MyUtils;
 import com.ks4pl.oasvr.OasvrApplication;
 import com.ks4pl.oasvr.entity.Permission;
 import com.ks4pl.oasvr.entity.User;
+import com.ks4pl.oasvr.model.PasswdModify;
 import com.ks4pl.oasvr.model.UserListItem;
 import com.ks4pl.oasvr.service.PermissionService;
 import com.ks4pl.oasvr.service.SessionService;
@@ -12,6 +13,7 @@ import com.ks4pl.oasvr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.PrinterGraphics;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,11 +109,6 @@ public class UserController {
         System.out.println("/api/user/delete uid="+uid);
         return userService.deleteUserById(uid);
     }
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Integer userLogina(@RequestBody String params){
-        return userLogin(params);
-    }
-
 
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
     public Integer userLogin(@RequestBody String params){
@@ -147,6 +144,35 @@ public class UserController {
     public Integer ResetPasswd(@RequestParam("id") Integer uid){
         System.out.println("/api/user/passwd/reset uid=" + uid);
         return userService.resetPasswd(uid, "123456");
+    }
+
+    @RequestMapping(value = "/api/user/passwd/modify", method = RequestMethod.POST)
+    public Integer modifyPasswd(@RequestBody PasswdModify pm){
+        Integer ret = 200;
+        User user = userService.selectUserById(sessionService.getCurrentUserId());
+        if (user == null) {
+            System.out.println("modify passwd fail, can not find current user with id=" + sessionService.getCurrentUserId());
+            ret = 201;
+        }
+        else if (!user.getPasswd().equals(pm.getOldp())){
+            System.out.println("modify passwd fail, input oldp:" + pm.getOldp() +"!= passwd:" + user.getPasswd());
+            ret = 202;
+        }
+        else if (userService.modifyPasswd(user.getId(), pm.getNewp()) == 0){
+            System.out.println("modify passwd fail, database return 0");
+            ret = 203;
+        }
+        else{
+            System.out.println("modify passwd success");
+        }
+        return ret;
+    }
+
+    @RequestMapping(value = "/api/user/logout", method = RequestMethod.GET)
+    public Integer userLogouit(){
+        System.out.println("user logout uid=" + sessionService.getCurrentUserId() + "  name="+sessionService.getCurrentUserName());
+        sessionService.deleteCurrentUserInfo();
+        return 200;
     }
 
 }

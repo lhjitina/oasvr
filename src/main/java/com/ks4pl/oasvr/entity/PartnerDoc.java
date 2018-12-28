@@ -17,4 +17,15 @@ public class PartnerDoc {
 
 
     public PartnerDoc(){}
+
+    @Override
+    public String toString() {
+        return "PartnerDoc{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", partner='" + partner + '\'' +
+                ", operatorId=" + operatorId +
+                ", operateTime=" + operateTime +
+                '}';
+    }
 }
