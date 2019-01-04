@@ -68,6 +68,10 @@ public class FileUtil {
                 path += "pdoc";
                 break;
             }
+            case "contract":{
+                path += "contract";
+                break;
+            }
             default:{
                 path += "other";
                 break;

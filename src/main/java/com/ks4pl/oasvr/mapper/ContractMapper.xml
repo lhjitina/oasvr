@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ks4pl.oasvr.mapper.ContractMapper">
+
+    <resultMap id="baseResultMap" type="com.ks4pl.oasvr.entity.Contract">
+        <id column="id"  property="id"/>
+        <result column="name"  property="name"/>
+        <result column="issueDate" property="issueDate"/>
+        <result column="state" property="state"/>
+        <result column="operatorId" property="operatorId"/>
+        <result column="operateTime" property="operateTime"/>
+    </resultMap>
+
+    <sql id="insCol">
+        name, issueDate, state, operatorId, operateTime
+    </sql>
+
+    <insert id="insertone" parameterType="com.ks4pl.oasvr.entity.Contract">
+        INSERT INTO contract (<include refid="insCol"/> )
+        VALUES (#{con.name}, #{con.issueDate}, #{con.state}, #{con.operatorId}, #{con.operateTime})
+    </insert>
+
+    <update id="updateStateByName" >
+        UPDATE contract SET state=#{con.state},
+                          operatorId=#{con.operatorId},
+                          operateTime=#{con.operateTime}
+        WHERE name=#{con.name}
+    </update>
+
+
+</mapper>
+

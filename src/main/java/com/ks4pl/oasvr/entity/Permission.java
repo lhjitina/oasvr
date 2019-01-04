@@ -13,6 +13,7 @@ public class Permission {
     private Integer sum;
     private Integer doc;
     private Integer usr;
+    private Integer con;
 
     public Permission() {
     }
@@ -25,6 +26,7 @@ public class Permission {
         p.setSum(userListItem.getPerSum()? 1 : 0);
         p.setUsr(userListItem.getPerUsr()? 1 : 0);
         p.setDoc(userListItem.getPerPol()? 1 : 0);
+        p.setCon(userListItem.getPerCon()? 1 : 0);
         return p;
     }
 }

@@ -49,6 +49,13 @@ public class PermissionService {
         return bExist;
     }
 
+    public Boolean conPermissionExist(Integer uid){
+        Boolean bExist = false;
+        Permission permission = permissionMapper.selectPermissionByUser(uid);
+        bExist = (permission.getCon() == 1);
+        return bExist;
+    }
+
     public Integer insert(Permission p){
         return permissionMapper.insert(p);
     }

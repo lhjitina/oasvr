@@ -8,10 +8,11 @@
         <result property="reg" column="reg"/>
         <result property="sum" column="sum"/>
         <result property="doc" column="doc"/>
+        <result property="con" column="con"/>
     </resultMap>
 
     <select id="selectPermissionByUser" resultMap="perResultMap">
-        SELECT uid, pol, reg, sum, doc FROM permission
+        SELECT uid, pol, reg, sum, doc, con FROM permission
         WHERE uid = #{uid}
     </select>
     <insert id="insert" parameterType="com.ks4pl.oasvr.entity.Permission">
