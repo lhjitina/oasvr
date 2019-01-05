@@ -6,6 +6,8 @@ import com.ks4pl.oasvr.OasvrApplication;
 import com.ks4pl.oasvr.entity.Permission;
 import com.ks4pl.oasvr.entity.User;
 import com.ks4pl.oasvr.model.PasswdModify;
+import com.ks4pl.oasvr.model.RespData;
+import com.ks4pl.oasvr.model.RespCode;
 import com.ks4pl.oasvr.model.UserListItem;
 import com.ks4pl.oasvr.service.PermissionService;
 import com.ks4pl.oasvr.service.SessionService;
@@ -13,12 +15,11 @@ import com.ks4pl.oasvr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.PrinterGraphics;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
+
 
 @RestController
 public class UserController {
@@ -37,33 +38,46 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/user/add", method = RequestMethod.POST)
-    public void userAdd(@RequestBody UserListItem userListItem) {
+    public RespData userAdd(@RequestBody UserListItem userListItem) {
 
         System.out.println("add user: " + userListItem.toString());
         User user = User.fromUserListItem(userListItem);
         user.setPasswd("123456");
         user.setRegistTime(new Timestamp(System.currentTimeMillis()));
         user.setState("启用");
+        RespData respData = null;
         if (userService.insert(user) != 0){
             Permission p = Permission.fromUserListItem(userListItem);
             p.setUid(userService.getLastInsertId());
             if (permissionService.insert(p) == 0){
                 System.out.println("insert permission fail:" + p);
             }
+            respData = RespData.ok();
         }
-        else{
-            System.out.println("insert user fail: "+user);
+        else if (userService.selectUserByTelOrEmail(user.getEmail()) != null ||
+                userService.selectUserByTelOrEmail(user.getName()) != null) {
+            respData = RespData.err(RespCode.USR_SAME);
+            System.out.println("user name or email has exist: " + user);
         }
+        else {
+            respData = RespData.err(RespCode.SERV_ERR);
+            System.out.println("insert user into database fail");
+        }
+        return respData;
     }
 
     @RequestMapping(value = "/api/user/detail", method= RequestMethod.GET)
-    public UserListItem getUserDetail(@RequestParam(value = "id") Integer uid){
+    public RespData getUserDetail(@RequestParam(value = "id") Integer uid){
         System.out.println("/api/user/detail with id="+uid);
-        return userService.selectUserListItemById(uid);
+        RespData respData = RespData.ok(userService.selectUserListItemById(uid));
+        if (respData.getData() == null){
+            respData.setCode(RespCode.SERV_ERR);
+        }
+        return respData;
     }
 
     @RequestMapping(value = "/api/user/list", method= RequestMethod.GET)
-    public ArrayList<UserListItem> getUserList(String userName, String departmentId, String tel, String email, String state){
+    public RespData getUserList(String userName, String departmentId, String tel, String email, String state){
         Map<String, Object> condition = new HashMap<>();
         if ((userName != null) && !userName.trim().isEmpty()){
             condition.put("name", userName);
@@ -82,7 +96,11 @@ public class UserController {
         }
 
         System.out.println("get user list with condition: " + condition);
-        return userService.selectUserListItemByCondition(condition);
+        RespData respData = RespData.ok(userService.selectUserListItemByCondition(condition));
+        if (respData.getData() == null){
+            respData.setCode(RespCode.SERV_ERR);
+        }
+        return respData;
     }
 
     @RequestMapping(value = "/api/user/update", method= RequestMethod.POST)
@@ -111,33 +129,36 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
-    public Integer userLogin(@RequestBody String params){
-        Integer ret = 200;
+    public RespData userLogin(@RequestBody String params){
         JSONObject jsonObject = JSONObject.parseObject(params);
         String loginName = jsonObject.getString("loginName");
         String passwd = jsonObject.getString("passwd");
         OasvrApplication.logger.info("user login....");
         System.out.println("loginame:"+loginName + "  passwd:"+passwd);
         User u = userService.selectUserByTelOrEmail(loginName);
+        UserListItem userListItem = userService.selectUserListItemById(u.getId());
+        RespData respData = null;
         if (u == null){
+            respData = RespData.err(RespCode.NO_REGIST);
             System.out.println("user name error:" + loginName);
-            ret = 201;
         }
         else if (!u.getPasswd().equals(passwd)){
             System.out.println("passwd error: user=" + loginName +
                 "   passwd input is:" + passwd +
                 "   right passwd is:" + u.getPasswd());
-            ret = 202;
+            respData = RespData.err(RespCode.PASS_ERR);
         }
         else if (sessionService.getCurrentUserId() != 0){
             System.out.println("the user has login, repeat login error");
             sessionService.saveUserInfo(u.getId(), u.getName());
+            respData = RespData.err(RespCode.RELOGIN);
         }
         else{
             System.out.println("the user login success");
             sessionService.saveUserInfo(u.getId(), u.getName());
+            respData = RespData.ok(userListItem);
         }
-        return ret;
+        return respData;
     }
 
     @RequestMapping(value = "/api/user/passwd/reset", method = RequestMethod.GET)
@@ -169,7 +190,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/user/logout", method = RequestMethod.GET)
-    public Integer userLogouit(){
+    public Integer userLogout(){
         System.out.println("user logout uid=" + sessionService.getCurrentUserId() + "  name="+sessionService.getCurrentUserName());
         sessionService.deleteCurrentUserInfo();
         return 200;

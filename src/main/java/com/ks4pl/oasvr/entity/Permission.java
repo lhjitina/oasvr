@@ -15,18 +15,34 @@ public class Permission {
     private Integer usr;
     private Integer con;
 
-    public Permission() {
+    public Permission(Integer uid) {
+        this.uid = uid;
+        this.con = 0;
+        this.doc = 0;
+        this.pol = 0;
+        this.reg = 0;
+        this.sum = 0;
+        this.usr = 0;
+
     }
 
     public static Permission fromUserListItem(UserListItem userListItem){
-        Permission p = new Permission();
-        p.setUid(userListItem.getId());
-        p.setPol(userListItem.getPerPol()? 1 : 0);
-        p.setReg(userListItem.getPerReg()? 1 : 0);
-        p.setSum(userListItem.getPerSum()? 1 : 0);
-        p.setUsr(userListItem.getPerUsr()? 1 : 0);
-        p.setDoc(userListItem.getPerPol()? 1 : 0);
-        p.setCon(userListItem.getPerCon()? 1 : 0);
+        Permission p = new Permission(userListItem.getId());
+        if (userListItem.getPerPol() != null){
+            p.setPol(userListItem.getPerPol()? 1 : 0);
+        }
+        if (userListItem.getPerReg() != null){
+            p.setReg(userListItem.getPerReg()? 1 : 0);
+        }
+        if (userListItem.getPerSum() != null){
+            p.setSum(userListItem.getPerSum()? 1 : 0);
+        }
+        if (userListItem.getPerUsr() != null){
+            p.setSum(userListItem.getPerUsr()? 1 : 0);
+        }
+        if (userListItem.getPerCon() != null){
+            p.setSum(userListItem.getPerCon()? 1 : 0);
+        }
         return p;
     }
 }

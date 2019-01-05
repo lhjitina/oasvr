@@ -16,11 +16,12 @@
         <result column="reg" property="perReg"/>
         <result column="sum" property="perSum"/>
         <result column="usr" property="perUsr"/>
+        <result column="con" property="perCon"/>
     </resultMap>
 
     <sql id="allCol">
         u.id, u.name, u.tel, u.email, u.departmentId, u.state, u.registTime, u.lastLoginTime,
-        d.name departmentName, p.pol, p.reg, p.sum, p.usr
+        d.name departmentName, p.pol, p.reg, p.sum, p.usr, p.con
     </sql>
 
     <select id="selectById" parameterType="Integer" resultMap="userResultMap">

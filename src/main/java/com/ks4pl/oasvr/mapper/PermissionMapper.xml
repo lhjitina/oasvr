@@ -16,12 +16,13 @@
         WHERE uid = #{uid}
     </select>
     <insert id="insert" parameterType="com.ks4pl.oasvr.entity.Permission">
-        INSERT INTO permission (uid, pol, reg, sum, doc, usr)
-        VALUES (#{per.uid}, #{per.pol}, #{per.reg}, #{per.sum}, #{per.doc}, #{per.usr})
+        INSERT INTO permission (uid, pol, reg, sum, doc, usr, con)
+        VALUES (#{per.uid}, #{per.pol}, #{per.reg}, #{per.sum}, #{per.doc}, #{per.usr}, #{per.con})
     </insert>
 
     <update id="update" parameterType="com.ks4pl.oasvr.entity.Permission">
-        UPDATE permission SET pol=#{per.pol}, reg=#{per.reg}, sum=#{per.sum}, doc=#{per.doc}, usr=#{per.usr}
+        UPDATE permission SET pol=#{per.pol}, reg=#{per.reg}, sum=#{per.sum},
+              doc=#{per.doc}, usr=#{per.usr}, con=#{per.con}
         WHERE uid=#{per.uid}
     </update>
 
