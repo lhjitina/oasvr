@@ -3,12 +3,15 @@ package com.ks4pl.oasvr.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.ks4pl.oasvr.MyUtils;
 import com.ks4pl.oasvr.OasvrApplication;
+import com.ks4pl.oasvr.dto.PageReqParam;
+import com.ks4pl.oasvr.dto.RespPage;
 import com.ks4pl.oasvr.entity.Permission;
 import com.ks4pl.oasvr.entity.User;
 import com.ks4pl.oasvr.model.PasswdModify;
-import com.ks4pl.oasvr.model.RespData;
-import com.ks4pl.oasvr.model.RespCode;
+import com.ks4pl.oasvr.dto.RespData;
+import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.model.UserListItem;
+import com.ks4pl.oasvr.service.ParamException;
 import com.ks4pl.oasvr.service.PermissionService;
 import com.ks4pl.oasvr.service.SessionService;
 import com.ks4pl.oasvr.service.UserService;
@@ -76,6 +79,22 @@ public class UserController {
         return respData;
     }
 
+    @RequestMapping(value = "/api/users", method= RequestMethod.POST)
+    public RespPage getUsers(@RequestBody PageReqParam pageReqParam){
+        System.out.println(pageReqParam.toString());
+        try {
+            return RespPage.okPage(
+                    pageReqParam.getNum(),
+                    pageReqParam.getSize(),
+                    userService.total(pageReqParam.getFilter()),
+                    userService.selectUserListItemByCondition(pageReqParam.getFilter(),pageReqParam.getNum(), pageReqParam.getSize())
+            );
+        }
+        catch (ParamException e){
+            return (RespPage) RespPage.errPage(RespCode.PARAM_ERR).setMsg(e.getMessage());
+        }
+    }
+
     @RequestMapping(value = "/api/user/list", method= RequestMethod.GET)
     public RespData getUserList(String userName, String departmentId, String tel, String email, String state){
         Map<String, Object> condition = new HashMap<>();
@@ -96,6 +115,8 @@ public class UserController {
         }
 
         System.out.println("get user list with condition: " + condition);
+        ArrayList<UserListItem> userListItems = userService.selectUserListItemByCondition(condition);
+        System.out.println(userListItems);
         RespData respData = RespData.ok(userService.selectUserListItemByCondition(condition));
         if (respData.getData() == null){
             respData.setCode(RespCode.SERV_ERR);

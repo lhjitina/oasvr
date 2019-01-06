@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class UserService {
+public class UserService extends ServiceBase{
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -27,6 +27,15 @@ public class UserService {
     public UserListItem selectUserListItemById(Integer uid){
         return userListItemMapper.selectById(uid);
 }
+
+    public ArrayList<UserListItem> selectUserListItemByCondition(HashMap<String, Object> condition, int num, int size) throws ParamException{
+        addPageParam(condition, num, size);
+        return userListItemMapper.selectByCondition(condition);
+    }
+
+    public Integer total(HashMap<String, Object> condition){
+        return userListItemMapper.total(condition);
+    }
 
     public ArrayList<UserListItem> selectUserListItemByCondition(Map<String, Object> condition){
         return userListItemMapper.selectByCondition(condition);

@@ -11,6 +11,7 @@ import java.util.Map;
 public interface UserListItemMapper {
 
     ArrayList<UserListItem> selectByCondition(Map<String, Object> conditon);
+    Integer total(Map<String, Object> condition);
 
     UserListItem selectById(@Param("uid")Integer uid);
 }

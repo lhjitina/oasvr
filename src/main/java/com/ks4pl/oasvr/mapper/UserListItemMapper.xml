@@ -51,10 +51,36 @@
             <if test="state!=null">
                 AND u.state=#{state}
             </if>
+        </where>
+        ORDER BY id <if test="num != null and size != null">limit #{num}, #{size}</if>
+    </select>
 
+    <select id="total"  resultType="Integer">
+        SELECT count(u.id) FROM user u, department d, permission p
+        <where>
+            d.id=u.departmentId AND u.deleted=0 AND p.uid=u.id
+            <if test="id!=null">
+                AND u.id=#{id}
+            </if>
+            <if test="name!=null">
+                AND u.name LIKE  concat('%',#{name},'%')
+            </if>
+            <if test="tel!=null">
+                AND u.tel LIKE  concat('%',#{tel},'%')
+            </if>
+            <if test="email!=null">
+                AND u.email LIKE  concat('%',#{email},'%')
+            </if>
+            <if test="departmentId!=null">
+                AND u.departmentId=#{departmentId}
+            </if>
+            <if test="state!=null">
+                AND u.state=#{state}
+            </if>
         </where>
     </select>
- </mapper>
+
+</mapper>
 
 
 

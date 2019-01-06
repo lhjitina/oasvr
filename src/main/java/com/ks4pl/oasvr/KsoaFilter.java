@@ -2,8 +2,8 @@ package com.ks4pl.oasvr;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ks4pl.oasvr.model.RespData;
-import com.ks4pl.oasvr.model.RespCode;
+import com.ks4pl.oasvr.dto.RespData;
+import com.ks4pl.oasvr.dto.RespCode;
 import org.springframework.context.annotation.Configuration;
 
 import javax.servlet.*;

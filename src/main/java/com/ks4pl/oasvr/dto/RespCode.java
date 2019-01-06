@@ -1,4 +1,4 @@
-package com.ks4pl.oasvr.model;
+package com.ks4pl.oasvr.dto;
 
 public enum RespCode {
     OK(0, "ok"),
@@ -9,7 +9,8 @@ public enum RespCode {
     SERV_ERR(5, "server error"),
     NO_TOKEN(6, "no token"),
     RELOGIN(7, "repeat login"),
-    USR_SAME(8, "user has exist");
+    USR_SAME(8, "user has exist"),
+    PARAM_ERR(9, "parameter error");
 
     private Integer code;
     private String msg;
