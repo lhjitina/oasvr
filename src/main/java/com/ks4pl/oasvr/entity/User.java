@@ -3,7 +3,10 @@ package com.ks4pl.oasvr.entity;
 import com.ks4pl.oasvr.model.UserListItem;
 import lombok.Getter;
 import lombok.Setter;
+import org.intellij.lang.annotations.Identifier;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 @Getter
@@ -12,7 +15,9 @@ public class User {
     private Integer id;
     private String name;
     private Integer departmentId;
+    @NotNull
     private String tel;
+    @NotNull
     private String email;
     private String state;
     private Timestamp registTime;

@@ -1,7 +1,6 @@
 package com.ks4pl.oasvr.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.ks4pl.oasvr.MyUtils;
 import com.ks4pl.oasvr.OasvrApplication;
 import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespPage;
@@ -11,21 +10,22 @@ import com.ks4pl.oasvr.model.PasswdModify;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.model.UserListItem;
-import com.ks4pl.oasvr.service.ParamException;
-import com.ks4pl.oasvr.service.PermissionService;
-import com.ks4pl.oasvr.service.SessionService;
-import com.ks4pl.oasvr.service.UserService;
+import com.ks4pl.oasvr.service.*;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import javax.validation.Valid;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 
 @RestController
 public class UserController {
+
+    private static final Logger logger = LogManager.getLogger(UserController.class);
 
     @Autowired
     private SessionService sessionService;
@@ -34,95 +34,70 @@ public class UserController {
     @Autowired
     private PermissionService permissionService;
 
-    private ArrayList<User> users;
-
-    public UserController() {
-        users = new ArrayList<>();
-    }
-
     @RequestMapping(value = "/api/user/add", method = RequestMethod.POST)
-    public RespData userAdd(@RequestBody UserListItem userListItem) {
-
+    public RespData userAdd(@RequestBody @Valid UserListItem userListItem, Errors errors)
+            throws ParamException,ServiceException, SQLIntegrityConstraintViolationException {
+        if (errors.hasErrors()){
+            throw new ParamException(errors.getAllErrors().toString());
+        }
         System.out.println("add user: " + userListItem.toString());
         User user = User.fromUserListItem(userListItem);
-        user.setPasswd("123456");
-        user.setRegistTime(new Timestamp(System.currentTimeMillis()));
-        user.setState("启用");
-        RespData respData = null;
-        if (userService.insert(user) != 0){
-            Permission p = Permission.fromUserListItem(userListItem);
-            p.setUid(userService.getLastInsertId());
-            if (permissionService.insert(p) == 0){
-                System.out.println("insert permission fail:" + p);
-            }
-            respData = RespData.ok();
-        }
-        else if (userService.selectUserByTelOrEmail(user.getEmail()) != null ||
-                userService.selectUserByTelOrEmail(user.getName()) != null) {
-            respData = RespData.err(RespCode.USR_SAME);
-            System.out.println("user name or email has exist: " + user);
-        }
-        else {
-            respData = RespData.err(RespCode.SERV_ERR);
-            System.out.println("insert user into database fail");
-        }
-        return respData;
+        userService.addUser(user);
+        Permission p = Permission.fromUserListItem(userListItem);
+        p.setUid(userService.getLastInsertId());
+        permissionService.addPerm(p);
+        return RespData.ok();
     }
 
     @RequestMapping(value = "/api/user/detail", method= RequestMethod.GET)
     public RespData getUserDetail(@RequestParam(value = "id") Integer uid){
         System.out.println("/api/user/detail with id="+uid);
-        RespData respData = RespData.ok(userService.selectUserListItemById(uid));
-        if (respData.getData() == null){
-            respData.setCode(RespCode.SERV_ERR);
-        }
-        return respData;
+        return RespData.ok(userService.selectUserListItemById(uid));
     }
 
-    @RequestMapping(value = "/api/users", method= RequestMethod.POST)
-    public RespPage getUsers(@RequestBody PageReqParam pageReqParam){
+    @RequestMapping(value = "/api/user/list", method= RequestMethod.POST)
+    public RespPage getUsers(@RequestBody @Valid PageReqParam pageReqParam, Errors errors) throws ParamException{
         System.out.println(pageReqParam.toString());
-        try {
-            return RespPage.okPage(
-                    pageReqParam.getNum(),
+        logger.info("/api/user/list");
+        logger.error("error log......");
+        if (errors.hasErrors()){
+            throw new ParamException(errors.getAllErrors().toString());
+        }
+        return RespPage.okPage(pageReqParam.getNum(),
                     pageReqParam.getSize(),
                     userService.total(pageReqParam.getFilter()),
                     userService.selectUserListItemByCondition(pageReqParam.getFilter(),pageReqParam.getNum(), pageReqParam.getSize())
-            );
-        }
-        catch (ParamException e){
-            return (RespPage) RespPage.errPage(RespCode.PARAM_ERR).setMsg(e.getMessage());
-        }
+        );
     }
 
-    @RequestMapping(value = "/api/user/list", method= RequestMethod.GET)
-    public RespData getUserList(String userName, String departmentId, String tel, String email, String state){
-        Map<String, Object> condition = new HashMap<>();
-        if ((userName != null) && !userName.trim().isEmpty()){
-            condition.put("name", userName);
-        }
-        if ((departmentId !=null) && !departmentId.trim().isEmpty() && MyUtils.isNumeric(departmentId)){
-            condition.put("departmentId", departmentId);
-        }
-        if ((tel != null) && !tel.trim().isEmpty()){
-            condition.put("tel", tel);
-        }
-        if ((email != null) && !email.trim().isEmpty()){
-            condition.put("email", email);
-        }
-        if ((state != null) && !state.trim().isEmpty()){
-            condition.put("state", state);
-        }
-
-        System.out.println("get user list with condition: " + condition);
-        ArrayList<UserListItem> userListItems = userService.selectUserListItemByCondition(condition);
-        System.out.println(userListItems);
-        RespData respData = RespData.ok(userService.selectUserListItemByCondition(condition));
-        if (respData.getData() == null){
-            respData.setCode(RespCode.SERV_ERR);
-        }
-        return respData;
-    }
+//    @RequestMapping(value = "/api/user/list", method= RequestMethod.GET)
+//    public RespData getUserList(String userName, String departmentId, String tel, String email, String state){
+//        Map<String, Object> condition = new HashMap<>();
+//        if ((userName != null) && !userName.trim().isEmpty()){
+//            condition.put("name", userName);
+//        }
+//        if ((departmentId !=null) && !departmentId.trim().isEmpty() && MyUtils.isNumeric(departmentId)){
+//            condition.put("departmentId", departmentId);
+//        }
+//        if ((tel != null) && !tel.trim().isEmpty()){
+//            condition.put("tel", tel);
+//        }
+//        if ((email != null) && !email.trim().isEmpty()){
+//            condition.put("email", email);
+//        }
+//        if ((state != null) && !state.trim().isEmpty()){
+//            condition.put("state", state);
+//        }
+//
+//        System.out.println("get user list with condition: " + condition);
+//        ArrayList<UserListItem> userListItems = userService.selectUserListItemByCondition(condition);
+//        System.out.println(userListItems);
+//        RespData respData = RespData.ok(userService.selectUserListItemByCondition(condition));
+//        if (respData.getData() == null){
+//            respData.setCode(RespCode.SERV_ERR);
+//        }
+//        return respData;
+//    }
 
     @RequestMapping(value = "/api/user/update", method= RequestMethod.POST)
     public Integer getUserEdit(@RequestBody UserListItem userListItem){

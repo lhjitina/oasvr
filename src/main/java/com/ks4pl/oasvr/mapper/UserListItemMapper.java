@@ -5,12 +5,13 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @Mapper
 public interface UserListItemMapper {
 
-    ArrayList<UserListItem> selectByCondition(Map<String, Object> conditon);
+    ArrayList<UserListItem> selectByCondition(HashMap<String, Object> conditon);
     Integer total(Map<String, Object> condition);
 
     UserListItem selectById(@Param("uid")Integer uid);

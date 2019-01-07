@@ -56,8 +56,10 @@ public class PermissionService {
         return bExist;
     }
 
-    public Integer insert(Permission p){
-        return permissionMapper.insert(p);
+    public void addPerm(Permission p) throws ServiceException{
+        if (permissionMapper.insert(p) == 0){
+            throw new ServiceException("insert permission fail");
+        }
     }
 
     public Integer update(Permission p){

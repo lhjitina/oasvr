@@ -3,6 +3,7 @@ package com.ks4pl.oasvr.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -11,7 +12,9 @@ import java.sql.Timestamp;
 public class UserListItem {
     private Integer id;
     private String name;
+    @NotNull(message = "tel can't be null")
     private String tel;
+    @NotNull(message = "email can't be null")
     private String email;
     private Integer departmentId;
     private String departmentName;
