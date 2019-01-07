@@ -1,6 +1,7 @@
 package com.ks4pl.oasvr.service;
 
 import com.ks4pl.oasvr.MyUtils;
+import com.ks4pl.oasvr.controller.IllegalArgumentException;
 import com.ks4pl.oasvr.entity.User;
 import com.ks4pl.oasvr.mapper.UserListItemMapper;
 import com.ks4pl.oasvr.mapper.UserMapper;
@@ -12,8 +13,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 @Service
 public class UserService extends ServiceBase{
@@ -22,7 +21,7 @@ public class UserService extends ServiceBase{
     @Autowired
     private UserListItemMapper userListItemMapper;
 
-    private void validateQueryParam(HashMap<String, Object> con) throws ParamException{
+    private void validateQueryParam(HashMap<String, Object> con) throws IllegalArgumentException {
         ArrayList<String> ks = new ArrayList<>();
         ks.addAll(con.keySet());
         for (String k : ks){
@@ -32,7 +31,7 @@ public class UserService extends ServiceBase{
             }
         }
         if (con.get("departmentId") != null && !MyUtils.isNumeric(con.get("departmentId").toString())){
-                throw new ParamException("department id should be number");
+                throw new IllegalArgumentException("department id should be number");
         }
     }
 
@@ -46,7 +45,7 @@ public class UserService extends ServiceBase{
         return userListItemMapper.selectById(uid);
 }
 
-    public ArrayList<UserListItem> selectUserListItemByCondition(HashMap<String, Object> condition, int num, int size) throws ParamException{
+    public ArrayList<UserListItem> selectUserListItemByCondition(HashMap<String, Object> condition, int num, int size) throws IllegalArgumentException {
         validateQueryParam(condition);
         addPageParam(condition, num, size);
         return userListItemMapper.selectByCondition(condition);
@@ -61,27 +60,35 @@ public class UserService extends ServiceBase{
         u.setRegistTime(new Timestamp(System.currentTimeMillis()));
         u.setState("启用");
         if (userMapper.insert(u) == 0){
-            throw new ServiceException("insert user to database fail");
+            throw new ServiceException("insert user fail:" + u.toString());
         }
     }
 
-    public Integer updateById(User u){
-        return userMapper.updateById(u);
+    public void updateById(User u) throws ServiceException, SQLIntegrityConstraintViolationException {
+        if (userMapper.updateById(u) == 0){
+            throw new ServiceException("update user fail:" + u.toString());
+        }
     }
 
-    public Integer deleteUserById(Integer uid){
-        return userMapper.deleteById(uid);
+    public void deleteUserById(Integer uid) throws ServiceException{
+        if (userMapper.deleteById(uid) == 0){
+            throw new ServiceException("delete user fail:" + uid);
+        }
     }
 
-    public Integer resetPasswd(Integer uid, String passwd){
-        return userMapper.updatePasswdById(uid, passwd);
+    public void resetPasswd(Integer uid, String passwd) throws ServiceException{
+        if (userMapper.updatePasswdById(uid, passwd) == 0){
+            throw new ServiceException("reset passwd fail, uid:" + uid + ";passwd=" + passwd);
+        }
     }
 
     public Integer getLastInsertId(){
         return userMapper.getLastInsertId();
     }
 
-    public Integer modifyPasswd(Integer uid, String passwd){
-        return userMapper.updatePasswdById(uid, passwd);
+    public void modifyPasswd(Integer uid, String passwd) throws ServiceException{
+        if (userMapper.updatePasswdById(uid, passwd) == 0){
+            throw new ServiceException("modify passwd fail, uid:" + uid + ";passwd:" + passwd);
+        }
     }
 }

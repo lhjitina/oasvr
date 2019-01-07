@@ -6,6 +6,7 @@ import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespPage;
 import com.ks4pl.oasvr.entity.Permission;
 import com.ks4pl.oasvr.entity.User;
+import com.ks4pl.oasvr.model.LoginInfo;
 import com.ks4pl.oasvr.model.PasswdModify;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespCode;
@@ -36,11 +37,11 @@ public class UserController {
 
     @RequestMapping(value = "/api/user/add", method = RequestMethod.POST)
     public RespData userAdd(@RequestBody @Valid UserListItem userListItem, Errors errors)
-            throws ParamException,ServiceException, SQLIntegrityConstraintViolationException {
+            throws IllegalArgumentException, ServiceException, SQLIntegrityConstraintViolationException {
         if (errors.hasErrors()){
-            throw new ParamException(errors.getAllErrors().toString());
+            throw new IllegalArgumentException(errors.getAllErrors().toString());
         }
-        System.out.println("add user: " + userListItem.toString());
+        logger.info("add user: " + userListItem.toString());
         User user = User.fromUserListItem(userListItem);
         userService.addUser(user);
         Permission p = Permission.fromUserListItem(userListItem);
@@ -51,17 +52,15 @@ public class UserController {
 
     @RequestMapping(value = "/api/user/detail", method= RequestMethod.GET)
     public RespData getUserDetail(@RequestParam(value = "id") Integer uid){
-        System.out.println("/api/user/detail with id="+uid);
+        logger.info("/api/user/detail with id="+uid);
         return RespData.ok(userService.selectUserListItemById(uid));
     }
 
     @RequestMapping(value = "/api/user/list", method= RequestMethod.POST)
-    public RespPage getUsers(@RequestBody @Valid PageReqParam pageReqParam, Errors errors) throws ParamException{
-        System.out.println(pageReqParam.toString());
-        logger.info("/api/user/list");
-        logger.error("error log......");
+    public RespPage getUsers(@RequestBody @Valid PageReqParam pageReqParam, Errors errors) throws IllegalArgumentException {
+        logger.info(pageReqParam.toString());
         if (errors.hasErrors()){
-            throw new ParamException(errors.getAllErrors().toString());
+            throw new IllegalArgumentException(errors.getAllErrors().toString());
         }
         return RespPage.okPage(pageReqParam.getNum(),
                     pageReqParam.getSize(),
@@ -70,126 +69,90 @@ public class UserController {
         );
     }
 
-//    @RequestMapping(value = "/api/user/list", method= RequestMethod.GET)
-//    public RespData getUserList(String userName, String departmentId, String tel, String email, String state){
-//        Map<String, Object> condition = new HashMap<>();
-//        if ((userName != null) && !userName.trim().isEmpty()){
-//            condition.put("name", userName);
-//        }
-//        if ((departmentId !=null) && !departmentId.trim().isEmpty() && MyUtils.isNumeric(departmentId)){
-//            condition.put("departmentId", departmentId);
-//        }
-//        if ((tel != null) && !tel.trim().isEmpty()){
-//            condition.put("tel", tel);
-//        }
-//        if ((email != null) && !email.trim().isEmpty()){
-//            condition.put("email", email);
-//        }
-//        if ((state != null) && !state.trim().isEmpty()){
-//            condition.put("state", state);
-//        }
-//
-//        System.out.println("get user list with condition: " + condition);
-//        ArrayList<UserListItem> userListItems = userService.selectUserListItemByCondition(condition);
-//        System.out.println(userListItems);
-//        RespData respData = RespData.ok(userService.selectUserListItemByCondition(condition));
-//        if (respData.getData() == null){
-//            respData.setCode(RespCode.SERV_ERR);
-//        }
-//        return respData;
-//    }
-
     @RequestMapping(value = "/api/user/update", method= RequestMethod.POST)
-    public Integer getUserEdit(@RequestBody UserListItem userListItem){
-        System.out.println("/api/user/update" + userListItem.toString());
+    public RespData updateUser(@RequestBody @Valid UserListItem userListItem, Errors errors)
+            throws SQLIntegrityConstraintViolationException, ServiceException{
+        if (errors.hasErrors()){
+            logger.error(errors.getAllErrors());
+        }
         User user = User.fromUserListItem(userListItem);
-        Integer ret = 1;
-        if (userService.updateById(user) == 0){
-            System.out.println("update user fail");
-            ret = 0;
-        }
-        else{
-            Permission p = Permission.fromUserListItem(userListItem);
-            if (permissionService.update(p) == 0){
-                System.out.println("update permission fail: " + userListItem.toString());
-                ret = 0;
-            }
-        }
-        return  ret;
+        userService.updateById(user);
+
+        Permission p = Permission.fromUserListItem(userListItem);
+        permissionService.update(p);
+
+        return RespData.ok();
     }
 
     @RequestMapping(value = "/api/user/delete", method = RequestMethod.GET)
-    public Integer deleteUser(@RequestParam("id") Integer uid){
-        System.out.println("/api/user/delete uid="+uid);
-        return userService.deleteUserById(uid);
+    public void deleteUser(@RequestParam("id") Integer uid) throws ServiceException{
+        logger.info("/api/user/delete uid="+uid);
+        userService.deleteUserById(uid);
     }
 
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
-    public RespData userLogin(@RequestBody String params){
-        JSONObject jsonObject = JSONObject.parseObject(params);
-        String loginName = jsonObject.getString("loginName");
-        String passwd = jsonObject.getString("passwd");
-        OasvrApplication.logger.info("user login....");
-        System.out.println("loginame:"+loginName + "  passwd:"+passwd);
-        User u = userService.selectUserByTelOrEmail(loginName);
-        UserListItem userListItem = userService.selectUserListItemById(u.getId());
-        RespData respData = null;
+    public RespData userLogin(@RequestBody @Valid LoginInfo loginInfo, Errors errors)
+                            throws IllegalArgumentException {
+        if (errors.hasErrors()){
+            throw new IllegalArgumentException(errors.getAllErrors().toString());
+        }
+        User u = userService.selectUserByTelOrEmail(loginInfo.getLoginName());
+
+        RespData respData;
         if (u == null){
             respData = RespData.err(RespCode.NO_REGIST);
-            System.out.println("user name error:" + loginName);
+            logger.info("user name error:" + loginInfo.getLoginName());
         }
-        else if (!u.getPasswd().equals(passwd)){
-            System.out.println("passwd error: user=" + loginName +
-                "   passwd input is:" + passwd +
+        else if (!u.getPasswd().equals(loginInfo.getPasswd())){
+            logger.info("passwd error: user=" + loginInfo.getLoginName() +
+                "   passwd input is:" + loginInfo.getPasswd() +
                 "   right passwd is:" + u.getPasswd());
             respData = RespData.err(RespCode.PASS_ERR);
         }
         else if (sessionService.getCurrentUserId() != 0){
-            System.out.println("the user has login, repeat login error");
+            logger.info("the user has login, repeat login error");
             sessionService.saveUserInfo(u.getId(), u.getName());
             respData = RespData.err(RespCode.RELOGIN);
         }
         else{
-            System.out.println("the user login success");
+            UserListItem userListItem = userService.selectUserListItemById(u.getId());
             sessionService.saveUserInfo(u.getId(), u.getName());
             respData = RespData.ok(userListItem);
+            logger.info("the user login success");
         }
         return respData;
     }
 
     @RequestMapping(value = "/api/user/passwd/reset", method = RequestMethod.GET)
-    public Integer ResetPasswd(@RequestParam("id") Integer uid){
-        System.out.println("/api/user/passwd/reset uid=" + uid);
-        return userService.resetPasswd(uid, "123456");
+    public void ResetPasswd(@RequestParam("id") Integer uid) throws ServiceException{
+        logger.info("/api/user/passwd/reset uid=" + uid);
+        userService.resetPasswd(uid, "123456");
     }
 
     @RequestMapping(value = "/api/user/passwd/modify", method = RequestMethod.POST)
-    public Integer modifyPasswd(@RequestBody PasswdModify pm){
-        Integer ret = 200;
+    public RespData modifyPasswd(@RequestBody PasswdModify pm) throws ServiceException{
         User user = userService.selectUserById(sessionService.getCurrentUserId());
+        RespData respData;
         if (user == null) {
-            System.out.println("modify passwd fail, can not find current user with id=" + sessionService.getCurrentUserId());
-            ret = 201;
+            respData = RespData.err(RespCode.SERV_ERR);
+            logger.info("modify passwd fail, can not find current user with id=" + sessionService.getCurrentUserId());
         }
         else if (!user.getPasswd().equals(pm.getOldp())){
-            System.out.println("modify passwd fail, input oldp:" + pm.getOldp() +"!= passwd:" + user.getPasswd());
-            ret = 202;
-        }
-        else if (userService.modifyPasswd(user.getId(), pm.getNewp()) == 0){
-            System.out.println("modify passwd fail, database return 0");
-            ret = 203;
+            logger.info("modify passwd fail, input oldp:" + pm.getOldp() +"!= passwd:" + user.getPasswd());
+            respData = RespData.err(RespCode.PASS_ERR);
         }
         else{
-            System.out.println("modify passwd success");
+            userService.modifyPasswd(user.getId(), pm.getNewp());
+            respData = RespData.ok();
         }
-        return ret;
+        return respData;
     }
 
     @RequestMapping(value = "/api/user/logout", method = RequestMethod.GET)
-    public Integer userLogout(){
-        System.out.println("user logout uid=" + sessionService.getCurrentUserId() + "  name="+sessionService.getCurrentUserName());
+    public RespData userLogout(){
+        logger.info("user logout uid=" + sessionService.getCurrentUserId() + "  name="+sessionService.getCurrentUserName());
         sessionService.deleteCurrentUserInfo();
-        return 200;
+        return RespData.ok();
     }
 
 }

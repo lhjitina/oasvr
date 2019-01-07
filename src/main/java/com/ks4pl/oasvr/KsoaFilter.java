@@ -32,7 +32,7 @@ public class KsoaFilter implements Filter {
         String token = request.getHeader("authorization");
 
         if (url.equals("/api/login")){
-            System.out.println("...login in.....");
+            System.out.println("...login.....");
             filterChain.doFilter(servletRequest, servletResponse);
         }
         else if (token == null) {

@@ -6,6 +6,7 @@ import com.ks4pl.oasvr.mapper.PermissionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 @Service
@@ -56,10 +57,8 @@ public class PermissionService {
         return bExist;
     }
 
-    public void addPerm(Permission p) throws ServiceException{
-        if (permissionMapper.insert(p) == 0){
-            throw new ServiceException("insert permission fail");
-        }
+    public void addPerm(Permission p) throws SQLIntegrityConstraintViolationException {
+         permissionMapper.insert(p);
     }
 
     public Integer update(Permission p){
