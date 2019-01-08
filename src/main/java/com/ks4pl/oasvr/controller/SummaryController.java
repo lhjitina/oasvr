@@ -1,18 +1,21 @@
 package com.ks4pl.oasvr.controller;
 
-import com.ks4pl.oasvr.entity.Policy;
+import com.ks4pl.oasvr.dto.PageReqParam;
+import com.ks4pl.oasvr.dto.RespPage;
 import com.ks4pl.oasvr.entity.Summary;
-import com.ks4pl.oasvr.model.PolicyListItem;
 import com.ks4pl.oasvr.model.SummaryListItem;
 import com.ks4pl.oasvr.service.PermissionService;
 import com.ks4pl.oasvr.service.SessionService;
 import com.ks4pl.oasvr.service.SummaryService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,8 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-public class SummaryController {
-
+public class SummaryController extends ControllerBase{
+    private static Logger logger = LogManager.getLogger();
     @Autowired
     private SummaryService summaryService;
     @Autowired
@@ -32,11 +35,13 @@ public class SummaryController {
     private PermissionService permissionService;
 
     @RequestMapping(value = "/api/front/summary/list", method = RequestMethod.GET)
-    public ArrayList<SummaryListItem> frontGetSummaryList(String name,
-                                                        String startDate,
-                                                        String endDate){
-        System.out.println("enter: /api/front/summary/list");
-        return getSummaryList(name, startDate, endDate);
+    public RespPage frontGetSummaryList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
+            throws IllegalArgumentException{
+        argumentError(errors);
+        return RespPage.okPage(pageReqParam.getNum(),
+                pageReqParam.getSize(),
+                summaryService.total(pageReqParam.getFilter()),
+                summaryService.selectByCondition(pageReqParam.getFilter()));
     }
 
     @RequestMapping(value = "/api/console/summary/list", method = RequestMethod.GET)

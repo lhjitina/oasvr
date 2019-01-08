@@ -61,8 +61,14 @@ public class RegulationService extends ServiceBase{
     public Integer total(HashMap<String, Object> con){
         return regulationListItemMapper.total(con);
     }
-    public Integer updateState(Regulation regulation){
-        return regulationMapper.updateStateByName(regulation);
+
+    public void updateState(String name, Integer departmentId, String state) throws ServiceException{
+        Regulation regulation = new Regulation(name, departmentId, null, state,
+                                        getCurrentUserId(),
+                                        new Timestamp(System.currentTimeMillis()));
+        if (regulationMapper.updateStateByName(regulation) == 0){
+            throw new ServiceException("update state to db fail");
+        }
     }
 
 }
