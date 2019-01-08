@@ -24,4 +24,17 @@
         </where>
         ORDER by pd.partner, pd.operateTime DESC
     </select>
+
+    <select id="total" parameterType="Map" resultType="Integer">
+        SELECT count(id)  FROM partnerdoc pd, user u
+        <where>
+            u.id = pd.operatorId
+            <if test="name!=null">
+                AND pd.name LIKE  concat('%', #{name}, '%')
+            </if>
+            <if test="partner != null">
+                AND pd.partner LIKE concat('%', #{partner}, '%')
+            </if>
+        </where>
+    </select>
 </mapper>

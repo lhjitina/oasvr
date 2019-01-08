@@ -17,17 +17,17 @@ public class RespPage extends RespData {
         return this;
     }
 
-    public RespPage setPage(Integer num, Integer size){
-        this.num = num;
-        this.size = size;
-        return this;
-    }
-
-    public static RespPage okPage(Object data){
-        RespPage respPage = new RespPage();
-        respPage._ok(data);
-        return respPage;
-    }
+//    public RespPage setPage(Integer num, Integer size){
+//        this.num = num;
+//        this.size = size;
+//        return this;
+//    }
+//
+//    public static RespPage okPage(Object data){
+//        RespPage respPage = new RespPage();
+//        respPage._ok(data);
+//        return respPage;
+//    }
 
     public static RespPage okPage(Integer num, Integer size, Integer total, Object data){
         RespPage respPage = new RespPage();

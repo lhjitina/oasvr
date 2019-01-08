@@ -43,4 +43,26 @@
     </where>
     ORDER by r.issueDate DESC
 </select>
+
+    <select id="total" parameterType="Map" resultType="Integer">
+        SELECT COUNT (r.id) FROM regulation r, department d, user u
+        <where>
+            r.departmentId=d.id AND r.operatorId=u.id
+            <if test="name!=null">
+                AND r.name LIKE  concat('%', #{name}, '%')
+            </if>
+            <if test="departmentId != null">
+                AND r.departmentId=#{departmentId}
+            </if>
+            <if test="startDate != null">
+                AND r.issueDate &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND r.issueDate &lt;= #{endDate}
+            </if>
+            <if test="state != null">
+                And r.state=#{state}
+            </if>
+        </where>
+    </select>
 </mapper>

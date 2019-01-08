@@ -31,4 +31,23 @@
         </where>
         ORDER by p.issueDate DESC
     </select>
+
+    <select id="total" parameterType="Map" resultType="Integer">
+    SELECT count(c.id)  FROM contract c, user u
+    <where>
+        u.id = c.operatorId
+        <if test="name!=null">
+            AND c.name LIKE  concat('%', #{name}, '%')
+        </if>
+        <if test="startDate != null">
+            AND c.issueDate &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND c.issueDate &lt;= #{endDate}
+        </if>
+        <if test="state != null">
+            And c.state=#{state}
+        </if>
+    </where>
+    </select>
 </mapper>

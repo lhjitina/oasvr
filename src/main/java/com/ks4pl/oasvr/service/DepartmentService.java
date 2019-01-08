@@ -6,28 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class DepartmentService {
+public class DepartmentService extends ServiceBase{
 
     @Autowired
     private DepartmentMapper departmentMapper;
 
-    public ArrayList<Department> selectAll(){
-        return departmentMapper.selectAll();
-    }
-
-    public Department selectByName(String name){
-        if (name == null)
-            return null;
-        return departmentMapper.selectByName(name);
+    public ArrayList<Department> selectByCondition(HashMap<String, Object> con, Integer num, Integer size){
+        addPageParam(con, num, size);
+        return departmentMapper.selectByCondition(con);
     }
 
     public Boolean isIdValid(Integer id){
         return (departmentMapper.selectById(id) != null);
     }
 
-
+    public Integer total(HashMap<String, Object> con){
+        return departmentMapper.total(con);
+    }
 
 }

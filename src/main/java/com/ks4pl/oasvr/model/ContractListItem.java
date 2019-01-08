@@ -12,7 +12,6 @@ import java.util.Date;
 public class ContractListItem extends Contract {
     public String operatorName;
 
-
     public ContractListItem(String operatorName) {
         this.operatorName = operatorName;
     }

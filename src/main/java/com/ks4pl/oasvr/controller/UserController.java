@@ -1,7 +1,5 @@
 package com.ks4pl.oasvr.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.ks4pl.oasvr.OasvrApplication;
 import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespPage;
 import com.ks4pl.oasvr.entity.Permission;
@@ -24,7 +22,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 
 @RestController
-public class UserController {
+public class UserController extends ControllerBase{
 
     private static final Logger logger = LogManager.getLogger(UserController.class);
 
@@ -38,9 +36,7 @@ public class UserController {
     @RequestMapping(value = "/api/user/add", method = RequestMethod.POST)
     public RespData userAdd(@RequestBody @Valid UserListItem userListItem, Errors errors)
             throws IllegalArgumentException, ServiceException, SQLIntegrityConstraintViolationException {
-        if (errors.hasErrors()){
-            throw new IllegalArgumentException(errors.getAllErrors().toString());
-        }
+        argumentError(errors);
         logger.info("add user: " + userListItem.toString());
         User user = User.fromUserListItem(userListItem);
         userService.addUser(user);
@@ -59,9 +55,7 @@ public class UserController {
     @RequestMapping(value = "/api/user/list", method= RequestMethod.POST)
     public RespPage getUsers(@RequestBody @Valid PageReqParam pageReqParam, Errors errors) throws IllegalArgumentException {
         logger.info(pageReqParam.toString());
-        if (errors.hasErrors()){
-            throw new IllegalArgumentException(errors.getAllErrors().toString());
-        }
+        argumentError(errors);
         return RespPage.okPage(pageReqParam.getNum(),
                     pageReqParam.getSize(),
                     userService.total(pageReqParam.getFilter()),
@@ -71,10 +65,8 @@ public class UserController {
 
     @RequestMapping(value = "/api/user/update", method= RequestMethod.POST)
     public RespData updateUser(@RequestBody @Valid UserListItem userListItem, Errors errors)
-            throws SQLIntegrityConstraintViolationException, ServiceException{
-        if (errors.hasErrors()){
-            logger.error(errors.getAllErrors());
-        }
+            throws IllegalArgumentException, SQLIntegrityConstraintViolationException, ServiceException{
+        argumentError(errors);
         User user = User.fromUserListItem(userListItem);
         userService.updateById(user);
 
@@ -93,24 +85,23 @@ public class UserController {
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
     public RespData userLogin(@RequestBody @Valid LoginInfo loginInfo, Errors errors)
                             throws IllegalArgumentException {
-        if (errors.hasErrors()){
-            throw new IllegalArgumentException(errors.getAllErrors().toString());
-        }
+        logger.info("login: "+ loginInfo);
+        argumentError(errors);
         User u = userService.selectUserByTelOrEmail(loginInfo.getLoginName());
 
         RespData respData;
         if (u == null){
             respData = RespData.err(RespCode.NO_REGIST);
-            logger.info("user name error:" + loginInfo.getLoginName());
+            logger.error("user name error:" + loginInfo.getLoginName());
         }
         else if (!u.getPasswd().equals(loginInfo.getPasswd())){
-            logger.info("passwd error: user=" + loginInfo.getLoginName() +
+            logger.error("passwd error: user=" + loginInfo.getLoginName() +
                 "   passwd input is:" + loginInfo.getPasswd() +
                 "   right passwd is:" + u.getPasswd());
             respData = RespData.err(RespCode.PASS_ERR);
         }
         else if (sessionService.getCurrentUserId() != 0){
-            logger.info("the user has login, repeat login error");
+            logger.error("the user has login, repeat login error");
             sessionService.saveUserInfo(u.getId(), u.getName());
             respData = RespData.err(RespCode.RELOGIN);
         }
@@ -130,7 +121,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/user/passwd/modify", method = RequestMethod.POST)
-    public RespData modifyPasswd(@RequestBody PasswdModify pm) throws ServiceException{
+    public RespData modifyPasswd(@RequestBody @Valid PasswdModify pm, Errors errors)
+            throws IllegalArgumentException, ServiceException{
+        argumentError(errors);
         User user = userService.selectUserById(sessionService.getCurrentUserId());
         RespData respData;
         if (user == null) {

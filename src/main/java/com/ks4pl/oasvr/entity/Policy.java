@@ -1,8 +1,11 @@
 package com.ks4pl.oasvr.entity;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -10,9 +13,13 @@ import java.util.Date;
 @Setter
 public class Policy {
     private Integer id;
+
+    @NotNull @NotBlank
     private String name;
+    @NotNull @NotBlank
     private String institution;
     private Date issueDate;
+    @NotNull @NotBlank
     private String state;
     private Integer operatorId;
     private Timestamp operateTime;

@@ -9,5 +9,6 @@ import java.util.Map;
 @Mapper
 public interface ContractListItemMapper {
     ArrayList<ContractListItem> selectByCondition(Map<String, Object> condition);
+    Integer total(Map<String, Object> condition);
 }
 
