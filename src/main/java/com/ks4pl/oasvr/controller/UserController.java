@@ -96,9 +96,9 @@ public class UserController extends ControllerBase{
             respData = RespData.err(RespCode.PASS_ERR);
         }
         else if (sessionService.getCurrentUserId() != 0){
-            logger.error("the user has login, repeat login error");
+            logger.warn("the user has login, repeat login");
             sessionService.saveUserInfo(u.getId(), u.getName());
-            respData = RespData.err(RespCode.RELOGIN);
+            respData = RespData.ok();
         }
         else{
             UserListItem userListItem = userService.selectUserListItemById(u.getId());
