@@ -31,7 +31,7 @@ public class ContractService extends ServiceBase{
         return contractListItemMapper.selectByCondition(condition);
     }
 
-    public Integer total(HashMap<String, Object> con){
+    public Integer total(Map<String, Object> con){
         return contractListItemMapper.total(con);
     }
     public Boolean getContractContent(String name, HttpServletResponse response) {

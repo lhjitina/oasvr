@@ -1,7 +1,6 @@
 package com.ks4pl.oasvr.controller;
 
 import com.ks4pl.oasvr.dto.PageReqParam;
-import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
 import com.ks4pl.oasvr.service.*;
@@ -31,8 +30,8 @@ public class InfoPortController extends ControllerBase {
         argumentError(errors);
         return RespPage.okPage(pageReqParam.getNum(),
                 pageReqParam.getSize(),
-                infoPortService.total(pageReqParam.getFilter()),
-                infoPortService.selectByCondition(pageReqParam.getFilter()));
+                infoPortService.total(pageReqParam.getParam()),
+                infoPortService.selectByCondition(pageReqParam.getParam()));
     }
 
     @RequestMapping(value="/api/share/content", method = RequestMethod.GET)

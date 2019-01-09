@@ -58,7 +58,7 @@ public class RegulationService extends ServiceBase{
     public ArrayList<RegulationListItem> selectListItemByCondition(Map<String, Object> condition){
         return regulationListItemMapper.selectByCondition(condition);
     }
-    public Integer total(HashMap<String, Object> con){
+    public Integer total(Map<String, Object> con){
         return regulationListItemMapper.total(con);
     }
 

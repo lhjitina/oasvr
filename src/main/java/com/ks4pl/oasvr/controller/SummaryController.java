@@ -4,9 +4,7 @@ import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
-import com.ks4pl.oasvr.service.PermissionService;
 import com.ks4pl.oasvr.service.ServiceException;
-import com.ks4pl.oasvr.service.SessionService;
 import com.ks4pl.oasvr.service.SummaryService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,8 +33,8 @@ public class SummaryController extends ControllerBase{
         argumentError(errors);
         return RespPage.okPage(pageReqParam.getNum(),
                 pageReqParam.getSize(),
-                summaryService.total(pageReqParam.getFilter()),
-                summaryService.selectByCondition(pageReqParam.getFilter()));
+                summaryService.total(pageReqParam.getParam()),
+                summaryService.selectByCondition(pageReqParam.getParam()));
     }
 
     @RequestMapping(value = "/api/console/summary/list", method = RequestMethod.POST)
@@ -45,8 +43,8 @@ public class SummaryController extends ControllerBase{
             argumentError(errors);
         return RespPage.okPage(pageReqParam.getNum(),
                 pageReqParam.getSize(),
-                summaryService.total(pageReqParam.getFilter()),
-                summaryService.selectByCondition(pageReqParam.getFilter()));
+                summaryService.total(pageReqParam.getParam()),
+                summaryService.selectByCondition(pageReqParam.getParam()));
     }
 
     @RequestMapping(value="/api/summary/content/{name}", method = RequestMethod.GET)

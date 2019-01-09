@@ -13,6 +13,6 @@ import java.util.Map;
 @Mapper
 public interface RegulationListItemMapper {
     ArrayList<RegulationListItem> selectByCondition(Map<String, Object> conditionMap);
-    Integer total(HashMap<String, Object> con);
+    Integer total(Map<String, Object> con);
 
 }

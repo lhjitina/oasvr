@@ -25,7 +25,7 @@ public class PdocService extends ServiceBase{
     public ArrayList<PdocListItem> selectByCondition(Map<String, Object> condition) {
         return pdocListItemMapper.selectByCondition(condition);
     }
-    public Integer total(HashMap<String, Object> con){
+    public Integer total(Map<String, Object> con){
         return pdocListItemMapper.total(con);
     }
     public Boolean getPdocContent(String name, HttpServletResponse response) {

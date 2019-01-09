@@ -4,12 +4,8 @@ import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
-import com.ks4pl.oasvr.entity.PartnerDoc;
-import com.ks4pl.oasvr.model.PdocListItem;
 import com.ks4pl.oasvr.service.PdocService;
-import com.ks4pl.oasvr.service.PermissionService;
 import com.ks4pl.oasvr.service.ServiceException;
-import com.ks4pl.oasvr.service.SessionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class PdocController extends ControllerBase{
@@ -38,8 +30,8 @@ public class PdocController extends ControllerBase{
         argumentError(errors);
         return RespPage.okPage(pageReqParam.getNum(),
                 pageReqParam.getSize(),
-                pdocService.total(pageReqParam.getFilter()),
-                pdocService.selectByCondition(pageReqParam.getFilter()));
+                pdocService.total(pageReqParam.getParam()),
+                pdocService.selectByCondition(pageReqParam.getParam()));
     }
 
     @RequestMapping(value = "/api/console/pdoc/list", method = RequestMethod.POST)
@@ -48,8 +40,8 @@ public class PdocController extends ControllerBase{
         argumentError(errors);
         return RespPage.okPage(pageReqParam.getNum(),
                 pageReqParam.getSize(),
-                pdocService.total(pageReqParam.getFilter()),
-                pdocService.selectByCondition(pageReqParam.getFilter()));
+                pdocService.total(pageReqParam.getParam()),
+                pdocService.selectByCondition(pageReqParam.getParam()));
     }
 
     @RequestMapping(value="/api/pdoc/content", method = RequestMethod.GET)

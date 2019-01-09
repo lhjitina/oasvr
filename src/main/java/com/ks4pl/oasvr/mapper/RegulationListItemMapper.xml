@@ -45,7 +45,7 @@
 </select>
 
     <select id="total" parameterType="Map" resultType="Integer">
-        SELECT COUNT (r.id) FROM regulation r, department d, user u
+        SELECT count(r.id) FROM regulation r, department d, user u
         <where>
             r.departmentId=d.id AND r.operatorId=u.id
             <if test="name!=null and name!=''">

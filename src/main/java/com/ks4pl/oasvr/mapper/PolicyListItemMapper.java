@@ -11,5 +11,5 @@ import java.util.Map;
 public interface PolicyListItemMapper {
 
     ArrayList<PolicyListItem> selectByCondition(Map<String, Object> condition);
-    Integer total(HashMap<String, Object> con);
+    Integer total(Map<String, Object> con);
 }

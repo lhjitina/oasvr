@@ -15,7 +15,7 @@ public class DepartmentService extends ServiceBase{
     @Autowired
     private DepartmentMapper departmentMapper;
 
-    public ArrayList<Department> selectByCondition(HashMap<String, Object> con, Integer num, Integer size){
+    public ArrayList<Department> selectByCondition(Map<String, Object> con, Integer num, Integer size){
         addPageParam(con, num, size);
         return departmentMapper.selectByCondition(con);
     }
@@ -24,7 +24,7 @@ public class DepartmentService extends ServiceBase{
         return (departmentMapper.selectById(id) != null);
     }
 
-    public Integer total(HashMap<String, Object> con){
+    public Integer total(Map<String, Object> con){
         return departmentMapper.total(con);
     }
 

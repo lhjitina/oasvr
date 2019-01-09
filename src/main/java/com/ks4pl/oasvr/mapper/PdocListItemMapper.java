@@ -10,5 +10,5 @@ import java.util.Map;
 @Mapper
 public interface PdocListItemMapper {
     ArrayList<PdocListItem> selectByCondition(Map<String, Object> condition);
-    Integer total(HashMap<String, Object> con);
+    Integer total(Map<String, Object> con);
 }

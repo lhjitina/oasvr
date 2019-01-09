@@ -1,31 +1,23 @@
 package com.ks4pl.oasvr.controller;
 
 
-import com.ks4pl.oasvr.MyUtils;
 import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
-import com.ks4pl.oasvr.entity.Regulation;
 import com.ks4pl.oasvr.model.RegulationListItem;
 import com.ks4pl.oasvr.service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.rmi.server.ServerCloneException;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class RegulationController extends ControllerBase {
@@ -39,8 +31,8 @@ public class RegulationController extends ControllerBase {
         argumentError(errors);
         return RespPage.okPage(pageReqParam.getNum(),
                 pageReqParam.getSize(),
-                regulationService.total(pageReqParam.getFilter()),
-                regulationService.selectListItemByCondition(pageReqParam.getFilter()));
+                regulationService.total(pageReqParam.getParam()),
+                regulationService.selectListItemByCondition(pageReqParam.getParam()));
     }
 
     @RequestMapping(value = "/api/console/regulation/list", method = RequestMethod.POST)
@@ -49,8 +41,8 @@ public class RegulationController extends ControllerBase {
         argumentError(errors);
         return RespPage.okPage(pageReqParam.getNum(),
                 pageReqParam.getSize(),
-                regulationService.total(pageReqParam.getFilter()),
-                regulationService.selectListItemByCondition(pageReqParam.getFilter()));
+                regulationService.total(pageReqParam.getParam()),
+                regulationService.selectListItemByCondition(pageReqParam.getParam()));
     }
 
     @RequestMapping(value = "/api/regulation/content/{name}", method = RequestMethod.GET)

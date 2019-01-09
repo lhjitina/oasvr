@@ -6,11 +6,12 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 @Mapper
 public interface DepartmentMapper {
 
-    ArrayList<Department> selectByCondition(HashMap<String, Object> con);
+    ArrayList<Department> selectByCondition(Map<String, Object> con);
     Department selectById(@Param("id") Integer id);
-    Integer total(HashMap<String, Object> con);
+    Integer total(Map<String, Object> con);
 }

@@ -31,7 +31,7 @@ public class PolicyService extends ServiceBase{
     public ArrayList<PolicyListItem> selectByCondition(Map<String, Object> condition) {
         return policyListItemMapper.selectByCondition(condition);
     }
-    public Integer total(HashMap<String, Object> con){
+    public Integer total(Map<String, Object> con){
         return policyListItemMapper.total(con);
     }
     public Boolean getPolicyContent(String name, HttpServletResponse response) {

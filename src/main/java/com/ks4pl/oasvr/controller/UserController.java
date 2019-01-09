@@ -53,8 +53,8 @@ public class UserController extends ControllerBase{
         argumentError(errors);
         return RespPage.okPage(pageReqParam.getNum(),
                     pageReqParam.getSize(),
-                    userService.total(pageReqParam.getFilter()),
-                    userService.selectUserListItemByCondition(pageReqParam.getFilter(),pageReqParam.getNum(), pageReqParam.getSize())
+                    userService.total(pageReqParam.getParam()),
+                    userService.selectUserListItemByCondition(pageReqParam.getParam(),pageReqParam.getNum(), pageReqParam.getSize())
         );
     }
 

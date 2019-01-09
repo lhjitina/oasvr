@@ -7,6 +7,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashMap;
+import java.util.Map;
 
 @Data
 public class PageReqParam {
@@ -15,6 +16,6 @@ public class PageReqParam {
     @NotNull @Min(10) @Max(100)
     Integer size;
     @NotNull
-    HashMap<String, Object> filter;
+    Map<String, Object> param;
 
 }

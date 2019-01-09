@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserService extends ServiceBase{
@@ -21,7 +21,7 @@ public class UserService extends ServiceBase{
     @Autowired
     private UserListItemMapper userListItemMapper;
 
-    private void validateQueryParam(HashMap<String, Object> con) throws IllegalArgumentException {
+    private void validateQueryParam(Map<String, Object> con) throws IllegalArgumentException {
         ArrayList<String> ks = new ArrayList<>();
         ks.addAll(con.keySet());
         for (String k : ks){
@@ -45,13 +45,13 @@ public class UserService extends ServiceBase{
         return userListItemMapper.selectById(uid);
 }
 
-    public ArrayList<UserListItem> selectUserListItemByCondition(HashMap<String, Object> condition, int num, int size) throws IllegalArgumentException {
+    public ArrayList<UserListItem> selectUserListItemByCondition(Map<String, Object> condition, int num, int size) throws IllegalArgumentException {
         validateQueryParam(condition);
         addPageParam(condition, num, size);
         return userListItemMapper.selectByCondition(condition);
     }
 
-    public Integer total(HashMap<String, Object> condition){
+    public Integer total(Map<String, Object> condition){
         return userListItemMapper.total(condition);
     }
 
