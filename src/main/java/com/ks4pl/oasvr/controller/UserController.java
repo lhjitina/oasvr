@@ -23,15 +23,10 @@ import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestController
 public class UserController extends ControllerBase{
-
     private static final Logger logger = LogManager.getLogger(UserController.class);
 
     @Autowired
-    private SessionService sessionService;
-    @Autowired
     private UserService userService;
-    @Autowired
-    private PermissionService permissionService;
 
     @RequestMapping(value = "/api/user/add", method = RequestMethod.POST)
     public RespData userAdd(@RequestBody @Valid UserListItem userListItem, Errors errors)

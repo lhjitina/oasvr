@@ -32,10 +32,6 @@ public class RegulationController extends ControllerBase {
     private static Logger logger = LogManager.getLogger();
     @Autowired
     private RegulationService regulationService;
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private PermissionService permissionService;
 
     @RequestMapping(value = "/api/front/regulation/list", method = RequestMethod.POST)
     public RespPage frontGetRegulationList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)

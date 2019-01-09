@@ -38,10 +38,6 @@ public class PolicyController extends ControllerBase{
 
     @Autowired
     private PolicyService policyService;
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private PermissionService permissionService;
 
     @RequestMapping(value = "/api/front/policy/list", method = RequestMethod.POST)
     public RespPage frontGetPolicyList(@RequestBody @Valid  PageReqParam pageReqParam, Errors errors)

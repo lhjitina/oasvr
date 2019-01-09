@@ -15,10 +15,10 @@
         FROM partnerdoc pd, user u
         <where>
             u.id = pd.operatorId
-            <if test="name!=null">
+            <if test="name!=null and name!=''">
                 AND pd.name LIKE  concat('%', #{name}, '%')
             </if>
-            <if test="partner != null">
+            <if test="partner != null and partner!=''">
                 AND pd.partner LIKE concat('%', #{partner}, '%')
             </if>
         </where>
@@ -29,10 +29,10 @@
         SELECT count(id)  FROM partnerdoc pd, user u
         <where>
             u.id = pd.operatorId
-            <if test="name!=null">
+            <if test="name!=null and name!=''">
                 AND pd.name LIKE  concat('%', #{name}, '%')
             </if>
-            <if test="partner != null">
+            <if test="partner != null and partner!=''">
                 AND pd.partner LIKE concat('%', #{partner}, '%')
             </if>
         </where>

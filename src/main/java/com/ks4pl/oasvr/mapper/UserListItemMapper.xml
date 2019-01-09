@@ -36,19 +36,19 @@
             <if test="id!=null">
                 AND u.id=#{id}
             </if>
-            <if test="name!=null">
+            <if test="name!=null and name!=''">
                 AND u.name LIKE  concat('%',#{name},'%')
             </if>
-            <if test="tel!=null">
+            <if test="tel!=null and tel!=''">
                 AND u.tel LIKE  concat('%',#{tel},'%')
             </if>
-            <if test="email!=null">
+            <if test="email!=null and email!=''">
                 AND u.email LIKE  concat('%',#{email},'%')
             </if>
-            <if test="departmentId!=null">
+            <if test="departmentId!=null and departmentId!=''">
                 AND u.departmentId=#{departmentId}
             </if>
-            <if test="state!=null">
+            <if test="state!=null and state!=''">
                 AND u.state=#{state}
             </if>
         </where>
@@ -62,19 +62,19 @@
             <if test="id!=null">
                 AND u.id=#{id}
             </if>
-            <if test="name!=null">
+            <if test="name!=null and name!=''">
                 AND u.name LIKE  concat('%',#{name},'%')
             </if>
-            <if test="tel!=null">
+            <if test="tel!=null and tel!=''">
                 AND u.tel LIKE  concat('%',#{tel},'%')
             </if>
-            <if test="email!=null">
+            <if test="email!=null and email!=''">
                 AND u.email LIKE  concat('%',#{email},'%')
             </if>
-            <if test="departmentId!=null">
+            <if test="departmentId!=null and departmentId!=''">
                 AND u.departmentId=#{departmentId}
             </if>
-            <if test="state!=null">
+            <if test="state!=null and state!=''">
                 AND u.state=#{state}
             </if>
         </where>

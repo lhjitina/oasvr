@@ -16,17 +16,17 @@
         FROM contract p, user u
         <where>
             u.id = p.operatorId
-            <if test="name!=null">
-                AND p.name LIKE  concat('%', #{name}, '%')
+            <if test="name!=null and name!=''">
+                AND c.name LIKE  concat('%', #{name}, '%')
             </if>
-            <if test="startDate != null">
-                AND p.issueDate &gt;= #{startDate}
+            <if test="startDate != null and startDate!=''">
+                AND c.issueDate &gt;= #{startDate}
             </if>
-            <if test="endDate != null">
-                AND p.issueDate &lt;= #{endDate}
+            <if test="endDate != null and endDate!=''">
+                AND c.issueDate &lt;= #{endDate}
             </if>
-            <if test="state != null">
-                And p.state=#{state}
+            <if test="state != null and state!=''">
+                And c.state=#{state}
             </if>
         </where>
         ORDER by p.issueDate DESC
@@ -36,16 +36,16 @@
     SELECT count(c.id)  FROM contract c, user u
     <where>
         u.id = c.operatorId
-        <if test="name!=null">
+        <if test="name!=null and name!=''">
             AND c.name LIKE  concat('%', #{name}, '%')
         </if>
-        <if test="startDate != null">
+        <if test="startDate != null and startDate!=''">
             AND c.issueDate &gt;= #{startDate}
         </if>
-        <if test="endDate != null">
+        <if test="endDate != null and endDate!=''">
             AND c.issueDate &lt;= #{endDate}
         </if>
-        <if test="state != null">
+        <if test="state != null and state!=''">
             And c.state=#{state}
         </if>
     </where>

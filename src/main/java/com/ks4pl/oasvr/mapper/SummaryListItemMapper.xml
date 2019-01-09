@@ -16,19 +16,35 @@
         FROM summary s, user u
        <where>
             s.operatorId=u.id
-            <if test="name!=null">
-                AND s.name LIKE  concat('%', #{name}, '%')
-            </if>
-            <if test="startDate != null">
-                AND s.meetingDate &gt;= #{startDate}
-            </if>
-            <if test="endDate != null">
-                AND s.meetingDate &lt;= #{endDate}
-            </if>
+           <if test="name!=null and name!=''">
+               AND s.name LIKE  concat('%', #{name}, '%')
+           </if>
+           <if test="startDate != null and startDate!=''">
+               AND s.meetingDate &gt;= #{startDate}
+           </if>
+           <if test="endDate != null and endDate!=''">
+               AND s.meetingDate &lt;= #{endDate}
+           </if>
         </where>
         ORDER by s.meetingDate DESC
     </select>
-</mapper>
+
+    <select id="total" parameterType="Map" resultType="Integer">
+        SELECT COUNT (s.id) FROM summary s, user u
+        <where>
+            s.operatorId=u.id
+            <if test="name!=null and name!=''">
+                AND s.name LIKE  concat('%', #{name}, '%')
+            </if>
+            <if test="startDate != null and startDate!=''">
+                AND s.meetingDate &gt;= #{startDate}
+            </if>
+            <if test="endDate != null and endDate!=''">
+                AND s.meetingDate &lt;= #{endDate}
+            </if>
+        </where>
+    </select>
+    /mapper>
 
 
 

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface SummaryMapper {
 
-    public Integer insert(@Param("sum")Summary sum);
+    Integer insert(@Param("sum")Summary sum);
 
-    public Integer deleteByName(@Param("name")String name);
+    Integer deleteByName(@Param("name")String name);
 }

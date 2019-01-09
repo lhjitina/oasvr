@@ -17,19 +17,19 @@
         FROM policy p, user u
         <where>
             u.id = p.operatorId
-            <if test="name!=null">
+            <if test="name!=null and name!=''">
                 AND p.name LIKE  concat('%', #{name}, '%')
             </if>
-            <if test="institution != null">
+            <if test="institution != null and institution!=''">
                 AND p.institution LIKE concat('%', #{institution}, '%')
             </if>
-            <if test="startDate != null">
+            <if test="startDate != null and startDate!=''">
                 AND p.issueDate &gt;= #{startDate}
             </if>
-            <if test="endDate != null">
+            <if test="endDate != null and endDate!=''">
                 AND p.issueDate &lt;= #{endDate}
             </if>
-            <if test="state != null">
+            <if test="state != null and state!=''">
                 And p.state=#{state}
             </if>
         </where>
@@ -40,19 +40,19 @@
         SELECT count(p.id) FROM policy p, user u
         <where>
             u.id = p.operatorId
-            <if test="name!=null">
+            <if test="name!=null and name!=''">
                 AND p.name LIKE  concat('%', #{name}, '%')
             </if>
-            <if test="institution != null">
+            <if test="institution != null and institution!=''">
                 AND p.institution LIKE concat('%', #{institution}, '%')
             </if>
-            <if test="startDate != null">
+            <if test="startDate != null and startDate!=''">
                 AND p.issueDate &gt;= #{startDate}
             </if>
-            <if test="endDate != null">
+            <if test="endDate != null and endDate!=''">
                 AND p.issueDate &lt;= #{endDate}
             </if>
-            <if test="state != null">
+            <if test="state != null and state!=''">
                 And p.state=#{state}
             </if>
         </where>

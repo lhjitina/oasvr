@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ks4pl.oasvr.mapper.ShareInfoListItemMapper">
+
+    <resultMap id="BaseResultMap" type="com.ks4pl.oasvr.model.ShareInfoListItem">
+        <result property="id" column="id"/>
+        <result property="name" column="name" />
+        <result property="operatorName" column="operator"/>
+        <result property="operatorId" column="operatorId"/>
+        <result property="operateTime" column="operateTime"/>
+    </resultMap>
+
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        SELECT s.name, s.operatorId, s.operateTime, u.name operator
+        FROM shareinfo s
+        JOIN user u ON u.id = s.operatorId
+         <where>
+            <if test="name!=null and name!=''">
+                AND s.name LIKE  concat('%', #{name}, '%')
+            </if>
+            <if test="operator != null and operator!=''">
+                And u.name=#{operatorName}
+            </if>
+        </where>
+        ORDER by s.operateTime DESC
+    </select>
+
+    <select id="total" parameterType="Map" resultType="Integer">
+        SELECT COUNT (s.id)
+        FROM shareinfo s
+        JOIN user u ON u.id = s.operatorId
+        <where>
+            <if test="name!=null and name!=''">
+                AND s.name LIKE  concat('%', #{name}, '%')
+            </if>
+            <if test="operator != null and operator!=''">
+                And u.name=#{operatorName}
+            </if>
+        </where>
+    </select>
+</mapper>

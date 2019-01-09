@@ -72,6 +72,9 @@ public class FileUtil {
                 path += "contract";
                 break;
             }
+            case "share": {
+                path += "share";
+            }
             default:{
                 path += "other";
                 break;
@@ -120,5 +123,12 @@ public class FileUtil {
             return false;
         }
         return true;
+    }
+
+    public static void delete(String type, String name){
+        File file = new File(getPath(type) + name);
+        if (file.exists()){
+            file.delete();
+        }
     }
 }

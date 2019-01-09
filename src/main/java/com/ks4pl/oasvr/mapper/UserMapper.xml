@@ -46,19 +46,19 @@
 
     <update id="updateById" parameterType="com.ks4pl.oasvr.entity.User">
         UPDATE user <trim prefix="SET" suffixOverrides=",">
-        <if test="u.name!=null">
+        <if test="u.name!=null and u.name!=''">
             name=#{u.name},
         </if>
-        <if test="u.tel != null">
+        <if test="u.tel != null and u.tel!=''">
             tel=#{u.tel},
         </if>
-        <if test="u.email != null">
+        <if test="u.email != null and u.email!=''">
             email=#{u.email},
         </if>
-        <if test="u.departmentId != null">
+        <if test="u.departmentId != null and u.departmentId!=''">
             departmentId=#{u.departmentId},
         </if>
-        <if test="u.state != null">
+        <if test="u.state != null and u.state != ''">
             state=#{u.state},
         </if>
 

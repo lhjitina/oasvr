@@ -34,10 +34,7 @@ public class ContractController extends ControllerBase{
 
     @Autowired
     private ContractService contractService;
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private PermissionService permissionService;
+
 
     @RequestMapping(value = "/api/front/contract/list", method = RequestMethod.POST)
     public RespPage frontGetContractList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)

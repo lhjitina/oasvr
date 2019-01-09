@@ -31,10 +31,6 @@ public class PdocController extends ControllerBase{
 
     @Autowired
     private PdocService pdocService;
-    @Autowired
-    private SessionService sessionService;
-    @Autowired
-    private PermissionService permissionService;
 
     @RequestMapping(value = "/api/front/pdoc/list", method = RequestMethod.POST)
     public RespPage frontGetPdocList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
