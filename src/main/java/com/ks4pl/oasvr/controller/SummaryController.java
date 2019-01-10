@@ -48,7 +48,8 @@ public class SummaryController extends ControllerBase{
     }
 
     @RequestMapping(value="/api/summary/content/{name}", method = RequestMethod.GET)
-    public void getSummaryContent(@PathVariable String name, HttpServletResponse response){
+    public void getSummaryContent(@PathVariable String name, HttpServletResponse response)
+            throws ServiceException{
         if (summaryService.getSummaryContent(name, response) == false){
             logger.error("getSummaryContent error");
         }

@@ -28,7 +28,7 @@ public class PdocService extends ServiceBase{
     public Integer total(Map<String, Object> con){
         return pdocListItemMapper.total(con);
     }
-    public Boolean getPdocContent(String name, HttpServletResponse response) {
+    public Boolean getPdocContent(String name, HttpServletResponse response) throws ServiceException{
         System.out.println("getPdocContent filename=" + name);
         return FileUtil.getBinaryFileContent("pdoc", name, response);
     }
@@ -49,6 +49,7 @@ public class PdocService extends ServiceBase{
     }
 
     public Integer delete(String partner, String name){
+        FileUtil.delete("pdoc", name);
         return pdocMapper.deleteByPartnerAndName(partner, name);
     }
 

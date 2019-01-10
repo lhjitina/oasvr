@@ -46,7 +46,8 @@ public class RegulationController extends ControllerBase {
     }
 
     @RequestMapping(value = "/api/regulation/content/{name}", method = RequestMethod.GET)
-    public void GetRegulationContent(@PathVariable String name, HttpServletResponse response) {
+    public void GetRegulationContent(@PathVariable String name, HttpServletResponse response)
+            throws ServiceException{
         if (regulationService.getRegulationContent(name, response) == false) {
             logger.error("GetRegulationContent error");
         }

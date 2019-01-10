@@ -25,7 +25,7 @@ public class InfoPortService extends ServiceBase {
     public Integer total(Map<String, Object> condition){
         return shareInfoListItemMapper.total(condition);
     }
-    public Boolean getShareInfoContent(String name, HttpServletResponse response) {
+    public Boolean getShareInfoContent(String name, HttpServletResponse response) throws ServiceException{
         return FileUtil.getBinaryFileContent("share", name, response);
     }
 

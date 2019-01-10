@@ -49,7 +49,8 @@ public class ContractController extends ControllerBase{
     }
 
     @RequestMapping(value="/api/contract/content/{name}", method = RequestMethod.GET)
-    public void getContractContent(@PathVariable String name, HttpServletResponse response){
+    public void getContractContent(@PathVariable String name, HttpServletResponse response)
+            throws ServiceException{
         if (contractService.getContractContent(name, response) == false){
             logger.error("getContractContent error");
         }

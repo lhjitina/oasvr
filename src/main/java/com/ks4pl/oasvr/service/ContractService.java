@@ -34,7 +34,7 @@ public class ContractService extends ServiceBase{
     public Integer total(Map<String, Object> con){
         return contractListItemMapper.total(con);
     }
-    public Boolean getContractContent(String name, HttpServletResponse response) {
+    public Boolean getContractContent(String name, HttpServletResponse response) throws ServiceException{
         System.out.println("getContractContent filename=" + name);
         return FileUtil.getBinaryFileContent("contract", name, response);
     }

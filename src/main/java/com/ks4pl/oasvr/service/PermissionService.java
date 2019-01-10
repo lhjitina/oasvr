@@ -18,7 +18,7 @@ public class PermissionService {
     public Boolean regPermissionExist(Integer uid){
         Boolean bExist = false;
         Permission permission = permissionMapper.selectPermissionByUser(uid);
-        bExist = (permission.getReg() == 1);
+        bExist = (permission != null && permission.getReg() == 1);
         return bExist;
     }
 

@@ -35,7 +35,8 @@ public class InfoPortController extends ControllerBase {
     }
 
     @RequestMapping(value="/api/share/content", method = RequestMethod.GET)
-    public void getShareInfoContent(@RequestParam String name, HttpServletResponse response){
+    public void getShareInfoContent(@RequestParam String name, HttpServletResponse response)
+            throws ServiceException{
         if (infoPortService.getShareInfoContent(name, response) == false){
             logger.error("GetPolicyContent error");
         }

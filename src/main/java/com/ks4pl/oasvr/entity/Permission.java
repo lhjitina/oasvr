@@ -15,6 +15,8 @@ public class Permission {
     private Integer usr;
     private Integer con;
 
+    public Permission(){}
+
     public Permission(Integer uid) {
         this.uid = uid;
         this.con = 0;

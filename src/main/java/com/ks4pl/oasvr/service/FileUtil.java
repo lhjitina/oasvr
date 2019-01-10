@@ -1,5 +1,7 @@
 package com.ks4pl.oasvr.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,8 +11,9 @@ import java.io.*;
 
 
 public class FileUtil {
-
-    public static Boolean getBinaryFileContent(String type, String name, HttpServletResponse response){
+    private static Logger logger = LogManager.getLogger();
+    public static Boolean getBinaryFileContent(String type, String name, HttpServletResponse response)
+            throws ServiceException{
         System.out.println("....get file: " + getPath(type) + name);
         if (getPath(type) == null)
             return false;
@@ -21,7 +24,8 @@ public class FileUtil {
             fis = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return false;
+            logger.error("file not found: {}", file.getPath());
+            throw new ServiceException("file not found:" + file.getPath());
         }
 
         Long flen = file.length();
@@ -31,12 +35,13 @@ public class FileUtil {
             fis.read(data, 0, flen.intValue());
             ServletOutputStream sos = response.getOutputStream();
             sos.write(data, 0, flen.intValue());
-            response.setContentType("application/octet-stream");
+            response.setContentType("application/pdf");
             fis.close();
             sos.close();
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            logger.error("IOException: {}", file.getPath() + file.getName());
+            throw new ServiceException("IOException:" + file.getPath() + file.getName());
         }
         return true;
     }
@@ -46,7 +51,7 @@ public class FileUtil {
         String os_name = System.getProperties().get("os.name").toString().toLowerCase();
         System.out.println("os name is ...."+os_name);
         if(os_name.contains("windows")) {
-            path = "d:/ksoa/data/";
+            path = "e:/projects/data/";
         }
         else{
             path = "/Users/lhj/work/data/";

@@ -30,7 +30,7 @@ public class RegulationService extends ServiceBase{
     @Autowired
     private RegulationListItemMapper regulationListItemMapper;
 
-    public Boolean getRegulationContent(String name, HttpServletResponse response){
+    public Boolean getRegulationContent(String name, HttpServletResponse response) throws ServiceException{
         return FileUtil.getBinaryFileContent("regulation", name, response);
     }
 

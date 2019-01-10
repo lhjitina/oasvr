@@ -49,7 +49,8 @@ public class PolicyController extends ControllerBase{
     }
 
     @RequestMapping(value="/api/policy/content/{name}", method = RequestMethod.GET)
-    public void getPolicyContent(@PathVariable String name, HttpServletResponse response){
+    public void getPolicyContent(@PathVariable String name, HttpServletResponse response)
+            throws ServiceException{
         if (policyService.getPolicyContent(name, response) == false){
            logger.error("GetPolicyContent error");
         }

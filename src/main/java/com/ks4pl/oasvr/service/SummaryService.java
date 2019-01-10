@@ -34,7 +34,7 @@ public class SummaryService extends ServiceBase{
     public Integer total(Map<String, Object> con){
         return summaryListItemMapper.total(con);
     }
-    public Boolean getSummaryContent(String name, HttpServletResponse response) {
+    public Boolean getSummaryContent(String name, HttpServletResponse response) throws ServiceException{
         System.out.println("getSummaryContent filename=" + name);
         return FileUtil.getBinaryFileContent("summary", name, response);
     }

@@ -4,12 +4,14 @@ import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
+import com.ks4pl.oasvr.model.PdocDelInfo;
 import com.ks4pl.oasvr.service.PdocService;
 import com.ks4pl.oasvr.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,7 +49,8 @@ public class PdocController extends ControllerBase{
     @RequestMapping(value="/api/pdoc/content", method = RequestMethod.GET)
     public void getPolicyContent(@RequestParam String name,
                                  @RequestParam String partner,
-                                 HttpServletResponse response){
+                                 HttpServletResponse response)
+            throws  ServiceException{
         if (pdocService.getPdocContent(name, response) == false){
             logger.error("GetPolicyContent error");
         }
@@ -62,6 +65,13 @@ public class PdocController extends ControllerBase{
         }
         //存储文件
         pdocService.FileUpload(partner, file);
+        return RespData.ok();
+    }
+
+    public RespData delete(@RequestBody @Valid  PdocDelInfo pdocDelInfo, Errors errors)
+            throws IllegalArgumentException{
+        argumentError(errors);
+        pdocService.delete(pdocDelInfo.getPartner(), pdocDelInfo.getName());
         return RespData.ok();
     }
 }

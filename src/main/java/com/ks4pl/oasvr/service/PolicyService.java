@@ -34,7 +34,7 @@ public class PolicyService extends ServiceBase{
     public Integer total(Map<String, Object> con){
         return policyListItemMapper.total(con);
     }
-    public Boolean getPolicyContent(String name, HttpServletResponse response) {
+    public Boolean getPolicyContent(String name, HttpServletResponse response) throws ServiceException{
         System.out.println("getPolicyContent filename=" + name);
         return FileUtil.getBinaryFileContent("policy", name, response);
     }
