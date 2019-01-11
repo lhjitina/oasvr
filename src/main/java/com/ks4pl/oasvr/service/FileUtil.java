@@ -79,6 +79,7 @@ public class FileUtil {
             }
             case "share": {
                 path += "share";
+                break;
             }
             default:{
                 path += "other";

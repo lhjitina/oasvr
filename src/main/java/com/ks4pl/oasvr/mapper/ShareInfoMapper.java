@@ -5,12 +5,12 @@ import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface ShareInfoMapper {
-    @Insert("insert into shareinfo (name, operatorId, operateTime " +
-            "values(#{name}, #{operatorId}, #{operateTime}" )
+    @Insert("insert into shareinfo (name, tag, operatorId, operateTime)" +
+            "values(#{si.name}, #{si.tag}, #{si.operatorId}, #{si.operateTime})" )
     Integer insert(@Param("si")ShareInfo si);
 
-    @Update("update shareinfo set name=#{name}, operatorId=#{operatorId}, operateTime=#{operateTime}" +
-            "where name=#{name}")
+    @Update("update shareinfo set tag=#{si.tag}, operatorId=#{si.operatorId}, operateTime=#{si.operateTime}" +
+            "where name=#{si.name}")
     Integer updateByName(@Param("si")ShareInfo si);
 
     @Delete("delete from shareinfo where name=#{name}")

@@ -5,18 +5,22 @@
     <resultMap id="BaseResultMap" type="com.ks4pl.oasvr.model.ShareInfoListItem">
         <result property="id" column="id"/>
         <result property="name" column="name" />
+        <result property="tag" column="tag"/>
         <result property="operatorName" column="operator"/>
         <result property="operatorId" column="operatorId"/>
         <result property="operateTime" column="operateTime"/>
     </resultMap>
 
-    <select id="selectByCondition" resultMap="BaseResultMap">
-        SELECT s.name, s.operatorId, s.operateTime, u.name operator
+    <select id="selectByCondition" parameterType="map" resultMap="BaseResultMap">
+        SELECT s.name, s.tag, s.operatorId, s.operateTime, u.name operator
         FROM shareinfo s
         JOIN user u ON u.id = s.operatorId
          <where>
             <if test="name!=null and name!=''">
                 AND s.name LIKE  concat('%', #{name}, '%')
+            </if>
+            <if test="tag!=null and tag!=''">
+                AND s.tag LIKE concat('%', #{tag}, '%')
             </if>
             <if test="operator != null and operator!=''">
                 And u.name=#{operatorName}
@@ -26,12 +30,15 @@
     </select>
 
     <select id="total" parameterType="Map" resultType="Integer">
-        SELECT COUNT (s.id)
+        SELECT count(s.id)
         FROM shareinfo s
         JOIN user u ON u.id = s.operatorId
         <where>
             <if test="name!=null and name!=''">
                 AND s.name LIKE  concat('%', #{name}, '%')
+            </if>
+            <if test="tag!=null and tag!=''">
+                AND s.tag LIKE concat('%', #{tag}, '%')
             </if>
             <if test="operator != null and operator!=''">
                 And u.name=#{operatorName}

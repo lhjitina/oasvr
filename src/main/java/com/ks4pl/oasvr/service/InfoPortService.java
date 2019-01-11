@@ -4,7 +4,10 @@ import com.ks4pl.oasvr.entity.ShareInfo;
 import com.ks4pl.oasvr.mapper.ShareInfoListItemMapper;
 import com.ks4pl.oasvr.mapper.ShareInfoMapper;
 import com.ks4pl.oasvr.model.ShareInfoListItem;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +16,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Map;
 
+@Service
 public class InfoPortService extends ServiceBase {
+    private static Logger logger = LogManager.getLogger();
     @Autowired
     private ShareInfoMapper shareInfoMapper;
     @Autowired
@@ -29,12 +34,13 @@ public class InfoPortService extends ServiceBase {
         return FileUtil.getBinaryFileContent("share", name, response);
     }
 
-    public void upload(MultipartFile file)
+    public void upload(String tag, MultipartFile file)
             throws ServiceException, SQLIntegrityConstraintViolationException {
         if (!FileUtil.FileUpload("share", file)){
             throw new ServiceException("save file fail," + file.getOriginalFilename());
         }
         ShareInfo shareInfo = new ShareInfo();
+        shareInfo.setTag(tag);
         shareInfo.setName(file.getOriginalFilename());
         shareInfo.setOperatorId(getCurrentUserId());
         shareInfo.setOperateTime(new Timestamp(System.currentTimeMillis()));
@@ -44,20 +50,23 @@ public class InfoPortService extends ServiceBase {
     }
 
     public void delete(String name){
+        logger.info("delete: name="+name);
         FileUtil.delete("share", name);
         shareInfoMapper.deleteByName(name);
     }
 
-    public void refresh(MultipartFile file)
+    public void refresh(String tag, MultipartFile file)
             throws ServiceException, SQLIntegrityConstraintViolationException {
         ShareInfo shareInfo = new ShareInfo();
         shareInfo.setName(file.getOriginalFilename());
+        shareInfo.setTag(tag);
         shareInfo.setOperatorId(getCurrentUserId());
         shareInfo.setOperateTime(new Timestamp(System.currentTimeMillis()));
+        logger.info("update:" + shareInfo.toString());
         if (shareInfoMapper.updateByName(shareInfo) == 0){
             throw new ServiceException("update database fail" + shareInfo.toString());
         }
-        delete(file.getOriginalFilename());
+        FileUtil.delete("share", file.getOriginalFilename());
         if (!FileUtil.FileUpload("share", file)){
             throw new ServiceException("save file fail," + file.getOriginalFilename());
         }

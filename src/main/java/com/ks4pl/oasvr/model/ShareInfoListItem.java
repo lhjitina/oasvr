@@ -7,4 +7,11 @@ import lombok.Setter;
 @Getter @Setter
 public class ShareInfoListItem extends ShareInfo {
     String operatorName;
+
+    @Override
+    public String toString() {
+        return "ShareInfoListItem{" +
+                "operatorName='" + operatorName + '\'' +
+                "} " + super.toString();
+    }
 }
