@@ -60,6 +60,14 @@ public class JwtUtil {
 
     }
 
+    public static Date fetchExp(String token){
+        Claims claims = fetchClaims(token);
+        if (claims != null){
+            return claims.getExpiration();
+        }
+        return null;
+    }
+
     public static Claims fetchClaims(String token){
         SecretKey key = Keys.hmacShaKeyFor(strKey.getBytes());
         Jws<Claims> jws = Jwts.parser().setSigningKey(key).parseClaimsJws(token);

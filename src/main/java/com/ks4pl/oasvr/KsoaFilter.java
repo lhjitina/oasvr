@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespCode;
+import com.ks4pl.oasvr.service.JwtUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
@@ -36,12 +37,15 @@ public class KsoaFilter implements Filter {
 
         if (url.equals("/api/user/login")){
             System.out.println("...login.....");
-//           response.setStatus(HttpStatus.NON_AUTHORITATIVE_INFORMATION.value());
             filterChain.doFilter(servletRequest, servletResponse);
         }
-        else if (token == null) {
-            logger.info("request token is null, url=" + url);
-            response.setStatus(HttpStatus.NON_AUTHORITATIVE_INFORMATION.value());
+        else if (token == null || token.trim().isEmpty()) {
+            logger.info("request token is null or empty, url=" + url);
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        }
+        else if (!JwtUtil.isValid(token)) {
+            logger.info("token is expired: udi={} exp={}", JwtUtil.fetchSubject(token), JwtUtil.fetchExp(token));
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
         }
         else{
             logger.info("request token is ok, url="+url);

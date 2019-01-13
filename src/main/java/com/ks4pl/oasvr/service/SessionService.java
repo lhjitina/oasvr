@@ -15,6 +15,10 @@ public class SessionService {
     @Autowired
     private HttpServletRequest request;
 
+    public String getToken(){
+        return request.getHeader("Authorization");
+    }
+
     public Integer getCurrentUserId() throws ServiceException{
         String token = request.getHeader("Authorization");
         if (token == null || token.isEmpty()){

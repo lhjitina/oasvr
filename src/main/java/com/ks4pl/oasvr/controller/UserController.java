@@ -138,4 +138,25 @@ public class UserController extends ControllerBase{
         logger.info("user logout uid=" + sessionService.getCurrentUserId());
         return RespData.ok();
     }
+
+    @RequestMapping(value = "/api/user/verifytoken", method = RequestMethod.GET)
+    public RespData verifyToken(){
+        String token = sessionService.getToken();
+        logger.info("verify token: " + token);
+        if (!JwtUtil.isValid(token)){
+            logger.info("token is invalid:" + token);
+            return RespData.err(RespCode.TOKEN_EXP);
+        }
+        else{
+            UserListItem userListItem = userService.selectUserListItemById(Integer.valueOf(JwtUtil.fetchSubject(token)));
+            if (userListItem == null){
+                logger.info("verify token, user no exist, uid="+ JwtUtil.fetchSubject(token));
+                return RespData.err(RespCode.NO_REGIST);
+            }
+            else{
+                logger.info("verify token ok, user:" + userListItem);
+                return RespData.ok(userListItem);
+            }
+        }
+    }
 }

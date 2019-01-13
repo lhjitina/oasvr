@@ -10,7 +10,8 @@ public enum RespCode {
     NO_TOKEN(6, "no token"),
     RELOGIN(7, "repeat login"),
     USR_SAME(8, "user has exist"),
-    PARAM_ERR(9, "parameter error");
+    PARAM_ERR(9, "parameter error"),
+    TOKEN_EXP(10, "token has expired");
 
     private Integer code;
     private String msg;
