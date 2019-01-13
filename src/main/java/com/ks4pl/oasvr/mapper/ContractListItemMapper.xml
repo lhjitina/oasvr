@@ -12,10 +12,10 @@
     </resultMap>
 
     <select id="selectByCondition" parameterType="Map" resultMap="BaseResultMap">
-        SELECT p.name, p.issueDate, p.state, p.operateTime, u.name operator, u.id uid
-        FROM contract p, user u
+        SELECT c.name, c.issueDate, c.state, c.operateTime, u.name operator, u.id uid
+        FROM contract c, user u
         <where>
-            u.id = p.operatorId
+            u.id = c.operatorId
             <if test="name!=null and name!=''">
                 AND c.name LIKE  concat('%', #{name}, '%')
             </if>
@@ -29,7 +29,7 @@
                 And c.state=#{state}
             </if>
         </where>
-        ORDER by p.issueDate DESC
+        ORDER by c.issueDate DESC
     </select>
 
     <select id="total" parameterType="Map" resultType="Integer">

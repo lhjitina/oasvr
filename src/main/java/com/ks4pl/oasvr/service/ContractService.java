@@ -64,7 +64,8 @@ public class ContractService extends ServiceBase{
         return contractMapper.insertone(contract);
     }
 
-    public Integer updateState(String name, String state) throws SQLIntegrityConstraintViolationException{
+    public Integer updateState(String name, String state)
+            throws SQLIntegrityConstraintViolationException, ServiceException{
         Contract contract = new Contract(0, name, null, state, getCurrentUserId(),
                                         new Timestamp(System.currentTimeMillis()));
         return contractMapper.updateStateByName(contract);

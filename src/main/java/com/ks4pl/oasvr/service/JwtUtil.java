@@ -4,19 +4,21 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.crypto.SecretKey;
 import java.util.Calendar;
 import java.util.Date;
 
 public class JwtUtil {
+    private static Logger logger = LogManager.getLogger();
     static final String strKey = "3d8469faede7c7bac0587d56f52ac495f95e50e393eed34753ca5c4f35bcc037";
-    public static String token(Integer uid, Integer cid){
+    public static String token(Integer uid){
         Calendar exp = Calendar.getInstance();
         exp.add(Calendar.MONTH, 1);
 
         SecretKey key = Keys.hmacShaKeyFor(strKey.getBytes());
-        System.out.println(key.toString());
 
         String jws = Jwts.builder()
                 .setSubject(uid.toString())

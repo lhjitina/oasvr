@@ -60,7 +60,9 @@ public class ContractController extends ControllerBase{
     public RespData FileUpload(@RequestParam(value = "issueDate") String issueDateStr, MultipartFile file)
         throws IllegalArgumentException, ServiceException, SQLIntegrityConstraintViolationException{
         //检查用户权限
+        logger.info("/api/contract/upload:{} ... {}", issueDateStr, file.getOriginalFilename());
         if (!permissionService.conPermissionExist(sessionService.getCurrentUserId())){
+            logger.info("user(id={}) no permission", sessionService.getCurrentUserId());
             return RespData.err(RespCode.NO_PERM);
         }
         //转换并检查发布日期
@@ -78,7 +80,8 @@ public class ContractController extends ControllerBase{
 
     @PostMapping(value = "/api/contract/state")
     public void setContractState(@RequestBody @Valid ContractListItem contractListItem, Errors errors)
-            throws IllegalArgumentException, SQLIntegrityConstraintViolationException{
+            throws IllegalArgumentException, SQLIntegrityConstraintViolationException, ServiceException{
+        logger.info("/api/contract/state: {}", contractListItem.toString());
         argumentError(errors);
         contractService.updateState(contractListItem.getOperatorName(),contractListItem.getState());
     }

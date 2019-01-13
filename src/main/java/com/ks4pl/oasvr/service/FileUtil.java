@@ -35,7 +35,7 @@ public class FileUtil {
             fis.read(data, 0, flen.intValue());
             ServletOutputStream sos = response.getOutputStream();
             sos.write(data, 0, flen.intValue());
-            response.setContentType("application/pdf");
+            response.setContentType("application/octet-stream");
             fis.close();
             sos.close();
         } catch (IOException e) {

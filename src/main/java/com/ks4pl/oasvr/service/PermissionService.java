@@ -53,7 +53,7 @@ public class PermissionService {
     public Boolean conPermissionExist(Integer uid){
         Boolean bExist = false;
         Permission permission = permissionMapper.selectPermissionByUser(uid);
-        bExist = (permission.getCon() == 1);
+        bExist = (permission != null && permission.getCon() == 1);
         return bExist;
     }
 

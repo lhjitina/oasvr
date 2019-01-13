@@ -13,7 +13,7 @@ public class ServiceBase {
             con.put("size", size);
     }
 
-    protected  Integer getCurrentUserId(){
+    protected  Integer getCurrentUserId() throws ServiceException{
         return sessionService.getCurrentUserId();
     }
 }

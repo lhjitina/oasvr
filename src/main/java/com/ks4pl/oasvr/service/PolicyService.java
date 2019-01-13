@@ -59,7 +59,7 @@ public class PolicyService extends ServiceBase{
         }
     }
 
-    public Integer updateState(String name, String institution, String state) {
+    public Integer updateState(String name, String institution, String state) throws ServiceException{
         Policy policy = new Policy( name, institution, null, state, getCurrentUserId(), new Timestamp(System.currentTimeMillis()));
         return policyMapper.updateStateByName(policy);
     }

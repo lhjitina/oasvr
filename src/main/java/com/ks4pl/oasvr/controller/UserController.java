@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
 
@@ -77,9 +78,10 @@ public class UserController extends ControllerBase{
         userService.deleteUserById(uid);
     }
 
-    @RequestMapping(value = "/api/login", method = RequestMethod.POST)
-    public RespData userLogin(@RequestBody @Valid LoginInfo loginInfo, Errors errors)
-                            throws IllegalArgumentException {
+    @RequestMapping(value = "/api/user/login", method = RequestMethod.POST)
+    public RespData userLogin(@RequestBody @Valid LoginInfo loginInfo, Errors errors,
+                              HttpServletResponse response)
+                            throws IllegalArgumentException, ServiceException {
         logger.info("login: "+ loginInfo);
         argumentError(errors);
         User u = userService.selectUserByTelOrEmail(loginInfo.getLoginName());
@@ -97,14 +99,13 @@ public class UserController extends ControllerBase{
         }
         else if (sessionService.getCurrentUserId() != 0){
             logger.warn("the user has login, repeat login");
-            sessionService.saveUserInfo(u.getId(), u.getName());
-            respData = RespData.ok();
+            respData = RespData.err(RespCode.RELOGIN);
         }
         else{
             UserListItem userListItem = userService.selectUserListItemById(u.getId());
-            sessionService.saveUserInfo(u.getId(), u.getName());
+            response.setHeader("Authorization", sessionService.createToken(u.getId()));
             respData = RespData.ok(userListItem);
-            logger.info("the user login success");
+            logger.info("the user login success: uid={}, uname={}", u.getId(), u.getName());
         }
         return respData;
     }
@@ -137,10 +138,8 @@ public class UserController extends ControllerBase{
     }
 
     @RequestMapping(value = "/api/user/logout", method = RequestMethod.GET)
-    public RespData userLogout(){
-        logger.info("user logout uid=" + sessionService.getCurrentUserId() + "  name="+sessionService.getCurrentUserName());
-        sessionService.deleteCurrentUserInfo();
+    public RespData userLogout() throws ServiceException{
+        logger.info("user logout uid=" + sessionService.getCurrentUserId());
         return RespData.ok();
     }
-
 }
