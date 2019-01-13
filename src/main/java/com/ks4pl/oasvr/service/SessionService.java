@@ -17,7 +17,7 @@ public class SessionService {
 
     public Integer getCurrentUserId() throws ServiceException{
         String token = request.getHeader("Authorization");
-        if (token == null){
+        if (token == null || token.isEmpty()){
             throw new ServiceException("request no token");
         }
         Integer userId;

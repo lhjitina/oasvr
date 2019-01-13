@@ -34,8 +34,9 @@ public class KsoaFilter implements Filter {
         String url = request.getRequestURI();
         String token = request.getHeader("authorization");
 
-        if (url.equals("/api/login")){
+        if (url.equals("/api/user/login")){
             System.out.println("...login.....");
+//           response.setStatus(HttpStatus.NON_AUTHORITATIVE_INFORMATION.value());
             filterChain.doFilter(servletRequest, servletResponse);
         }
         else if (token == null) {

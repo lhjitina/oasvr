@@ -97,10 +97,6 @@ public class UserController extends ControllerBase{
                 "   right passwd is:" + u.getPasswd());
             respData = RespData.err(RespCode.PASS_ERR);
         }
-        else if (sessionService.getCurrentUserId() != 0){
-            logger.warn("the user has login, repeat login");
-            respData = RespData.err(RespCode.RELOGIN);
-        }
         else{
             UserListItem userListItem = userService.selectUserListItemById(u.getId());
             response.setHeader("Authorization", sessionService.createToken(u.getId()));
