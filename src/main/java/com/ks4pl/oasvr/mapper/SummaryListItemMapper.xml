@@ -30,7 +30,7 @@
     </select>
 
     <select id="total" parameterType="Map" resultType="Integer">
-        SELECT COUNT (s.id) FROM summary s, user u
+        SELECT count(s.id) FROM summary s, user u
         <where>
             s.operatorId=u.id
             <if test="name!=null and name!=''">

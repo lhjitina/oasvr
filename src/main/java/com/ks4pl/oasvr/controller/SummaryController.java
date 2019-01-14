@@ -27,7 +27,7 @@ public class SummaryController extends ControllerBase{
     @Autowired
     private SummaryService summaryService;
 
-    @RequestMapping(value = "/api/front/summary/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/front/summary/list", method = RequestMethod.POST)
     public RespPage frontGetSummaryList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
             throws IllegalArgumentException{
         argumentError(errors);

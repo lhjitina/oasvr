@@ -14,8 +14,12 @@ import java.util.Date;
 public class ContractListItem extends Contract {
     public String operatorName;
 
+
     public ContractListItem(Integer id, String name, Date issueDate, String state, Integer operatorId, Timestamp operateTime, String operatorName) {
         super(id, name, issueDate, state, operatorId, operateTime);
         this.operatorName = operatorName;
+    }
+
+    public ContractListItem() {
     }
 }

@@ -45,6 +45,7 @@ public class UserController extends ControllerBase{
     @RequestMapping(value = "/api/user/detail", method= RequestMethod.GET)
     public RespData getUserDetail(@RequestParam(value = "id") Integer uid){
         logger.info("/api/user/detail with id="+uid);
+        logger.info(userService.selectUserListItemById(uid).toString());
         return RespData.ok(userService.selectUserListItemById(uid));
     }
 
