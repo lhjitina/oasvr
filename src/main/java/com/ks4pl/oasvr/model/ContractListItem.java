@@ -18,4 +18,7 @@ public class ContractListItem extends Contract {
         super(id, name, issueDate, state, operatorId, operateTime);
         this.operatorName = operatorName;
     }
+
+    public ContractListItem() {
+    }
 }

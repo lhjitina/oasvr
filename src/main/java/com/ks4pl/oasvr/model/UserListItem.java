@@ -40,6 +40,8 @@ public class UserListItem {
     private Boolean perSum;
     private Boolean perUsr;
     private Boolean perCon;
+    private Boolean perDoc;
+
 
     @Override
     public String toString() {
@@ -58,6 +60,8 @@ public class UserListItem {
                 ", perSum=" + perSum +
                 ", perUsr=" + perUsr +
                 ", perCon=" + perCon +
+                ", perDoc=" + perDoc +
                 '}';
     }
+
 }

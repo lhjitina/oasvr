@@ -39,11 +39,14 @@ public class Permission {
         if (userListItem.getPerSum() != null){
             p.setSum(userListItem.getPerSum()? 1 : 0);
         }
+        if (userListItem.getPerDoc() != null){
+            p.setDoc(userListItem.getPerDoc()? 1 : 0);
+        }
         if (userListItem.getPerUsr() != null){
-            p.setSum(userListItem.getPerUsr()? 1 : 0);
+            p.setUsr(userListItem.getPerUsr()? 1 : 0);
         }
         if (userListItem.getPerCon() != null){
-            p.setSum(userListItem.getPerCon()? 1 : 0);
+            p.setCon(userListItem.getPerCon()? 1 : 0);
         }
         return p;
     }

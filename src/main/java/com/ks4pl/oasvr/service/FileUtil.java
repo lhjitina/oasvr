@@ -51,7 +51,7 @@ public class FileUtil {
         String os_name = System.getProperties().get("os.name").toString().toLowerCase();
         System.out.println("os name is ...."+os_name);
         if(os_name.contains("windows")) {
-            path = "e:/projects/data/";
+            path = "./data/";
         }
         else{
             path = "/Users/lhj/work/data/";
@@ -92,7 +92,7 @@ public class FileUtil {
                 path += '/';
             }
             else{
-                System.out.println("the same name file exist, can not create directory:" + path);
+                logger.error("the same name file exist, can not create directory:" + path);
                 path = null;
             }
         }
@@ -100,7 +100,7 @@ public class FileUtil {
             path += '/';
         }
         else{
-            System.out.println("the directory no exist and create fail:" + path);
+            logger.error("the directory no exist and create fail:" + path);
             path = null;
         }
         return path;

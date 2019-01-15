@@ -83,6 +83,6 @@ public class ContractController extends ControllerBase{
             throws IllegalArgumentException, SQLIntegrityConstraintViolationException, ServiceException{
         logger.info("/api/contract/state: {}", contractListItem.toString());
         argumentError(errors);
-        contractService.updateState(contractListItem.getOperatorName(),contractListItem.getState());
+        contractService.updateState(contractListItem.getName(),contractListItem.getState());
     }
 }

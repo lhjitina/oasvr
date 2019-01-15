@@ -3,6 +3,7 @@ package com.ks4pl.oasvr.service;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,8 +34,14 @@ public class JwtUtil {
 
     public static Boolean isValid(String token){
         SecretKey key = Keys.hmacShaKeyFor(strKey.getBytes());
-        Jws<Claims> jws = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+        Jws<Claims> jws = null;
         Boolean valid = false;
+        try {
+            jws = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+        }
+        catch (MalformedJwtException e){
+            logger.info("jwt token invalid");
+        }
         if (jws != null){
             Date exp = jws.getBody().getExpiration();
             String issuer = jws.getBody().getIssuer();
@@ -44,7 +51,7 @@ public class JwtUtil {
             }
         }
         else{
-            System.out.println("jws null");
+            logger.info("jws null");
         }
         return valid;
     }
