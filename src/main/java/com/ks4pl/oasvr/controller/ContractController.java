@@ -41,6 +41,7 @@ public class ContractController extends ControllerBase{
     @RequestMapping(value = "/api/console/contract/list", method = RequestMethod.POST)
     public RespPage consoleGetContractList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
         throws IllegalArgumentException{
+        logger.info("/api/console/contract/list: " + pageReqParam.toString());
         argumentError(errors);
         return RespPage.okPage(pageReqParam.getNum(),
                 pageReqParam.getSize(),

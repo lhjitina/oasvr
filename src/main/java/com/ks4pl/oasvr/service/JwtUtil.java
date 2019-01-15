@@ -14,7 +14,7 @@ import java.util.Date;
 
 public class JwtUtil {
     private static Logger logger = LogManager.getLogger();
-    static final String strKey = "3d8469faede7c7bac0587d56f52ac495f95e50e393eed34753ca5c4f35bcc037";
+    private  static final String strKey = "3d8469faede7c7bac0587d56f52ac495f95e50e393eed34753ca5c4f35bcc037";
     public static String token(Integer uid){
         Calendar exp = Calendar.getInstance();
         exp.add(Calendar.MONTH, 1);
@@ -42,6 +42,7 @@ public class JwtUtil {
         catch (MalformedJwtException e){
             logger.info("jwt token invalid");
         }
+
         if (jws != null){
             Date exp = jws.getBody().getExpiration();
             String issuer = jws.getBody().getIssuer();

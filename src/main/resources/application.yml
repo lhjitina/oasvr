@@ -10,6 +10,6 @@ spring:
     url: jdbc:mysql://localhost:3306/kaisheng?serverTimezone=Asia/Shanghai
     username: root
 #    password: ks123!@#
-    password: root
-#    password: root123456
+    #    password: root
+    password: root123456
     driver-class-name: com.mysql.cj.jdbc.Driver
