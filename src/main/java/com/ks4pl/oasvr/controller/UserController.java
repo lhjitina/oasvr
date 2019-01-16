@@ -35,10 +35,8 @@ public class UserController extends ControllerBase{
         argumentError(errors);
         logger.info("add user: " + userListItem.toString());
         User user = User.fromUserListItem(userListItem);
-        userService.addUser(user);
         Permission p = Permission.fromUserListItem(userListItem);
-        p.setUid(userService.getLastInsertId());
-        permissionService.addPerm(p);
+        userService.addUser(user, p);
         return RespData.ok();
     }
 

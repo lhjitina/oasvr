@@ -12,7 +12,6 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class UserListItem {
-    @NotNull
     private Integer id;
 
     @NotNull @NotBlank

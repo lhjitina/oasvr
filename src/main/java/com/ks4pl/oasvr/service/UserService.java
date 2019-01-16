@@ -2,12 +2,17 @@ package com.ks4pl.oasvr.service;
 
 import com.ks4pl.oasvr.MyUtils;
 import com.ks4pl.oasvr.controller.IllegalArgumentException;
+import com.ks4pl.oasvr.entity.Permission;
 import com.ks4pl.oasvr.entity.User;
+import com.ks4pl.oasvr.mapper.PermissionMapper;
 import com.ks4pl.oasvr.mapper.UserListItemMapper;
 import com.ks4pl.oasvr.mapper.UserMapper;
 import com.ks4pl.oasvr.model.UserListItem;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
@@ -16,10 +21,15 @@ import java.util.Map;
 
 @Service
 public class UserService extends ServiceBase{
+    private static Logger logger = LogManager.getLogger();
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private UserListItemMapper userListItemMapper;
+    @Autowired
+    private PermissionMapper permissionMapper;
+
+    private final String defaultPasswd = "123456";
 
     private void validateQueryParam(Map<String, Object> con) throws IllegalArgumentException {
         ArrayList<String> ks = new ArrayList<>();
@@ -55,12 +65,19 @@ public class UserService extends ServiceBase{
         return userListItemMapper.total(condition);
     }
 
-    public void addUser(User u) throws ServiceException, SQLIntegrityConstraintViolationException {
-        u.setPasswd("123456");
+ //   @Transactional
+    public void addUser(User u, Permission p) throws ServiceException, SQLIntegrityConstraintViolationException {
+        u.setPasswd(defaultPasswd);
         u.setRegistTime(new Timestamp(System.currentTimeMillis()));
         u.setState("启用");
         if (userMapper.insert(u) == 0){
+            logger.info("insert user error");
             throw new ServiceException("insert user fail:" + u.toString());
+        }
+        logger.info("insert user return id="+u.getId());
+        p.setUid(u.getId());
+        if (permissionMapper.insert(p) == 0){
+            throw new ServiceException("inert permission into database fail, new user id="+u.getId());
         }
     }
 
@@ -80,10 +97,6 @@ public class UserService extends ServiceBase{
         if (userMapper.updatePasswdById(uid, passwd) == 0){
             throw new ServiceException("reset passwd fail, uid:" + uid + ";passwd=" + passwd);
         }
-    }
-
-    public Integer getLastInsertId(){
-        return userMapper.getLastInsertId();
     }
 
     public void modifyPasswd(Integer uid, String passwd) throws ServiceException{

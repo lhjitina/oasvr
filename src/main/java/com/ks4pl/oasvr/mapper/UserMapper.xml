@@ -27,15 +27,6 @@
         SELECT <include refid="allCol"/> FROM user WHERE id=#{uid}
     </select>
 
-    <sql id="insCol">
-        name, tel, email, departmentId, state, registTime, passwd, deleted
-    </sql>
-    <insert id="insert"  parameterType="com.ks4pl.oasvr.entity.User">
-        INSERT INTO user (<include refid="insCol"/>)
-        VALUES (#{user.name}, #{user.tel}, #{user.email}, #{user.departmentId}, #{user.state},
-                #{user.registTime}, #{user.passwd}, 0)
-    </insert>
-
     <update id="deleteById" parameterType="Integer">
         UPDATE user SET deleted=1 WHERE id=#{uid}
     </update>
@@ -65,10 +56,6 @@
     </trim>
         WHERE id=#{u.id}
     </update>
-
-    <select id="getLastInsertId" resultType="Integer">
-        SELECT LAST_INSERT_ID()
-    </select>
 </mapper>
 
 
