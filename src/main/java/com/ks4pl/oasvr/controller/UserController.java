@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 
 
 @RestController
@@ -83,7 +84,7 @@ public class UserController extends ControllerBase{
                             throws IllegalArgumentException, ServiceException {
         logger.info("login: "+ loginInfo);
         argumentError(errors);
-        User u = userService.selectUserByTelOrEmail(loginInfo.getLoginName());
+        User u=null;// = userService.selectUserByTelOrEmail(loginInfo.getLoginName());
 
         RespData respData;
         if (u == null){
@@ -157,5 +158,12 @@ public class UserController extends ControllerBase{
                 return RespData.ok(userListItem);
             }
         }
+    }
+    @RequestMapping(value = "/te", method = RequestMethod.GET)
+
+    public UserListItem getuser(Integer id) throws SQLIntegrityConstraintViolationException, ServiceException{
+        logger.info(id);
+        UserListItem userListItem = userService.selectUserListItemById(id);
+        return userListItem;
     }
 }

@@ -32,14 +32,6 @@ public class UserService extends ServiceBase{
     private final String defaultPasswd = "123456";
 
     private void validateQueryParam(Map<String, Object> con) throws IllegalArgumentException {
-        ArrayList<String> ks = new ArrayList<>();
-        ks.addAll(con.keySet());
-        for (String k : ks){
-            if (con.get(k).toString().trim().isEmpty()){
-                con.remove(k);
-                System.out.println("remove empty key:"+ k);
-            }
-        }
         if (con.get("departmentId") != null && !MyUtils.isNumeric(con.get("departmentId").toString())){
                 throw new IllegalArgumentException("department id should be number");
         }
@@ -57,6 +49,7 @@ public class UserService extends ServiceBase{
 
     public ArrayList<UserListItem> selectUserListItemByCondition(Map<String, Object> condition, int num, int size) throws IllegalArgumentException {
         validateQueryParam(condition);
+        delBlankParam(condition);
         addPageParam(condition, num, size);
         return userListItemMapper.selectByCondition(condition);
     }

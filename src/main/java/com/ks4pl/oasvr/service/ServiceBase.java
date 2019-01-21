@@ -1,7 +1,8 @@
 package com.ks4pl.oasvr.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.Map;
+
+import java.util.*;
 
 
 public class ServiceBase {
@@ -13,7 +14,18 @@ public class ServiceBase {
             con.put("size", size);
     }
 
-    protected  Integer getCurrentUserId() throws ServiceException{
+    protected void delBlankParam(Map<String, Object> con){
+        ArrayList<String> keys = new ArrayList<>();
+        keys.addAll(con.keySet());
+        for (String k : keys){
+            if (con.get(k).toString().trim().isEmpty()){
+                con.remove(k);
+                System.out.println("remove empty key:"+ k);
+            }
+        }
+    }
+
+    protected Integer getCurrentUserId() throws ServiceException{
         return sessionService.getCurrentUserId();
     }
 }
