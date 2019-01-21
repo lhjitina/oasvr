@@ -50,13 +50,24 @@ public class PermissionService {
         return bExist;
     }
 
-    public Boolean conPermissionExist(Integer uid){
+    public Boolean conTemplatePermissionExist(Integer uid){
         Boolean bExist = false;
         Permission permission = permissionMapper.selectPermissionByUser(uid);
         bExist = (permission != null && permission.getCon() == 1);
         return bExist;
     }
-
+    public Boolean cwPermissionExist(Integer uid){
+        Boolean bExist = false;
+        Permission permission = permissionMapper.selectPermissionByUser(uid);
+        bExist = (permission != null && permission.getCw() == 1);
+        return bExist;
+    }
+    public Boolean crPermissionExist(Integer uid){
+        Boolean bExist = false;
+        Permission permission = permissionMapper.selectPermissionByUser(uid);
+        bExist = (permission != null && permission.getCr() == 1);
+        return bExist;
+    }
     public void addPerm(Permission p) throws SQLIntegrityConstraintViolationException {
          permissionMapper.insert(p);
     }

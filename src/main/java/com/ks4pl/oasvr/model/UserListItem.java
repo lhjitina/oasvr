@@ -40,6 +40,8 @@ public class UserListItem {
     private Boolean perUsr;
     private Boolean perCon;
     private Boolean perDoc;
+    private Boolean perCw;
+    private Boolean perCr;
 
 
     @Override

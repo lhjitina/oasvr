@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ks4pl.oasvr.mapper.ContractListItemMapper">
+<mapper namespace="com.ks4pl.oasvr.mapper.ContractTemplateListItemMapper">
 
-    <resultMap id="BaseResultMap" type="com.ks4pl.oasvr.model.ContractListItem">
+    <resultMap id="BaseResultMap" type="com.ks4pl.oasvr.model.ContractTemplateListItem">
         <result property="name" column="name" />
         <result property="issueDate" column="issueDate"/>
         <result property="state" column="state"/>
@@ -13,7 +13,7 @@
 
     <select id="selectByCondition" parameterType="Map" resultMap="BaseResultMap">
         SELECT c.name, c.issueDate, c.state, c.operateTime, u.name operator, u.id uid
-        FROM contract c, user u
+        FROM contracttemplate c, user u
         <where>
             u.id = c.operatorId
             <if test="name!=null and name!=''">
@@ -33,7 +33,7 @@
     </select>
 
     <select id="total" parameterType="Map" resultType="Integer">
-    SELECT count(c.id)  FROM contract c, user u
+    SELECT count(c.id)  FROM contracttemplate c, user u
     <where>
         u.id = c.operatorId
         <if test="name!=null and name!=''">

@@ -14,6 +14,8 @@ public class Permission {
     private Integer doc;
     private Integer usr;
     private Integer con;
+    private Integer cw;
+    private Integer cr;
 
     public Permission(){}
 
@@ -25,6 +27,8 @@ public class Permission {
         this.reg = 0;
         this.sum = 0;
         this.usr = 0;
+        this.cw = 0;
+        this.cr = 0;
 
     }
 
@@ -47,6 +51,12 @@ public class Permission {
         }
         if (userListItem.getPerCon() != null){
             p.setCon(userListItem.getPerCon()? 1 : 0);
+        }
+        if (userListItem.getPerCw() != null){
+            p.setCw(userListItem.getPerCw()? 1 : 0);
+        }
+        if (userListItem.getPerCr() != null){
+            p.setCr(userListItem.getPerCr()? 1 : 0);
         }
         return p;
     }

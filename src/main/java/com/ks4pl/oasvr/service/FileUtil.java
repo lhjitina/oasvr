@@ -77,6 +77,10 @@ public class FileUtil {
                 path += "contract";
                 break;
             }
+            case "contracttemplate":{
+                path += "contracttemplate";
+                break;
+            }
             case "share": {
                 path += "share";
                 break;

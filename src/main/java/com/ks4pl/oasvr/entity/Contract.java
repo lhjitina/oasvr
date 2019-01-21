@@ -1,7 +1,7 @@
 package com.ks4pl.oasvr.entity;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,28 +9,21 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class Contract {
-    private Integer id;
+    Integer id;
 
     @NotNull @NotBlank
-    private String name;
-    private Date issueDate;
-
-    @NotNull @NotBlank
-    private String state;
-    private Integer operatorId;
-    private Timestamp operateTime;
-
-
-    public Contract(){}
-
-    public Contract(Integer id, String name, Date issueDate, String state, Integer operatorId, Timestamp operateTime) {
-        this.id = id;
-        this.name = name;
-        this.issueDate = issueDate;
-        this.state = state;
-        this.operatorId = operatorId;
-        this.operateTime = operateTime;
-    }
+    String name;
+    String partner;
+    Integer type;
+    @NotNull
+    Date start;
+    @NotNull
+    Date end;
+    String digest;
+    @NotNull
+    Integer operatorId;
+    String operatorName;
+    Timestamp operateTime;
 }
-
