@@ -9,6 +9,7 @@ import com.ks4pl.oasvr.model.ContractTemplateListItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+@Service
 public class ContractService extends ServiceBase{
     @Autowired
     ContractMapper contractMapper;
@@ -36,7 +38,8 @@ public class ContractService extends ServiceBase{
         return FileUtil.getBinaryFileContent("contract", name, response);
     }
 
-    public void FileUpload(String partner, Date start, Date end, String digest, MultipartFile file)
+    public void FileUpload(String partner, String type, Date start, Date end,
+                           Integer autoRenewal, String digest, MultipartFile file)
             throws ServiceException, SQLIntegrityConstraintViolationException {
         if (!FileUtil.FileUpload("contract", file)){
             logger.error("save file error");
@@ -46,8 +49,10 @@ public class ContractService extends ServiceBase{
         Contract contract = new Contract();
         contract.setName(file.getOriginalFilename());
         contract.setPartner(partner);
+        contract.setType(type);
         contract.setStart(start);
         contract.setEnd(end);
+        contract.setAutoRenewal(autoRenewal);
         contract.setDigest(digest);
         contract.setOperatorId(getCurrentUserId());
         contract.setOperateTime(new Timestamp(System.currentTimeMillis()));

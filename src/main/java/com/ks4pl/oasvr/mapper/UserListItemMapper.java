@@ -47,7 +47,7 @@ public interface UserListItemMapper {
     @Select("select u.id id, u.name name, u.tel tel, u.email email, u.departmentId departmentId, " +
             "u.state state, u.registTime registTime, u.lastLoginTime lastLoginTime, " +
             "d.name departmentName, " +
-            "p.pol perPol, p.reg perReg, p.sum perSum, p.usr perUsr, p.con perCon, p.doc perDoc " +
+            "p.pol perPol, p.reg perReg, p.sum perSum, p.usr perUsr, p.con perCon, p.doc perDoc, p.cw perCw, p.cr perCr " +
             "from user u " +
             "join department d on d.id=u.departmentId " +
             "join permission p on p.uid = u.id " +

@@ -48,8 +48,8 @@ public class UserService extends ServiceBase{
 }
 
     public ArrayList<UserListItem> selectUserListItemByCondition(Map<String, Object> condition, int num, int size) throws IllegalArgumentException {
-        validateQueryParam(condition);
         delBlankParam(condition);
+        validateQueryParam(condition);
         addPageParam(condition, num, size);
         return userListItemMapper.selectByCondition(condition);
     }

@@ -16,7 +16,8 @@ public class Contract {
     @NotNull @NotBlank
     String name;
     String partner;
-    Integer type;
+    String type;
+    Integer autoRenewal;
     @NotNull
     Date start;
     @NotNull

@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public interface UserMapper {
 
     @Select({"select id, name, tel, email, departmentId,",
-            "state, registTime, lastLoginTime",
+            "state, registTime, lastLoginTime, passwd",
             "from user",
-            "where tel=#{te} OR email=#{te} AND deleted=0"})
+            "where tel=#{te} OR email=#{te} AND deleted=0 and state='启用'"})
     User selectUserByTelOrEmail(String te);
 
     @Select({"select id, name, tel, email, departmentId,",

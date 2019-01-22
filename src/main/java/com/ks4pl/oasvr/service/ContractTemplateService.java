@@ -35,7 +35,7 @@ public class ContractTemplateService extends ServiceBase{
     }
     public Boolean getContractTemplateContent(String name, HttpServletResponse response) throws ServiceException{
         System.out.println("getContractTemplateContent filename=" + name);
-        return FileUtil.getBinaryFileContent("contracttemplate", name, response);
+        return FileUtil.getBinaryFileContent("contractTemplate", name, response);
     }
 
     public void FileUpload(Date issueDate, MultipartFile file)

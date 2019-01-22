@@ -84,7 +84,7 @@ public class UserController extends ControllerBase{
                             throws IllegalArgumentException, ServiceException {
         logger.info("login: "+ loginInfo);
         argumentError(errors);
-        User u=null;// = userService.selectUserByTelOrEmail(loginInfo.getLoginName());
+        User u = userService.selectUserByTelOrEmail(loginInfo.getLoginName());
 
         RespData respData;
         if (u == null){

@@ -13,9 +13,9 @@ import java.util.Map;
 public interface ContractMapper {
 
     @Insert("insert into contract " +
-            "(name, partner, start, end, digest, operatorId, operateTime) " +
-            "values(#{name}, #{partner}, #{start}, #{end}, #{digest}, " +
-            "#{operatorId}, #{operateTime})")
+            "(name, partner, type, start, end, digest, operatorId, operateTime, autoRenewal) " +
+            "values(#{name}, #{partner}, #{type}, #{start}, #{end}, #{digest}, " +
+            "#{operatorId}, #{operateTime}, #{autoRenewal})")
     @Options(useGeneratedKeys = true, keyColumn = "id")
     Integer insertCon(Contract contract);
 

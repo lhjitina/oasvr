@@ -53,7 +53,8 @@ public class ContractController extends ControllerBase{
                                @RequestParam String start,
                                @RequestParam String end,
                                @RequestParam String digest,
-                               @RequestParam Integer type,
+                               @RequestParam String type,
+                               @RequestParam Integer autoRenewal,
                                @RequestBody  MultipartFile file)
             throws IllegalArgumentException, ServiceException, SQLIntegrityConstraintViolationException {
         //检查用户权限
@@ -72,7 +73,7 @@ public class ContractController extends ControllerBase{
             throw new IllegalArgumentException("date invalide:" + start + " or " + end);
         }
         //存储文件
-        contractService.FileUpload(partner, startDate, endDate, digest, file);
+        contractService.FileUpload(partner, type, startDate, endDate, autoRenewal, digest, file);
         return RespData.ok();
     }
 
