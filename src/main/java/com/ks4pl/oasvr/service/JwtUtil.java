@@ -33,6 +33,10 @@ public class JwtUtil {
     }
 
     public static Boolean isValid(String token){
+        if (token == null || token.isEmpty()){
+            logger.error("token is null or empty");
+            return false;
+        }
         SecretKey key = Keys.hmacShaKeyFor(strKey.getBytes());
         Jws<Claims> jws = null;
         Boolean valid = false;

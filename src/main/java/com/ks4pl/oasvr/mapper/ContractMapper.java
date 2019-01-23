@@ -1,10 +1,7 @@
 package com.ks4pl.oasvr.mapper;
 
 import com.ks4pl.oasvr.entity.Contract;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -19,8 +16,32 @@ public interface ContractMapper {
     @Options(useGeneratedKeys = true, keyColumn = "id")
     Integer insertCon(Contract contract);
 
+    @Select("<script>" +
+            "select name, partner, type, digest, start, end, autoRenewal, u.name operatorName " +
+            "from contract " +
+            "join user on c.operatorId=u.id " +
+            "<where> 1=1 " +
+            "<if test='name!=null'> and name like concat('%', #{name}, '%') </if>" +
+            "<if test='partner!=null'> and partner like concat('%', #{partner}, '%')</if>" +
+            "<if test='type!=null'> and type like concat('%', #{type}, '%')</if>" +
+            "<if test='startDate!=null'> and end &gt; #{startDate}</if>" +
+            "<if test='endDate!=null'> and end &lt; #{endDate}</if>" +
+            "</where>" +
+            "order by end" +
+            "</script>")
     ArrayList<Contract> selectByCondition(Map<String, Object> con);
 
+    @Select("<script>" +
+            "select count(id)" +
+            "from contract " +
+            "<where> 1=1 " +
+            "<if test='name!=null'> and name like concat('%', #{name}, '%') </if>" +
+            "<if test='partner!=null'> and partner like concat('%', #{partner}, '%')</if>" +
+            "<if test='type!=null'> and type like concat('%', #{type}, '%')</if>" +
+            "<if test='startDate!=null'> and end &gt; #{startDate}</if>" +
+            "<if test='endDate!=null'> and end &lt; #{endDate}</if>" +
+            "</where>" +
+            "</script>")
     Integer total(Map<String, Object> con);
 
     @Delete("delete from contract " +
