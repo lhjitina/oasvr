@@ -14,10 +14,9 @@ import java.sql.Timestamp;
 public class UserListItem {
     private Integer id;
 
-    @NotNull @NotBlank
+    @NotBlank
     private String name;
 
-    @NotNull(message = "tel can't be null")
     @NotBlank(message = "tel can't be blank")
     private String tel;
 
@@ -29,7 +28,7 @@ public class UserListItem {
     private Integer departmentId;
     private String departmentName;
 
-    @NotNull @NotBlank
+    @NotBlank
     private String state;
 
     private Timestamp registTime;

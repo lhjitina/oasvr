@@ -58,11 +58,10 @@ public class UserService extends ServiceBase{
         return userListItemMapper.total(condition);
     }
 
- //   @Transactional
+    @Transactional
     public void addUser(User u, Permission p) throws ServiceException, SQLIntegrityConstraintViolationException {
         u.setPasswd(defaultPasswd);
         u.setRegistTime(new Timestamp(System.currentTimeMillis()));
-        u.setState("启用");
         if (userMapper.insert(u) == 0){
             logger.info("insert user error");
             throw new ServiceException("insert user fail:" + u.toString());

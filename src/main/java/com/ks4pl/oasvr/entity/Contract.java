@@ -12,15 +12,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class Contract {
     Integer id;
-
-    @NotNull @NotBlank
+    @NotBlank
     String name;
     String partner;
     String type;
     Integer autoRenewal;
-    @NotNull
     Date start;
-    @NotNull
     Date end;
     String digest;
     @NotNull

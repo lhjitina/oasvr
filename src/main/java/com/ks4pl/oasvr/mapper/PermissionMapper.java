@@ -18,7 +18,7 @@ public interface PermissionMapper {
     Integer insert(Permission permission);
 
     @Update("update permission " +
-            "set pod=#{pol}, reg=#{reg}, sum=#{sum}, doc=#{doc}, " +
+            "set pol=#{pol}, reg=#{reg}, sum=#{sum}, doc=#{doc}, " +
             "con=#{con}, usr=#{usr}, cw=#{cw}, cr=#{cr} " +
             "where uid=#{uid}")
     Integer update(Permission permission);
