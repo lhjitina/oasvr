@@ -4,6 +4,7 @@ import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
+import com.ks4pl.oasvr.model.ContractDelete;
 import com.ks4pl.oasvr.model.ContractTemplateListItem;
 import com.ks4pl.oasvr.service.ContractService;
 import com.ks4pl.oasvr.service.ContractTemplateService;
@@ -78,9 +79,9 @@ public class ContractController extends ControllerBase{
     }
 
     @PostMapping(value = "/api/contract/delete")
-    public RespData setContractState(@RequestParam String name){
-        logger.info("/api/contract/delete: {}", name);
-        contractService.deleteCon(name);
+    public RespData setContractState(@RequestBody ContractDelete contractDelete){
+        logger.info("/api/contract/delete: {}", contractDelete.toString());
+        contractService.deleteCon(contractDelete.getName());
         return RespData.ok();
     }
 

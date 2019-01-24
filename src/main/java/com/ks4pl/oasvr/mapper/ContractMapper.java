@@ -17,11 +17,11 @@ public interface ContractMapper {
     Integer insertCon(Contract contract);
 
     @Select("<script>" +
-            "select name, partner, type, digest, start, end, autoRenewal, u.name operatorName " +
-            "from contract " +
-            "join user on c.operatorId=u.id " +
+            "select c.name name, partner, type, digest, start, end, autoRenewal, u.name operatorName " +
+            "from contract c " +
+            "join user u on operatorId=u.id " +
             "<where> 1=1 " +
-            "<if test='name!=null'> and name like concat('%', #{name}, '%') </if>" +
+            "<if test='name!=null'> and c.name like concat('%', #{name}, '%') </if>" +
             "<if test='partner!=null'> and partner like concat('%', #{partner}, '%')</if>" +
             "<if test='type!=null'> and type like concat('%', #{type}, '%')</if>" +
             "<if test='startDate!=null'> and end &gt; #{startDate}</if>" +
