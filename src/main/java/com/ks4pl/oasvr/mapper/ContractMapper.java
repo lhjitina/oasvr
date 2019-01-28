@@ -1,6 +1,7 @@
 package com.ks4pl.oasvr.mapper;
 
 import com.ks4pl.oasvr.entity.Contract;
+import com.ks4pl.oasvr.model.ContractUpdate;
 import org.apache.ibatis.annotations.*;
 
 import java.util.ArrayList;
@@ -47,4 +48,16 @@ public interface ContractMapper {
     @Delete("delete from contract " +
             "where name=#{name}")
     Integer deleteCon(String name);
+
+    @Update("update contract " +
+            "set partner=#{partner}," +
+            "type=#{type}," +
+            "digest=#{digest}," +
+            "start=#{start}," +
+            "end=#{end}," +
+            "autoRenewal=#{autoRenewal}," +
+            "operatorId=#{operatorId}," +
+            "operateTime=#{operateTime} " +
+            "where name=#{name}")
+    Integer updateCon(ContractUpdate contractUpdate);
 }

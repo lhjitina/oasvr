@@ -6,6 +6,7 @@ import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
 import com.ks4pl.oasvr.model.ContractDelete;
 import com.ks4pl.oasvr.model.ContractTemplateListItem;
+import com.ks4pl.oasvr.model.ContractUpdate;
 import com.ks4pl.oasvr.service.ContractService;
 import com.ks4pl.oasvr.service.ContractTemplateService;
 import com.ks4pl.oasvr.service.ServiceException;
@@ -19,8 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 @RestController
@@ -79,9 +82,22 @@ public class ContractController extends ControllerBase{
     }
 
     @PostMapping(value = "/api/contract/delete")
-    public RespData setContractState(@RequestBody ContractDelete contractDelete){
+    public RespData deleteContract(@RequestBody ContractDelete contractDelete){
         logger.info("/api/contract/delete: {}", contractDelete.toString());
         contractService.deleteCon(contractDelete.getName());
+        return RespData.ok();
+    }
+
+    @PostMapping(value = "/api/contract/update")
+    public RespData updateContract(@RequestBody ContractUpdate contractUpdate)
+            throws ServiceException, SQLIntegrityConstraintViolationException{
+        logger.info("/api/constract/update: " + contractUpdate.toString());
+        contractUpdate.setOperatorId(sessionService.getCurrentUserId());
+        contractUpdate.setOperateTime(new Timestamp(System.currentTimeMillis()));
+        if (contractService.updateCon(contractUpdate) == 0){
+            logger.error("update contract error: " + contractUpdate.toString());
+            return RespData.err(RespCode.SERV_ERR);
+        }
         return RespData.ok();
     }
 

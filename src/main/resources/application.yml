@@ -3,12 +3,11 @@ server:
 
 spring:
   jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
+    date-format: yyyy/MM/dd HH:mm:ss
     time_zone: GMT+8
 
   datasource:
     url: jdbc:mysql://localhost:3306/kaisheng?serverTimezone=Asia/Shanghai
     username: root
     password: ks123!@#
-#    password: root123456
     driver-class-name: com.mysql.cj.jdbc.Driver

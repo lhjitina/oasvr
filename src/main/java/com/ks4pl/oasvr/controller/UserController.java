@@ -101,7 +101,7 @@ public class UserController extends ControllerBase{
             UserListItem userListItem = userService.selectUserListItemById(u.getId());
             response.setHeader("Authorization", sessionService.createToken(u.getId()));
             respData = RespData.ok(userListItem);
-            logger.info("the user login success: uid={}, uname={}", u.getId(), u.getName());
+            logger.info("the user login success: ", userListItem.toString());
         }
         return respData;
     }

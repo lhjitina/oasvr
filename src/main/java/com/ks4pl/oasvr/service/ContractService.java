@@ -6,6 +6,7 @@ import com.ks4pl.oasvr.mapper.ContractMapper;
 import com.ks4pl.oasvr.mapper.ContractTemplateListItemMapper;
 import com.ks4pl.oasvr.mapper.ContractTemplateMapper;
 import com.ks4pl.oasvr.model.ContractTemplateListItem;
+import com.ks4pl.oasvr.model.ContractUpdate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class ContractService extends ServiceBase{
         return contractMapper.total(con);
     }
     public Boolean getContractContent(String name, HttpServletResponse response) throws ServiceException{
-        System.out.println("getContractContent filename=" + name);
+        logger.info("getContractContent filename=" + name);
         return FileUtil.getBinaryFileContent("contract", name, response);
     }
 
@@ -66,5 +67,10 @@ public class ContractService extends ServiceBase{
 
     public Integer deleteCon(String name){
         return contractMapper.deleteCon(name);
+    }
+
+    public Integer updateCon(ContractUpdate contractUpdate)
+            throws SQLIntegrityConstraintViolationException{
+        return contractMapper.updateCon(contractUpdate);
     }
 }
