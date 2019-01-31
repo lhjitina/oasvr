@@ -10,8 +10,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class PdocDelInfo {
-    @NotNull @NotBlank
-    String partner;
-    @NotNull @NotBlank
+    @NotBlank
     String name;
 }

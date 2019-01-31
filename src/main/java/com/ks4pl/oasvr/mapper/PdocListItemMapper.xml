@@ -12,9 +12,10 @@
 
     <select id="selectByCondition" parameterType="Map" resultMap="BaseResultMap">
         SELECT pd.name, pd.partner, pd.operateTime, u.name operator, u.id uid
-        FROM partnerdoc pd, user u
+        FROM partnerdoc pd
+        JOIN user u ON u.id = pd.operatorId
         <where>
-            u.id = pd.operatorId
+            1=1
             <if test="name!=null and name!=''">
                 AND pd.name LIKE  concat('%', #{name}, '%')
             </if>
@@ -26,9 +27,10 @@
     </select>
 
     <select id="total" parameterType="Map" resultType="Integer">
-        SELECT count(id)  FROM partnerdoc pd, user u
+        SELECT count(pd.id)  FROM partnerdoc pd
+        JOIN user u ON u.id = pd.operatorId
         <where>
-            u.id = pd.operatorId
+            1=1
             <if test="name!=null and name!=''">
                 AND pd.name LIKE  concat('%', #{name}, '%')
             </if>

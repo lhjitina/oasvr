@@ -48,9 +48,9 @@ public class PdocService extends ServiceBase{
         }
     }
 
-    public Integer delete(String partner, String name){
+    public Integer delete(String name){
         FileUtil.delete("pdoc", name);
-        return pdocMapper.deleteByPartnerAndName(partner, name);
+        return pdocMapper.deleteByName(name);
     }
 
 }

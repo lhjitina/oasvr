@@ -68,10 +68,12 @@ public class PdocController extends ControllerBase{
         return RespData.ok();
     }
 
+    @RequestMapping(value = "/api/console/pdoc/delete", method = RequestMethod.POST)
     public RespData delete(@RequestBody @Valid  PdocDelInfo pdocDelInfo, Errors errors)
             throws IllegalArgumentException{
         argumentError(errors);
-        pdocService.delete(pdocDelInfo.getPartner(), pdocDelInfo.getName());
+        logger.info("/api/console/pdoc/delete:" + pdocDelInfo.getName());
+        pdocService.delete(pdocDelInfo.getName());
         return RespData.ok();
     }
 }
