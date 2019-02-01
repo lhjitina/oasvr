@@ -28,17 +28,7 @@ public class PolicyController extends ControllerBase{
     @Autowired
     private PolicyService policyService;
 
-    @RequestMapping(value = "/api/front/policy/list", method = RequestMethod.POST)
-    public RespPage frontGetPolicyList(@RequestBody @Valid  PageReqParam pageReqParam, Errors errors)
-            throws IllegalArgumentException{
-        argumentError(errors);
-        return RespPage.okPage(pageReqParam.getNum(),
-                pageReqParam.getSize(),
-                policyService.total(pageReqParam.getParam()),
-                policyService.selectByCondition(pageReqParam.getParam()));
-    }
-
-    @RequestMapping(value = "/api/console/policy/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/policy/list", method = RequestMethod.POST)
     public RespPage consoleGetPolicyList(@RequestBody @Valid  PageReqParam pageReqParam, Errors errors)
             throws IllegalArgumentException {
         argumentError(errors);

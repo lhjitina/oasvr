@@ -49,7 +49,8 @@ public class InfoPortService extends ServiceBase {
         }
     }
 
-    public void delete(String name){
+    public void delete(String name) throws ServiceException{
+
         logger.info("delete: name="+name);
         FileUtil.delete("share", name);
         shareInfoMapper.deleteByName(name);
@@ -70,5 +71,14 @@ public class InfoPortService extends ServiceBase {
         if (!FileUtil.FileUpload("share", file)){
             throw new ServiceException("save file fail," + file.getOriginalFilename());
         }
+    }
+
+    public ArrayList<ShareInfoListItem> fuzzyQuery(Map<String, Object> condition){
+        String[] keys = condition.get("keys").toString().split(" |,|，");
+        logger.info("info port fuzzy query keys count={} ", keys.length);
+        for (int i = 0; i < keys.length; i++){
+            logger.info("key {} is: {}", i, keys[i] );
+        }
+        return null;
     }
 }

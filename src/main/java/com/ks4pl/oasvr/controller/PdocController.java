@@ -26,17 +26,7 @@ public class PdocController extends ControllerBase{
     @Autowired
     private PdocService pdocService;
 
-    @RequestMapping(value = "/api/front/pdoc/list", method = RequestMethod.POST)
-    public RespPage frontGetPdocList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
-            throws IllegalArgumentException{
-        argumentError(errors);
-        return RespPage.okPage(pageReqParam.getNum(),
-                pageReqParam.getSize(),
-                pdocService.total(pageReqParam.getParam()),
-                pdocService.selectByCondition(pageReqParam.getParam()));
-    }
-
-    @RequestMapping(value = "/api/console/pdoc/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/pdoc/list", method = RequestMethod.POST)
     public RespPage consoleGetPdocList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
                 throws IllegalArgumentException{
         argumentError(errors);
@@ -68,11 +58,11 @@ public class PdocController extends ControllerBase{
         return RespData.ok();
     }
 
-    @RequestMapping(value = "/api/console/pdoc/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/pdoc/delete", method = RequestMethod.POST)
     public RespData delete(@RequestBody @Valid  PdocDelInfo pdocDelInfo, Errors errors)
             throws IllegalArgumentException{
         argumentError(errors);
-        logger.info("/api/console/pdoc/delete:" + pdocDelInfo.getName());
+        logger.info("/api/pdoc/delete:" + pdocDelInfo.getName());
         pdocService.delete(pdocDelInfo.getName());
         return RespData.ok();
     }

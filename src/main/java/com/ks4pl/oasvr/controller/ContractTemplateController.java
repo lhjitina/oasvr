@@ -27,18 +27,7 @@ public class ContractTemplateController extends ControllerBase{
     @Autowired
     private ContractTemplateService contractTemplateService;
 
-
-    @RequestMapping(value = "/api/front/contracttemplate/list", method = RequestMethod.POST)
-    public RespPage frontGetContractList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
-        throws IllegalArgumentException{
-        argumentError(errors);
-        return RespPage.okPage(pageReqParam.getNum(),
-                pageReqParam.getSize(),
-                contractTemplateService.total(pageReqParam.getParam()),
-                contractTemplateService.selectByCondition(pageReqParam.getParam()));
-    }
-
-    @RequestMapping(value = "/api/console/contracttemplate/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/contracttemplate/list", method = RequestMethod.POST)
     public RespPage consoleGetContractList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
         throws IllegalArgumentException{
         logger.info("/api/console/contracttemplate/list: " + pageReqParam.toString());

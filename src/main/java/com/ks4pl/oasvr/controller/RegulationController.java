@@ -25,17 +25,7 @@ public class RegulationController extends ControllerBase {
     @Autowired
     private RegulationService regulationService;
 
-    @RequestMapping(value = "/api/front/regulation/list", method = RequestMethod.POST)
-    public RespPage frontGetRegulationList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
-            throws IllegalArgumentException {
-        argumentError(errors);
-        return RespPage.okPage(pageReqParam.getNum(),
-                pageReqParam.getSize(),
-                regulationService.total(pageReqParam.getParam()),
-                regulationService.selectListItemByCondition(pageReqParam.getParam()));
-    }
-
-    @RequestMapping(value = "/api/console/regulation/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/regulation/list", method = RequestMethod.POST)
     public RespPage consoleGetRegulationList(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
             throws IllegalArgumentException {
         argumentError(errors);
