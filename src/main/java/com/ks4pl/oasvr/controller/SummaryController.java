@@ -4,6 +4,7 @@ import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
+import com.ks4pl.oasvr.model.SummaryListItem;
 import com.ks4pl.oasvr.service.ServiceException;
 import com.ks4pl.oasvr.service.SummaryService;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -72,6 +74,17 @@ public class SummaryController extends ControllerBase{
         logger.info("deleteSummary:" + name);
         summaryService.deleteByName(name);
         return RespData.ok();
+    }
+
+    @RequestMapping(value = "/api/summary/fuzzy", method = RequestMethod.POST)
+    public RespPage fuzzyQuery(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
+            throws IllegalArgumentException {
+        logger.info("fuzzyQuery:" + pageReqParam);
+        argumentError(errors);
+        ArrayList<SummaryListItem> res = summaryService.fuzzyQuery(pageReqParam.getParam());
+        return RespPage.okPage(pageReqParam.getNum(),
+                pageReqParam.getSize(),
+                res.size(), res);
     }
 
 }

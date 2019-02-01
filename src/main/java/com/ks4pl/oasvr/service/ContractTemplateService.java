@@ -65,4 +65,9 @@ public class ContractTemplateService extends ServiceBase{
                                         new Timestamp(System.currentTimeMillis()));
         return contractTemplateMapper.updateStateByName(contractTemplate);
     }
+
+    public ArrayList<ContractTemplateListItem> fuzzyQuery(Map<String, Object> condition){
+        String[] keys = condition.get("keys").toString().split(" |,|，");
+        return contractTemplateListItemMapper.fuzzyQuery(keys);
+    }
 }

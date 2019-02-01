@@ -60,4 +60,18 @@ public interface ContractMapper {
             "operateTime=#{operateTime} " +
             "where name=#{name}")
     Integer updateCon(ContractUpdate contractUpdate);
+
+    @Select("<script>" +
+            "select c.name name, partner, type, digest, start, end, autoRenewal, u.name operatorName " +
+            "from contract c " +
+            "join user u on operatorId=u.id " +
+            "where 1=1 " +
+            "<foreach collection='array' index='index' item='item' open='' separator='' close=''>" +
+            "and (c.name like concat('%', #{item}, '%') " +
+            "  or partner like concat('%', #{item}, '%') " +
+            "  or type like concat('%', #{item}, '%') " +
+            "  or digest like concat('%', #{item}, '%')) " +
+            "</foreach> " +
+            "</script>")
+    ArrayList<Contract> fuzzyQuery(String[] keys);
 }

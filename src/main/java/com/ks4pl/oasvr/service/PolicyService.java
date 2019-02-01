@@ -63,5 +63,8 @@ public class PolicyService extends ServiceBase{
         Policy policy = new Policy( name, institution, null, state, getCurrentUserId(), new Timestamp(System.currentTimeMillis()));
         return policyMapper.updateStateByName(policy);
     }
-
+    public ArrayList<PolicyListItem> fuzzyQuery(Map<String, Object> condition){
+        String[] keys = condition.get("keys").toString().split(" |,|，");
+        return policyListItemMapper.fuzzyQuery(keys);
+    }
 }

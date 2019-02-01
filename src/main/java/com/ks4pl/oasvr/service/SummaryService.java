@@ -61,4 +61,9 @@ public class SummaryService extends ServiceBase{
             throw new ServiceException("delete summary fail: " + name);
         }
     }
+
+    public ArrayList<SummaryListItem> fuzzyQuery(Map<String, Object> condition){
+        String[] keys = condition.get("keys").toString().split(" |,|，");
+        return summaryListItemMapper.fuzzyQuery(keys);
+    }
  }

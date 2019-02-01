@@ -8,6 +8,7 @@ import com.ks4pl.oasvr.model.LoginInfo;
 import com.ks4pl.oasvr.model.PasswdModify;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespCode;
+import com.ks4pl.oasvr.model.SummaryListItem;
 import com.ks4pl.oasvr.model.UserListItem;
 import com.ks4pl.oasvr.service.*;
 import org.apache.logging.log4j.Logger;
@@ -159,11 +160,15 @@ public class UserController extends ControllerBase{
             }
         }
     }
-    @RequestMapping(value = "/te", method = RequestMethod.GET)
 
-    public UserListItem getuser(Integer id) throws SQLIntegrityConstraintViolationException, ServiceException{
-        logger.info(id);
-        UserListItem userListItem = userService.selectUserListItemById(id);
-        return userListItem;
+    @RequestMapping(value = "/api/user/fuzzy", method = RequestMethod.POST)
+    public RespPage fuzzyQuery(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
+            throws IllegalArgumentException {
+        logger.info("fuzzyQuery:" + pageReqParam);
+        argumentError(errors);
+        ArrayList<UserListItem> res = userService.fuzzyQuery(pageReqParam.getParam());
+        return RespPage.okPage(pageReqParam.getNum(),
+                pageReqParam.getSize(),
+                res.size(), res);
     }
 }

@@ -4,6 +4,7 @@ import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
+import com.ks4pl.oasvr.entity.Contract;
 import com.ks4pl.oasvr.model.ContractDelete;
 import com.ks4pl.oasvr.model.ContractTemplateListItem;
 import com.ks4pl.oasvr.model.ContractUpdate;
@@ -23,6 +24,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -99,6 +101,17 @@ public class ContractController extends ControllerBase{
             return RespData.err(RespCode.SERV_ERR);
         }
         return RespData.ok();
+    }
+
+    @RequestMapping(value = "/api/contract/fuzzy", method = RequestMethod.POST)
+    public RespPage fuzzyQuery(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
+            throws IllegalArgumentException{
+        logger.info("fuzzyQuery:" + pageReqParam);
+        argumentError(errors);
+        ArrayList<Contract> res = contractService.fuzzyQuery(pageReqParam.getParam());
+        return RespPage.okPage(pageReqParam.getNum(),
+                pageReqParam.getSize(),
+                res.size(), res);
     }
 
 }

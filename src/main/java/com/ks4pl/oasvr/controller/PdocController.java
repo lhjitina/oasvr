@@ -4,7 +4,9 @@ import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
+import com.ks4pl.oasvr.entity.PartnerDoc;
 import com.ks4pl.oasvr.model.PdocDelInfo;
+import com.ks4pl.oasvr.model.PdocListItem;
 import com.ks4pl.oasvr.service.PdocService;
 import com.ks4pl.oasvr.service.ServiceException;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 
 @RestController
 public class PdocController extends ControllerBase{
@@ -65,5 +68,16 @@ public class PdocController extends ControllerBase{
         logger.info("/api/pdoc/delete:" + pdocDelInfo.getName());
         pdocService.delete(pdocDelInfo.getName());
         return RespData.ok();
+    }
+
+    @RequestMapping(value = "/api/pdoc/fuzzy", method = RequestMethod.POST)
+    public RespPage fuzzyQuery(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
+            throws IllegalArgumentException{
+        logger.info("fuzzyQuery:" + pageReqParam);
+        argumentError(errors);
+        ArrayList<PdocListItem> res = pdocService.fuzzyQuery(pageReqParam.getParam());
+        return RespPage.okPage(pageReqParam.getNum(),
+                pageReqParam.getSize(),
+                res.size(), res);
     }
 }

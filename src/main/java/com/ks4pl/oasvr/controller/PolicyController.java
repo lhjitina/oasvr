@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 @RestController
@@ -76,5 +77,16 @@ public class PolicyController extends ControllerBase{
         argumentError(errors);
         policyService.updateState(policyListItem.getName(), policyListItem.getInstitution(), policyListItem.getState());
         return RespData.ok();
+    }
+
+    @RequestMapping(value = "/api/policy/fuzzy", method = RequestMethod.POST)
+    public RespPage fuzzyQuery(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
+            throws IllegalArgumentException{
+        logger.info("fuzzyQuery:" + pageReqParam);
+        argumentError(errors);
+        ArrayList<PolicyListItem> res = policyService.fuzzyQuery(pageReqParam.getParam());
+        return RespPage.okPage(pageReqParam.getNum(),
+                pageReqParam.getSize(),
+                res.size(), res);
     }
 }

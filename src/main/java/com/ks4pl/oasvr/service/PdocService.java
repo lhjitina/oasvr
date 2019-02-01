@@ -53,4 +53,8 @@ public class PdocService extends ServiceBase{
         return pdocMapper.deleteByName(name);
     }
 
+    public ArrayList<PdocListItem> fuzzyQuery(Map<String, Object> condition){
+        String[] keys = condition.get("keys").toString().split(" |,|，");
+        return pdocListItemMapper.fuzzyQuery(keys);
+    }
 }

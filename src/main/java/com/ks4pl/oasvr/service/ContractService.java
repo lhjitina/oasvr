@@ -73,4 +73,9 @@ public class ContractService extends ServiceBase{
             throws SQLIntegrityConstraintViolationException{
         return contractMapper.updateCon(contractUpdate);
     }
+
+    public ArrayList<Contract> fuzzyQuery(Map<String, Object> condition){
+        String[] keys = condition.get("keys").toString().split(" |,|，");
+        return contractMapper.fuzzyQuery(keys);
+    }
 }

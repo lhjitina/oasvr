@@ -4,6 +4,7 @@ import com.ks4pl.oasvr.dto.PageReqParam;
 import com.ks4pl.oasvr.dto.RespCode;
 import com.ks4pl.oasvr.dto.RespData;
 import com.ks4pl.oasvr.dto.RespPage;
+import com.ks4pl.oasvr.entity.ContractTemplate;
 import com.ks4pl.oasvr.model.ContractTemplateListItem;
 import com.ks4pl.oasvr.service.*;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 @RestController
@@ -74,5 +76,16 @@ public class ContractTemplateController extends ControllerBase{
         logger.info("/api/contracttemplate/state: {}", contractTemplateListItem.toString());
         argumentError(errors);
         contractTemplateService.updateState(contractTemplateListItem.getName(), contractTemplateListItem.getState());
+    }
+
+    @RequestMapping(value = "/api/contracttemplate/fuzzy", method = RequestMethod.POST)
+    public RespPage fuzzyQuery(@RequestBody @Valid PageReqParam pageReqParam, Errors errors)
+            throws IllegalArgumentException{
+        logger.info("fuzzyQuery:" + pageReqParam);
+        argumentError(errors);
+        ArrayList<ContractTemplateListItem> res = contractTemplateService.fuzzyQuery(pageReqParam.getParam());
+        return RespPage.okPage(pageReqParam.getNum(),
+                pageReqParam.getSize(),
+                res.size(), res);
     }
 }

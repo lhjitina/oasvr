@@ -75,7 +75,6 @@ public class InfoPortController extends ControllerBase {
         ArrayList<ShareInfoListItem> res = infoPortService.fuzzyQuery(pageReqParam.getParam());
         return RespPage.okPage(pageReqParam.getNum(),
                 pageReqParam.getSize(),
-                res.size(),
-                res);
+                res.size(), res);
     }
 }

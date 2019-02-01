@@ -70,5 +70,8 @@ public class RegulationService extends ServiceBase{
             throw new ServiceException("update state to db fail");
         }
     }
-
+    public ArrayList<RegulationListItem> fuzzyQuery(Map<String, Object> condition){
+        String[] keys = condition.get("keys").toString().split(" |,|，");
+        return regulationListItemMapper.fuzzyQuery(keys);
+    }
 }

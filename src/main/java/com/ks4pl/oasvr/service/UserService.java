@@ -96,4 +96,9 @@ public class UserService extends ServiceBase{
             throw new ServiceException("modify passwd fail, uid:" + uid + ";passwd:" + passwd);
         }
     }
+
+    public ArrayList<UserListItem> fuzzyQuery(Map<String, Object> condition){
+        String[] keys = condition.get("keys").toString().split(" |,|，");
+        return userListItemMapper.fuzzyQuery(keys);
+    }
 }
